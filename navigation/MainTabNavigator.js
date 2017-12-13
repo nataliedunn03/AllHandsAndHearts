@@ -7,18 +7,34 @@ import Colors from "../constants/Colors";
 
 import HomeScreen from "../screens/HomeScreen";
 import MapScreen from "../screens/MapScreen";
+import NotificationScreen from "../screens/NotificationScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 
 export default TabNavigator(
   {
     Home: {
-      screen: HomeScreen
+      screen: HomeScreen,
+      navigationOptions: {
+        headerTitle: "Home"
+      }
     },
     Map: {
-      screen: MapScreen
+      screen: MapScreen,
+      navigationOptions: {
+        headerTitle: "Maps"
+      }
+    },
+    Notification: {
+      screen: NotificationScreen,
+      navigationOptions: {
+        headerTitle: "Notification"
+      }
     },
     Profile: {
-      screen: ProfileScreen
+      screen: ProfileScreen,
+      navigationOptions: {
+        headerTitle: "Profile"
+      }
     }
   },
   {
@@ -30,20 +46,26 @@ export default TabNavigator(
           case "Home":
             iconName =
               Platform.OS === "ios"
-                ? `ios-information-circle${focused ? "" : "-outline"}`
-                : "md-information-circle";
+                ? `ios-home${focused ? "" : "-outline"}`
+                : "md-home";
             break;
           case "Map":
             iconName =
               Platform.OS === "ios"
-                ? `ios-link${focused ? "" : "-outline"}`
-                : "md-link";
+                ? `ios-map${focused ? "" : "-outline"}`
+                : "md-map";
+            break;
+          case "Notification":
+            iconName =
+              Platform.OS === "ios"
+                ? `ios-notifications${focused ? "" : "-outline"}`
+                : "md-notifications";
             break;
           case "Profile":
             iconName =
               Platform.OS === "ios"
-                ? `ios-options${focused ? "" : "-outline"}`
-                : "md-options";
+                ? `ios-contact${focused ? "" : "-outline"}`
+                : "md-contact";
         }
         return (
           <Ionicons
