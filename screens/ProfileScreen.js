@@ -3,10 +3,6 @@ import React from "react";
 import Touchable from "react-native-platform-touchable";
 import { StyleSheet, Text, View } from "react-native";
 export default class ProfileScreen extends React.Component {
-  static navigationOptions = {
-    tabBarLabel: "Profile"
-  };
-
   render() {
     /* Go ahead and delete ExpoConfigView and replace it with your
      * content, we just wanted to give you a quick view of your config */
@@ -19,7 +15,8 @@ export default class ProfileScreen extends React.Component {
             paddingVertical: 30,
             paddingHorizontal: 80
           }}
-          background={Touchable.Ripple("blue")}>
+          background={Touchable.Ripple("blue")}
+        >
           <Text>Hello there!</Text>
         </Touchable>
       </View>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Platform } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { TabNavigator, TabBarBottom } from "react-navigation";
 
@@ -15,25 +15,28 @@ export default TabNavigator(
     Home: {
       screen: HomeScreen,
       navigationOptions: {
-        headerTitle: "Home"
+        headerTitle: "HOME",
+        tabBarLabel: "Home"
       }
     },
-    Map: {
+    Maps: {
       screen: MapScreen,
       navigationOptions: {
-        headerTitle: "Maps"
+        headerTitle: "MAPS"
       }
     },
     Notification: {
       screen: NotificationScreen,
       navigationOptions: {
-        headerTitle: "Notification"
+        headerTitle: "NOTIFICATIONS",
+        tabBarLabel: "Notifications"
       }
     },
     Profile: {
       screen: ProfileScreen,
       navigationOptions: {
-        headerTitle: "Profile"
+        headerTitle: "PROFILE",
+        tabBarLabel: "Profile"
       }
     }
   },
@@ -49,7 +52,7 @@ export default TabNavigator(
                 ? `ios-home${focused ? "" : "-outline"}`
                 : "md-home";
             break;
-          case "Map":
+          case "Maps":
             iconName =
               Platform.OS === "ios"
                 ? `ios-map${focused ? "" : "-outline"}`
@@ -77,7 +80,20 @@ export default TabNavigator(
         );
       }
     }),
-    tabBarComponent: TabBarBottom,
+    tabBarComponent: props => {
+      return (
+        <TabBarBottom
+          {...props}
+          style={{
+            backgroundColor: "#FFFFFF",
+            borderTopColor: "#E0E0E0"
+          }}
+        />
+      );
+    },
+    tabBarOptions: {
+      activeTintColor: "#659CEC"
+    },
     tabBarPosition: "bottom",
     animationEnabled: true,
     swipeEnabled: false

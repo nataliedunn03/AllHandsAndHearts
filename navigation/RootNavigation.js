@@ -1,22 +1,28 @@
-import { Notifications } from 'expo';
-import React from 'react';
-import { StackNavigator } from 'react-navigation';
+import { Notifications } from "expo";
+import React from "react";
+import { StackNavigator } from "react-navigation";
 
-import MainTabNavigator from './MainTabNavigator';
-import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
+import MainTabNavigator from "./MainTabNavigator";
+import registerForPushNotificationsAsync from "../api/registerForPushNotificationsAsync";
 
 const RootStackNavigator = StackNavigator(
   {
     Main: {
-      screen: MainTabNavigator,
-    },
+      screen: MainTabNavigator
+    }
   },
   {
     navigationOptions: () => ({
       headerTitleStyle: {
-        fontWeight: 'normal',
+        fontWeight: "normal",
+        fontSize: 15,
+        color: "#222222"
       },
-    }),
+      headerStyle: {
+        backgroundColor: "#FFFFFF",
+        borderBottomColor: "#F2F2F2"
+      }
+    })
   }
 );
 
@@ -41,10 +47,14 @@ export default class RootNavigator extends React.Component {
     registerForPushNotificationsAsync();
 
     // Watch for incoming notifications
-    this._notificationSubscription = Notifications.addListener(this._handleNotification);
+    this._notificationSubscription = Notifications.addListener(
+      this._handleNotification
+    );
   }
 
   _handleNotification = ({ origin, data }) => {
-    console.log(`Push notification ${origin} with data: ${JSON.stringify(data)}`);
+    console.log(
+      `Push notification ${origin} with data: ${JSON.stringify(data)}`
+    );
   };
 }

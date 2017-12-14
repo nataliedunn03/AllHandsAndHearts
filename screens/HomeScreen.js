@@ -34,46 +34,38 @@ export default class HomeScreen extends React.Component {
           <View style={styles.getStartedContainer}>
             {this._maybeRenderDevelopmentModeWarning()}
 
-            <Text style={styles.getStartedText}>Get started by opening</Text>
+            <Text style={styles.getStartedText}>
+              Let's work on the 'Maps' tab for now
+            </Text>
 
             <View
               style={[styles.codeHighlightContainer, styles.homeScreenFilename]}
             >
               <MonoText style={styles.codeHighlightText}>
-                screens/HomeScreen.js
+                screens/MapScreen.js
               </MonoText>
             </View>
-
-            <Text style={styles.getStartedText}>
-              Change this text and your app will automatically reload.
-            </Text>
-          </View>
-
-          <View style={styles.helpContainer}>
             <TouchableOpacity
-              onPress={this._handleHelpPress}
-              style={styles.helpLink}
+              onPress={() => {
+                WebBrowser.openBrowserAsync(
+                  "https://github.com/react-community/react-native-maps"
+                );
+              }}
             >
               <Text style={styles.helpLinkText}>
-                Help, it didn’t automatically reload!
+                {" "}
+                Click here to go over react native navigation by AirBnb
               </Text>
             </TouchableOpacity>
+            <Text style={styles.getStartedText}>
+              Here's the deal: 1. We need to get current location 2. We need a
+              button that moves map back to our current location. Like the one
+              in google maps. (look at the react native vector icons for gps
+              icon) 3. We need markers on the map 4. We need to connect those to
+              Salesforce 5. Boom MVP is done
+            </Text>
           </View>
         </ScrollView>
-
-        <View style={styles.tabBarInfoContainer}>
-          <Text style={styles.tabBarInfoText}>
-            This is a tab bar. You can edit it in:
-          </Text>
-
-          <View
-            style={[styles.codeHighlightContainer, styles.navigationFilename]}
-          >
-            <MonoText style={styles.codeHighlightText}>
-              navigation/MainTabNavigator.js
-            </MonoText>
-          </View>
-        </View>
       </View>
     );
   }
@@ -88,8 +80,8 @@ export default class HomeScreen extends React.Component {
 
       return (
         <Text style={styles.developmentModeText}>
-          Development mode is enabled, your app will be slower but you can use
-          useful development tools. {learnMoreButton}
+          Alright FFG!!! We'll come back to 'Home' at some point! Go here to
+          master expo. {learnMoreButton}
         </Text>
       );
     } else {
