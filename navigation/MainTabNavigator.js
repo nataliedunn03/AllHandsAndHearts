@@ -91,9 +91,6 @@ export default TabNavigator(
         />
       );
     },
-    tabBarOptions: {
-      activeTintColor: "#659CEC"
-    },
     tabBarPosition: "bottom",
     animationEnabled: true,
     swipeEnabled: false
