@@ -13,12 +13,13 @@ export const alertIfLocationisDisabled = async () => {
   }
 };
 
-export const enableLocation = async () => {
-  const { status } = await Permissions.askAsync(Permissions.LOCATION);
-  if (status === "granted") {
-    getCurrentLocation();
+export const getUserCurrentLocation = async () => {
+  const { status } = await Permissions.getAsync(Permissions.LOCATION);
+  if (status !== "granted") {
+    const { status } = await Permissions.askAsync(Permissions.LOCATION);
+    return null;
   } else {
-    throw new Error("Location service denied");
+    return getCurrentLocation();
   }
 };
 export const getCurrentLocation = async () => {

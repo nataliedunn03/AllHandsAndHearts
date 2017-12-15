@@ -58,11 +58,18 @@ export default class HomeScreen extends React.Component {
               </Text>
             </TouchableOpacity>
             <Text style={styles.getStartedText}>
-              Here's the deal: 1. We need to get current location 2. We need a
-              button that moves map back to our current location. Like the one
-              in google maps. (look at the react native vector icons for gps
-              icon) 3. We need markers on the map 4. We need to connect those to
-              Salesforce 5. Boom MVP is done
+              Here's the deal: 1. We need to get current location (Complete!)
+            </Text>
+            <Text style={styles.getStartedText}>
+              2. We need a button that moves map back to our current location .
+              Like the one in google maps. (look at the react native vector
+              icons for gps icon) (Complete!)
+            </Text>
+            <Text style={styles.getStartedText}>
+              3. We need markers on the map
+            </Text>
+            <Text style={styles.getStartedText}>
+              4. We need to connect those to Salesforce 5. Boom MVP is done
             </Text>
           </View>
         </ScrollView>
