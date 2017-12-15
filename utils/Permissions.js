@@ -14,13 +14,8 @@ export const alertIfLocationisDisabled = async () => {
 };
 
 export const getUserCurrentLocation = async () => {
-  const { status } = await Permissions.getAsync(Permissions.LOCATION);
-  if (status !== "granted") {
-    const { status } = await Permissions.askAsync(Permissions.LOCATION);
-    return null;
-  } else {
-    return getCurrentLocation();
-  }
+  const { status } = await Permissions.askAsync(Permissions.LOCATION);
+  return status === "granted" ? getCurrentLocation() : {};
 };
 export const getCurrentLocation = async () => {
   return Location.getCurrentPositionAsync({

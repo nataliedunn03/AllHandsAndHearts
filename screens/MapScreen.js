@@ -21,7 +21,7 @@ export default class MapScreen extends React.Component {
   };
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { locationPermission: false };
   }
   async componentWillMount() {
     this._moveToCurrentLocation();
@@ -32,15 +32,20 @@ export default class MapScreen extends React.Component {
   _moveToCurrentLocation = async () => {
     try {
       let { coords } = await getUserCurrentLocation();
-      let location = {
-        ...coords,
-        longitudeDelta: 0.0922 * (width / height),
-        latitudeDelta: 0.0922
-      };
-      this.setState({
-        location,
-        gpsButtonColor: Colors.tabIconSelected
-      });
+      if (coords) {
+        let location = {
+          ...coords,
+          longitudeDelta: 0.0922 * (width / height),
+          latitudeDelta: 0.0922
+        };
+        this.setState({
+          location,
+          gpsButtonColor: Colors.tabIconSelected,
+          locationPermission: true
+        });
+      } else {
+        this.setState({ locationPermission: false });
+      }
     } catch (e) {
       console.log(e);
     }
@@ -53,6 +58,7 @@ export default class MapScreen extends React.Component {
       <View style={{ flex: 1 }}>
         <View style={styles.container}>
           <CurrentLocationButton
+            locationPermission={this.state.locationPermission}
             onPress={this._moveToCurrentLocation}
             bottomMargin={height - 150}
             iconColor={this.state.gpsButtonColor}

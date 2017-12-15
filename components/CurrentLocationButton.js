@@ -2,10 +2,14 @@ import React from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import Colors from "../constants/Colors";
 import { MaterialIcons } from "@expo/vector-icons";
+import { alertIfLocationisDisabled } from "../utils/Permissions";
 
 export default (CurrentLocationButton = props => {
   const style = {
     top: props.bottomMargin ? props.bottomMargin : 0
+  };
+  onButtonPress = () => {
+    props.locationPermission ? props.onPress() : alertIfLocationisDisabled();
   };
   return (
     <View>
@@ -13,12 +17,12 @@ export default (CurrentLocationButton = props => {
         <TouchableOpacity
           activeOpacity={0.9}
           style={styles.currentLocationButton}
-          onPress={props.onPress}
+          onPress={onButtonPress}
         >
           <MaterialIcons
-            name="my-location"
+            name={props.locationPermission ? "my-location" : "location-off"}
             size={20}
-            color={props.iconColor ? props.iconColor : Colors.tabIconSelected}
+            color={props.iconColor}
           />
         </TouchableOpacity>
       </View>
