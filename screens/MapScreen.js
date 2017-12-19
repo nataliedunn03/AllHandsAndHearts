@@ -19,7 +19,6 @@ import {
 	getUserCurrentLocation
 } from '../utils/Permissions';
 const { width, height } = Dimensions.get('window');
-
 export default class MapScreen extends React.Component {
 	constructor(props) {
 		super(props);
@@ -30,12 +29,12 @@ export default class MapScreen extends React.Component {
 		};
 	}
 	componentDidMount() {
-		this._moveToCurrentLocation();
+		this._getUserCurrentLocation();
 	}
 	/**
 	 * Get current lcoation then set the delta to viewport
 	 */
-	_moveToCurrentLocation = async () => {
+	_getUserCurrentLocation = async () => {
 		try {
 			let { coords } = await getUserCurrentLocation();
 			if (coords) {
@@ -56,7 +55,8 @@ export default class MapScreen extends React.Component {
 			console.log(e);
 		}
 	};
-	_setRegion = async () => {
+	//move the map to user current location on button click
+	_moveToUserCurrentLocation = async () => {
 		try {
 			let { coords } = await getUserCurrentLocation();
 			if (coords) {
@@ -73,14 +73,12 @@ export default class MapScreen extends React.Component {
 			console.log(e);
 		}
 	};
-	_onMapReady = () => {
-		this.setState({ mapReady: true });
-	};
-	_onRegionChange = region => {
-		const { initialRegion } = this.state;
+	//see if user moved the map and show button to come back to current location
+	_updateGPSButton = region => {
+		const { initialRegion, locationPermission } = this.state;
 		//little hacky way to change the GPS button color
 		//based on location change
-		if (initialRegion) {
+		if (initialRegion && locationPermission) {
 			let diffLat = Math.abs(
 				initialRegion.latitude.toFixed(4) - region.latitude.toFixed(4)
 			);
@@ -88,6 +86,7 @@ export default class MapScreen extends React.Component {
 				initialRegion.longitude.toFixed(4) - region.longitude.toFixed(4)
 			);
 			if (diffLat > 0.0001 || diffLong > 0.0001) {
+				console.log(region);
 				this.setState({
 					gpsButtonColor: Colors.tabIconDefault,
 					displayGps: true
@@ -100,22 +99,38 @@ export default class MapScreen extends React.Component {
 			}
 		}
 	};
-	_onRegionChangeComplete = region => {};
+	//see what kind of animation we should perform based on map movement
+	_getGPSButtonAnimationType = () => {
+		if (!this.state.locationPermission) return 'fadeIn';
+		return this.state.displayGps ? 'fadeIn' : 'fadeOut';
+	};
+	//render the gps button if map is moved
 	_renderGPSButton() {
 		return (
 			<Animatable.View
-				animation={this.state.displayGps ? 'fadeIn' : 'fadeOut'}
+				animation={this._getGPSButtonAnimationType()}
 				useNativeDriver
 			>
 				<CurrentLocationButton
 					style={{ top: -40 }}
 					locationPermission={this.state.locationPermission}
-					onPress={this._setRegion}
+					onPress={this._moveToUserCurrentLocation}
 					iconColor={this.state.gpsButtonColor}
 				/>
 			</Animatable.View>
 		);
 	}
+	//see if map is ready
+	_onMapReady = () => {
+		this.setState({ mapReady: true });
+	};
+	//callback on pan map
+	_onRegionChange = region => {
+		this._updateGPSButton(region);
+	};
+	//callback when user stops moving the map
+	_onRegionChangeComplete = region => {};
+
 	render() {
 		return (
 			<View style={styles.container}>

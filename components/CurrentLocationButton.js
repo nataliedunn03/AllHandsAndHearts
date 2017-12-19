@@ -23,22 +23,20 @@ export default class CurrentLocationButton extends React.Component {
 	};
 	render() {
 		return (
-			<View>
-				<View style={[styles.currentLocationView, this.props.style]}>
-					<TouchableOpacity
-						activeOpacity={0.9}
-						style={styles.currentLocationButton}
-						onPress={this.onButtonPress}
-					>
-						<MaterialIcons
-							name={
-								this.props.locationPermission ? 'my-location' : 'location-off'
-							}
-							size={20}
-							color={this.props.iconColor}
-						/>
-					</TouchableOpacity>
-				</View>
+			<View style={[styles.currentLocationView, this.props.style]}>
+				<TouchableOpacity
+					activeOpacity={0.9}
+					style={styles.currentLocationButton}
+					onPress={this.onButtonPress}
+				>
+					<MaterialIcons
+						name={
+							this.props.locationPermission ? 'my-location' : 'location-off'
+						}
+						size={20}
+						color={this.props.iconColor}
+					/>
+				</TouchableOpacity>
 			</View>
 		);
 	}
