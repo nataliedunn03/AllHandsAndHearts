@@ -86,7 +86,6 @@ export default class MapScreen extends React.Component {
 				initialRegion.longitude.toFixed(4) - region.longitude.toFixed(4)
 			);
 			if (diffLat > 0.0001 || diffLong > 0.0001) {
-				console.log(region);
 				this.setState({
 					gpsButtonColor: Colors.tabIconDefault,
 					displayGps: true
