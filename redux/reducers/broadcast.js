@@ -5,7 +5,8 @@ import {
 } from '../actions/actionTypes';
 
 const INITIAL_STATE = {
-	refreshing: false
+	refreshing: false,
+	broadcastCards: []
 };
 
 export const broadcast = (state = INITIAL_STATE, action) => {

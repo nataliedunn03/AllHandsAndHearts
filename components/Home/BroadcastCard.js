@@ -63,22 +63,15 @@ const RemoveComponent = ({ cardKey, onClosePress }) => (
 class BroadcastCard extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			opacity: new Animated.Value(0)
-		};
 	}
 	componentDidUpdate() {
 		//LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-		Animated.timing(this.state.opacity, {
-			toValue: 1,
-			duration: 250
-		}).start();
 	}
 
 	render() {
 		const { style, title, body, cardKey, onClosePress } = this.props;
 		return (
-			<View style={[style, { opacity: this.state.opacity }]}>
+			<View style={[style]}>
 				<TouchableHighlight
 					underlayColor={'transparent'}
 					onPress={() => console.log('Card is clicked')}

@@ -15,7 +15,6 @@ import {
 import { WebBrowser } from 'expo';
 import { MonoText } from '../components/StyledText';
 //import BroadcastsContainer from '../containers/BroadcastsContainer';
-import ActivitiesContainer from '../containers/ActivitiesContainer';
 
 import Broadcasts from '../components/Home/Broadcasts';
 import Activities from '../components/Home/Activities';
@@ -27,12 +26,13 @@ export default class HomeScreen extends React.Component {
 	_handleRefresh = async () => {
 		try {
 			await this.props.getBroadcastCards();
-			LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+			//LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 		} catch (e) {
 			console.log(e);
 		}
 	};
 	render() {
+		console.log(this.props);
 		return (
 			<ScrollView
 				style={{
@@ -57,10 +57,7 @@ export default class HomeScreen extends React.Component {
 						removeBroadcastCard={this.props.removeBroadcastCard}
 					/>
 				)}
-				<Activities
-					broadcast={this.props.broadcast}
-					removeBroadcastCard={this.props.removeBroadcastCard}
-				/>
+				{this.props.activity && <Activities activity={this.props.activity} />}
 			</ScrollView>
 		);
 	}
