@@ -1,42 +1,60 @@
-import { Notifications } from 'expo';
 import React from 'react';
-import { StackNavigator } from 'react-navigation';
-
-import MainTabNavigator from './MainTabNavigator';
+import { Platform, BackHandler } from 'react-native';
+import { Notifications } from 'expo';
+import { connect } from 'react-redux';
+import {
+	addNavigationHelpers,
+	NavigationActions,
+	StackNavigator,
+	TabNavigator
+} from 'react-navigation';
+import Colors from '../constants/Colors';
+import MainModalNavigator from './MainModalTabNavigator';
 import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
+import LoginScreen from '../containers/LoginScreenContainer';
 
-const RootStackNavigator = StackNavigator(
-	{
-		Main: {
-			screen: MainTabNavigator
+export const AppNavigator = StackNavigator({
+	LoginScreen: {
+		screen: LoginScreen,
+		navigationOptions: {
+			header: null
 		}
 	},
-	{
-		navigationOptions: () => ({
-			headerTitleStyle: {
-				fontWeight: 'normal',
-				fontSize: 15,
-				color: '#222222'
-			},
-			headerStyle: {
-				backgroundColor: '#FFFFFF',
-				borderBottomColor: '#F2F2F2'
-			}
-		})
-	}
-);
+	MainModalNavigator: { screen: MainModalNavigator }
+});
+class RootNavigator extends React.Component {
+	componentWillMount() {
+		if (Platform.OS !== 'android') {
+			return;
+		}
 
-export default class RootNavigator extends React.Component {
-	componentDidMount() {
-		this._notificationSubscription = this._registerForPushNotifications();
+		BackHandler.addEventListener('hardwareBackPress', () => {
+			const { dispatch, nav } = this.props;
+
+			// This assumes that we always want to clsoe the app when you are at the first screen
+			// of the top most navigator or at the first screen of the first level of nested navigators
+			if (nav.index === 0) {
+				if (!nav.routes[0].index) {
+					return false;
+				} else if (nav.routes[0].index === 0) {
+					return false;
+				}
+			}
+
+			dispatch(NavigationActions.back());
+
+			return true;
+		});
 	}
 
 	componentWillUnmount() {
+		if (Platform.OS === 'android') {
+			BackHandler.removeEventListener('hardwareBackPress');
+		}
 		this._notificationSubscription && this._notificationSubscription.remove();
 	}
-
-	render() {
-		return <RootStackNavigator />;
+	componentDidMount() {
+		this._notificationSubscription = this._registerForPushNotifications();
 	}
 
 	_registerForPushNotifications() {
@@ -57,4 +75,19 @@ export default class RootNavigator extends React.Component {
 			`Push notification ${origin} with data: ${JSON.stringify(data)}`
 		);
 	};
+	render() {
+		const { dispatch, nav } = this.props;
+
+		return (
+			<AppNavigator
+				navigation={addNavigationHelpers({ dispatch, state: nav })}
+			/>
+		);
+	}
 }
+
+const mapStateToProps = state => ({
+	nav: state.nav
+});
+
+export default connect(mapStateToProps)(RootNavigator);

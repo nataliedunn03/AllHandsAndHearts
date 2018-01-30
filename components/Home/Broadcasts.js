@@ -1,0 +1,116 @@
+import React, { Component } from 'react';
+
+import {
+	StyleSheet,
+	ScrollView,
+	LayoutAnimation,
+	UIManager,
+	InteractionManager
+} from 'react-native';
+
+import { View } from 'react-native-animatable';
+import Colors from '../../constants/Colors';
+import Layout from '../../constants/Layout';
+import BroadcastCard from './BroadcastCard';
+import { MonoText } from '../../components/StyledText';
+
+//enable in android
+if (Layout.android)
+	UIManager.setLayoutAnimationEnabledExperimental &&
+		UIManager.setLayoutAnimationEnabledExperimental(true);
+
+export default class Broadcasts extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			refreshing: false
+		};
+	}
+	componentDidMount() {
+		//set this to the -10 which is equivalent to margin 0 as to parent
+		setTimeout(() => {
+			this.scrollView.scrollTo({ x: -10 });
+		}, 0);
+	}
+
+	componentWillUpdate() {}
+	_removeItem = async index => {
+		await this.props.removeBroadcastCard(index);
+		LayoutAnimation.easeInEaseOut();
+	};
+	removeBroadcastCard = async index => {
+		this._removeItem(index);
+	};
+	_renderCards = cards => {
+		return cards.map((card, index) => {
+			return (
+				<BroadcastCard
+					key={index}
+					cardKey={index}
+					title={card.title}
+					body={card.body}
+					style={{
+						margin: 10,
+						marginTop: 0,
+						width: cards.length > 1 ? Layout.width - 80 : Layout.width - 34,
+						height: 150
+					}}
+					onCardPress={() => console.log(`card at ${index} is pressed`)}
+					onClosePress={this.removeBroadcastCard}
+				/>
+			);
+		});
+	};
+	render() {
+		let { style, broadcast: { broadcastCards } } = this.props;
+		return (
+			broadcastCards &&
+			broadcastCards.length > 0 && (
+				<View
+					ref={ref => {
+						this.broadcastRef = ref;
+					}}
+					style={[styles.broadcastContainer]}
+				>
+					<MonoText style={styles.monoText}>Broadcast</MonoText>
+					<ScrollView
+						ref={scrollView => {
+							this.scrollView = scrollView;
+						}}
+						style={[styles.scrollView, style]}
+						horizontal
+						showsHorizontalScrollIndicator={false}
+						decelerationRate={0}
+						snapToInterval={Layout.width - 60}
+						snapToAlignment={'center'}
+						contentInset={{
+							top: 0,
+							left: 16,
+							bottom: 0,
+							right: 16
+						}}
+					>
+						{this._renderCards(broadcastCards)}
+					</ScrollView>
+				</View>
+			)
+		);
+	}
+}
+
+const styles = StyleSheet.create({
+	scrollView: {},
+	monoText: {
+		color: '#000000',
+		fontSize: 28,
+		marginTop: 10,
+		marginBottom: 16,
+		marginLeft: 16,
+		fontWeight: '500',
+		textAlign: 'left',
+		backgroundColor: 'transparent'
+	},
+	broadcastContainer: {
+		paddingTop: 10
+	}
+});

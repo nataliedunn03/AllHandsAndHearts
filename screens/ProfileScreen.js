@@ -1,7 +1,7 @@
-import React from 'react';
 //import { ExpoConfigView } from '@expo/samples';
+import React from 'react';
 import Touchable from 'react-native-platform-touchable';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 export default class ProfileScreen extends React.Component {
 	render() {
 		/* Go ahead and delete ExpoConfigView and replace it with your
@@ -11,13 +11,13 @@ export default class ProfileScreen extends React.Component {
 				<Touchable
 					onPress={() => console.log('hello!')}
 					style={{
-						backgroundColor: '#eee',
+						backgroundColor: '#fff',
 						paddingVertical: 30,
 						paddingHorizontal: 80
 					}}
 					background={Touchable.Ripple('blue')}
 				>
-					<Text>Hello there!</Text>
+					<Text>Let's come back to this!</Text>
 				</Touchable>
 			</View>
 		);

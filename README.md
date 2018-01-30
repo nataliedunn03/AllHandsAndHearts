@@ -13,7 +13,7 @@ FFG project for HappyHandsHearts client
 
 `/assets` All of static assets such as images should go here
 
-`/constants/theme` All of Theme style
+`/constants/Colors` All of Theme style
 `/constans/apiuri` All of API URL should reside here
 `/constants/actionTypes` All of redux types should persis here
 

@@ -1,14 +1,12 @@
 'use strict';
 
-import { Dimensions } from 'react-native';
+import { Dimensions, Platform } from 'react-native';
 
-const width = Dimensions.get('window').width;
-const height = Dimensions.get('window').height;
-
+const { height, width } = Dimensions.get('window');
+const android = Platform.OS === 'android';
 export default {
-	window: {
-		width,
-		height
-	},
-	isSmallDevice: width < 375
+	height: android ? height - 24 : height,
+	width: width,
+	isSmallDevice: width < 375,
+	android
 };
