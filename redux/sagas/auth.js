@@ -10,7 +10,8 @@ import {
 	LOGOUT_REQUEST,
 	REQUEST_ERROR,
 	RESET_TO_MAIN,
-	GET_BROADCAST_CARDS_ON_LOGIN
+	GET_BROADCAST_CARDS_ON_LOGIN,
+	GET_ACTIVITY_CARDS_ON_LOGIN
 } from '../actions/actionTypes';
 import * as AuthService from '../../services/auth';
 import { getBroadcastCards } from '../../services/broadcast';
@@ -68,6 +69,9 @@ function* loginFlow(action) {
 		if (auth) {
 			yield put({
 				type: GET_BROADCAST_CARDS_ON_LOGIN
+			});
+			yield put({
+				type: GET_ACTIVITY_CARDS_ON_LOGIN
 			});
 			yield put({ type: SET_AUTH, newAuthState: true });
 			yield put({ type: RESET_TO_MAIN });

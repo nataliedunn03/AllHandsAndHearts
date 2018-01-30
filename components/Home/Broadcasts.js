@@ -29,7 +29,7 @@ export default class Broadcasts extends Component {
 	componentDidMount() {
 		//set this to the -10 which is equivalent to margin 0 as to parent
 		setTimeout(() => {
-			this.scrollView.scrollTo({ x: -10 });
+			if (this.scrollViewRef) this.scrollViewRef.scrollTo({ x: -10 });
 		}, 0);
 	}
 
@@ -75,7 +75,7 @@ export default class Broadcasts extends Component {
 					<MonoText style={styles.monoText}>Broadcast</MonoText>
 					<ScrollView
 						ref={scrollView => {
-							this.scrollView = scrollView;
+							this.scrollViewRef = scrollView;
 						}}
 						style={[styles.scrollView, style]}
 						horizontal

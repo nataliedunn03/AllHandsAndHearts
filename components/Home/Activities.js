@@ -12,53 +12,51 @@ export default class Activities extends Component {
 		};
 	}
 	componentDidUpdate() {
-		//LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+		LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 	}
+	_renderCards = cards => {
+		return cards.map((card, index) => {
+			return (
+				<ActivityCard
+					key={index}
+					name={card.name}
+					taskText={card.location}
+					taskDetail={card.detail}
+				/>
+			);
+		});
+	};
+
 	render() {
+		let { style, activity: { activityCards } } = this.props;
 		return (
-			<View
-				ref={ref => {
-					this.activitiesRef = ref;
-				}}
-				style={{
-					flex: 1
-				}}
-			>
-				<MonoText
+			activityCards &&
+			activityCards.length > 0 && (
+				<View
+					ref={ref => {
+						this.activitiesRef = ref;
+					}}
 					style={{
-						color: '#000000',
-						fontSize: 28,
-						marginTop: 10,
-						marginLeft: 16,
-						fontWeight: '500',
-						marginBottom: 10,
-						textAlign: 'left',
-						backgroundColor: 'transparent'
+						flex: 1
 					}}
 				>
-					Activities
-				</MonoText>
-				<ActivityCard
-					name="Maddie"
-					taskText="Added a pin in Puerto Rico"
-					taskDetail="School collapsed. Evacuation and transportation needed."
-				/>
-				<ActivityCard
-					name="Ed"
-					taskText="Added a pin in New York area"
-					taskDetail="Trees on the road. Transportation stopped. Volunteers required."
-				/>
-				<ActivityCard
-					name="Sam"
-					taskText="Added a pin in Texas area"
-					taskDetail="Trees on the road. Transportation stopped. Volunteers required."
-				/>
-				<ActivityCard
-					name="Steven"
-					taskText="Added a pin in New York area"
-					taskDetail="Trees on the road. Transportation stopped. Volunteers required."
-				/>
-			</View>
+					<MonoText
+						style={{
+							color: '#000000',
+							fontSize: 28,
+							marginTop: 10,
+							marginBottom: 16,
+							marginLeft: 16,
+							fontWeight: '500',
+							textAlign: 'left',
+							backgroundColor: 'transparent'
+						}}
+					>
+						Activities
+					</MonoText>
+					{this._renderCards(activityCards)}
+				</View>
+			)
 		);
 	}
 }
