@@ -1,21 +1,20 @@
 'use strict';
-
 import React from 'react';
 import { Platform, StyleSheet, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { TabNavigator, TabBarBottom } from 'react-navigation';
+import { TabNavigator, TabBarBottom, StackNavigator } from 'react-navigation';
 
+import MapScreen from '../screens/MapScreen';
+import MarkerViewScreen from '../screens/MarkerViewScreen';
+import ProfileScreen from '../screens/ProfileScreen';
+import HomeScreenContainer from '../containers/HomeScreenContainer';
 import Colors from '../constants/Colors';
 
-import HomeScreen from '../screens/HomeScreen';
-import MapScreen from '../screens/MapScreen';
-import NotificationScreen from '../screens/NotificationScreen';
-import ProfileScreen from '../screens/ProfileScreen';
-
-export default TabNavigator(
+const MainTabNavigator = TabNavigator(
 	{
 		Home: {
-			screen: HomeScreen,
+			screen: HomeScreenContainer,
+			path: '/',
 			navigationOptions: {
 				headerTitle: 'HOME',
 				tabBarLabel: 'Home'
@@ -23,20 +22,15 @@ export default TabNavigator(
 		},
 		Maps: {
 			screen: MapScreen,
+			path: '/maps',
 			navigationOptions: {
 				headerTitle: 'MAPS',
 				tabBarLabel: 'Maps'
 			}
 		},
-		Notification: {
-			screen: NotificationScreen,
-			navigationOptions: {
-				headerTitle: 'NOTIFICATIONS',
-				tabBarLabel: 'Notifications'
-			}
-		},
 		Profile: {
 			screen: ProfileScreen,
+			path: '/profile',
 			navigationOptions: {
 				headerTitle: 'PROFILE',
 				tabBarLabel: 'Profile'
@@ -45,6 +39,16 @@ export default TabNavigator(
 	},
 	{
 		navigationOptions: ({ navigation }) => ({
+			headerTitleStyle: {
+				color: Colors.defaultColor.PAPER_COLOR,
+				fontWeight: '600',
+				justifyContent: 'space-between',
+				textAlign: 'center'
+			},
+			headerStyle: {
+				backgroundColor: Colors.defaultColor.PRIMARY_COLOR,
+				borderBottomColor: '#F2F2F2'
+			},
 			tabBarIcon: ({ focused }) => {
 				const { routeName } = navigation.state;
 				let iconName;
@@ -61,12 +65,12 @@ export default TabNavigator(
 								? `ios-map${focused ? '' : '-outline'}`
 								: 'md-map';
 					break;
-				case 'Notification':
+					/*case 'Notification':
 					iconName =
 							Platform.OS === 'ios'
 								? `ios-notifications${focused ? '' : '-outline'}`
 								: 'md-notifications';
-					break;
+					break;*/
 				case 'Profile':
 					iconName =
 							Platform.OS === 'ios'
@@ -84,17 +88,12 @@ export default TabNavigator(
 			}
 		}),
 		tabBarComponent: props => {
-			return (
-				<TabBarBottom
-					{...props}
-					style={{
-						backgroundColor: '#FFFFFF',
-						borderTopColor: '#E0E0E0'
-					}}
-				/>
-			);
+			return <TabBarBottom {...props} style={styles.tabBarBottom} />;
 		},
 		tabBarPosition: 'bottom',
+		tabBarOptions: {
+			activeTintColor: Colors.tabIconSelected
+		},
 		animationEnabled: true,
 		configureTransition: () => ({
 			timing: Animated.spring,
@@ -104,3 +103,42 @@ export default TabNavigator(
 		swipeEnabled: false
 	}
 );
+
+const styles = StyleSheet.create({
+	tabBarBottom: {
+		backgroundColor: Colors.MainNavigation.BACKGROUND.COLOR,
+		borderTopColor: Colors.MainNavigation.BORDER.COLOR
+	}
+});
+
+const MainModalNavigator = StackNavigator(
+	{
+		MainTabNavigator: {
+			screen: MainTabNavigator
+		},
+		Marker: {
+			screen: MarkerViewScreen,
+			path: '/marker/:name',
+			navigationOptions: ({ navigation }) => ({
+				headerTitleStyle: {
+					color: Colors.defaultColor.PAPER_COLOR,
+					fontWeight: '600',
+					justifyContent: 'space-between',
+					textAlign: 'center'
+				},
+				headerStyle: {
+					backgroundColor: Colors.defaultColor.PRIMARY_COLOR,
+					borderBottomColor: '#F2F2F2'
+				},
+				headerTitle: `${
+					navigation.state.params.name
+						? navigation.state.params.name
+						: 'New Marker'
+				}`
+			})
+		}
+	},
+	{ headerMode: 'none', mode: 'modal' }
+);
+
+export default MainModalNavigator;

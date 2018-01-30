@@ -14,7 +14,6 @@ export const alertIfLocationisDisabled = async () => {
 		alert('Location is turned off! Chage it in settings');
 	}
 };
-
 export const getUserCurrentLocation = async () => {
 	const { status } = await Permissions.askAsync(Permissions.LOCATION);
 	return status === 'granted' ? getCurrentLocation() : {};

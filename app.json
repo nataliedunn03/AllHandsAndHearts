@@ -1,21 +1,21 @@
 {
-  "expo": {
-    "name": "Happy Hands & Hearts",
-    "description": "FFG Happy Hearts Fund project",
-    "slug": "FFG",
-    "privacy": "public",
-    "sdkVersion": "23.0.0",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "primaryColor": "#cccccc",
-    "icon": "./assets/images/icon.png",
-    "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "ios": {
-      "supportsTablet": true
-    }
-  }
+	"expo": {
+		"name": "AHH",
+		"description": "All Hands and Hearts -- Smart Response",
+		"slug": "AHH",
+		"privacy": "unlisted",
+		"sdkVersion": "25.0.0",
+		"version": "1.0.0",
+		"orientation": "portrait",
+		"primaryColor": "#cccccc",
+		"icon": "./assets/images/icon.png",
+		"splash": {
+			"image": "./assets/images/splash.png",
+			"resizeMode": "contain",
+			"backgroundColor": "#ffffff"
+		},
+		"ios": {
+			"supportsTablet": true
+		}
+	}
 }

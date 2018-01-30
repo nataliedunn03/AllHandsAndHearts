@@ -1,5 +1,4 @@
 'use strict';
-
 import React from 'react';
 import {
 	Image,
@@ -8,74 +7,61 @@ import {
 	StyleSheet,
 	Text,
 	TouchableOpacity,
-	View
+	View,
+	RefreshControl,
+	Animated,
+	LayoutAnimation
 } from 'react-native';
 import { WebBrowser } from 'expo';
-
 import { MonoText } from '../components/StyledText';
+//import BroadcastsContainer from '../containers/BroadcastsContainer';
+import ActivitiesContainer from '../containers/ActivitiesContainer';
 
+import Broadcasts from '../components/Home/Broadcasts';
+import Activities from '../components/Home/Activities';
+import Colors from '../constants/Colors';
 export default class HomeScreen extends React.Component {
+	state = {
+		scrollY: 0
+	};
+	_handleRefresh = async () => {
+		try {
+			await this.props.getBroadcastCards();
+			LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+		} catch (e) {
+			console.log(e);
+		}
+	};
 	render() {
 		return (
-			<View style={styles.container}>
-				<ScrollView
-					style={styles.container}
-					contentContainerStyle={styles.contentContainer}
-				>
-					<View style={styles.welcomeContainer}>
-						<Image
-							source={
-								__DEV__
-									? require('../assets/images/robot-dev.png')
-									: require('../assets/images/robot-prod.png')
-							}
-							style={styles.welcomeImage}
-						/>
-					</View>
-
-					<View style={styles.getStartedContainer}>
-						{this._maybeRenderDevelopmentModeWarning()}
-
-						<Text style={styles.getStartedText}>
-							Let's work on the 'Maps' tab for now
-						</Text>
-
-						<View
-							style={[styles.codeHighlightContainer, styles.homeScreenFilename]}
-						>
-							<MonoText style={styles.codeHighlightText}>
-								screens/MapScreen.js
-							</MonoText>
-						</View>
-						<TouchableOpacity
-							onPress={() => {
-								WebBrowser.openBrowserAsync(
-									'https://github.com/react-community/react-native-maps'
-								);
-							}}
-						>
-							<Text style={styles.helpLinkText}>
-								{' '}
-								Click here to go over react native navigation by AirBnb
-							</Text>
-						</TouchableOpacity>
-						<Text style={styles.getStartedText}>
-							Here's the deal: 1. We need to get current location (Complete!)
-						</Text>
-						<Text style={styles.getStartedText}>
-							2. We need a button that moves map back to our current location .
-							Like the one in google maps. (look at the react native vector
-							icons for gps icon) (Complete!)
-						</Text>
-						<Text style={styles.getStartedText}>
-							3. We need markers on the map
-						</Text>
-						<Text style={styles.getStartedText}>
-							4. We need to connect those to Salesforce 5. Boom MVP is done
-						</Text>
-					</View>
-				</ScrollView>
-			</View>
+			<ScrollView
+				style={{
+					flex: 1,
+					backgroundColor: Colors.defaultColor.PAGE_BACKGROUND
+				}}
+				ref={ref => {
+					this.homeScreenComponentRef = ref;
+				}}
+				refreshControl={
+					<RefreshControl refreshing={false} onRefresh={this._handleRefresh} />
+				}
+				scrollEventThrottle={16}
+				showsVerticalScrollIndicator={false}
+				onScroll={Animated.event([
+					{ nativeEvent: { contentOffset: { y: this.state.scrollY } } }
+				])}
+			>
+				{this.props.broadcast && (
+					<Broadcasts
+						broadcast={this.props.broadcast}
+						removeBroadcastCard={this.props.removeBroadcastCard}
+					/>
+				)}
+				<Activities
+					broadcast={this.props.broadcast}
+					removeBroadcastCard={this.props.removeBroadcastCard}
+				/>
+			</ScrollView>
 		);
 	}
 
@@ -127,7 +113,7 @@ const styles = StyleSheet.create({
 		textAlign: 'center'
 	},
 	contentContainer: {
-		paddingTop: 30
+		paddingTop: 15
 	},
 	welcomeContainer: {
 		alignItems: 'center',
@@ -179,7 +165,7 @@ const styles = StyleSheet.create({
 			}
 		}),
 		alignItems: 'center',
-		backgroundColor: '#fbfbfb',
+		backgroundColor: 'red',
 		paddingVertical: 20
 	},
 	tabBarInfoText: {
