@@ -17,7 +17,7 @@ const getActivitiesHelper = function* getActivitiesHelper() {
 	yield put({ type: SENDING_REQUEST, sending: true });
 	try {
 		const activities = yield call(getActivities, '');
-		yield call(delay, 1000, true); // simulate network events
+		//yield call(delay, 1000, true); // simulate network events
 		yield put({ type: SENDING_REQUEST, sending: false });
 		return activities;
 	} catch (error) {

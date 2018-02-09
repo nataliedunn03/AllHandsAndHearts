@@ -12,7 +12,9 @@ export default class Activities extends Component {
 		};
 	}
 	componentDidUpdate() {
-		LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+		setTimeout(() => {
+			LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+		}, 5);
 	}
 	_renderCards = cards => {
 		return cards.map((card, index) => {
