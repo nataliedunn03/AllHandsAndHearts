@@ -2,7 +2,17 @@
 
 FFG project for HappyHandsHearts client
 
+Pre-Req: 
+1. create-reactnative-app
+2. expo exp
+3. expo xde - optional
+
+Post: 
+1. close and go to root folder
+2. run npm install / yarn
+3. exp start / use XDE to navigate to project folder -> select device
 #dir overview
+
 
 ### Let's follow this style when we create a story
 
