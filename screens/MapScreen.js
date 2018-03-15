@@ -7,20 +7,21 @@ import {
 	Platform,
 	Animated,
 	Button,
-	TextInput
+	TextInput,
+	Easing
 } from 'react-native';
-
+import Touchable from 'react-native-platform-touchable';
 import { MapView, Location, Constants, Permissions } from 'expo';
 import CurrentLocationButton from '../components/CurrentLocationButton';
 import { View, Image, Text } from 'react-native-animatable';
 import Colors from '../constants/Colors';
+import Modal from 'react-native-modalbox';
 import {
 	alertIfLocationisDisabled,
 	getUserCurrentLocation
 } from '../utils/Permissions';
 import Layout from '../constants/Layout';
 import StyledInput from '../components/StyledInput';
-import SlidingUpPanel from 'rn-sliding-up-panel';
 
 import Marker from '../components/Marker';
 
@@ -46,7 +47,9 @@ export default class MapScreen extends React.Component {
 			displayGps: false,
 			markers: markers,
 			visible: false,
-			markersTouch: []
+			markersTouch: [],
+			markerModalVisible: false,
+			markerModalSwipedUp: false
 		};
 	}
 	componentDidMount() {
@@ -87,9 +90,7 @@ export default class MapScreen extends React.Component {
 					longitudeDelta: DELTA * (Layout.width / Layout.height),
 					latitudeDelta: DELTA
 				};
-				if (this.state.mapReady) {
-					this.mapViewRef.animateToRegion(region);
-				}
+				this.mapViewRef.animateToRegion(region);
 			}
 		} catch (e) {
 			console.log(e);
@@ -127,7 +128,7 @@ export default class MapScreen extends React.Component {
 		return this.state.displayGps ? 'fadeIn' : 'fadeOut';
 	};
 
-	_createNewMarker(e) {
+	_createNewMarker(e, marker) {
 		console.log(e.nativeEvent.coordinate);
 		const id = randomId();
 		let markers = [
@@ -136,7 +137,8 @@ export default class MapScreen extends React.Component {
 				coordinate: e.nativeEvent.coordinate,
 				key: id,
 				color: Colors.defaultColor.PRIMARY_COLOR,
-				description: 'This is a description'
+				description: 'This is a description',
+				name: marker.name
 			}
 		];
 		this.setState({
@@ -157,7 +159,39 @@ export default class MapScreen extends React.Component {
 			</View>
 		);
 	}
-	_onMarkerPress(marker) {
+	onModalCloseCallback = () => {
+		this.setState({
+			markerModalVisible: false
+		});
+	};
+	_renderModalContent = () => {
+		return (
+			<View style={styles.modalContent}>
+				<Touchable
+					onPress={this.onModalCloseCallback}
+					style={{
+						backgroundColor: '#fff',
+						paddingVertical: 30
+					}}
+					background={Touchable.Ripple('blue')}
+				>
+					<View>
+						<Text> Hey Ye! use something like this</Text>
+						<Text> Hey Ye! use something like this</Text>
+						<Text> Hey Ye! use something like this</Text>
+						<Text> Hey Ye! use something like this</Text>
+						<Text> Hey Ye! use something like this</Text>
+						<Text> Hey Ye! use something like this</Text>
+						<Text> Hey Ye! use something like this</Text>
+						<Text> Hey Ye! use something like this</Text>
+						<Text> Hey Ye! use something like this</Text>
+						<Text> Hey Ye! use something like this</Text>
+					</View>
+				</Touchable>
+			</View>
+		);
+	};
+	async _onMarkerPress(e, marker) {
 		/*this.setState({
 			markersTouch: [
 				...this.state.markersTouch,
@@ -166,7 +200,27 @@ export default class MapScreen extends React.Component {
 				}
 			]
 		});*/
-		this.props.navigation.navigate('Marker', { name: marker.name });
+		if (e != null) {
+			e.persist();
+			console.log(e.nativeEvent.coordinate);
+			const coord = e.nativeEvent.coordinate;
+			try {
+				Location.setApiKey('AIzaSyChIWVSK41LTxJuDDYJECnBsAbMkzy13Fk');
+				const decodedLocation = await Location.reverseGeocodeAsync(coord);
+				console.log(decodedLocation);
+				this._createNewMarker(e, decodedLocation[0]);
+				this.props.navigation.navigate('Marker', {
+					name: decodedLocation[0].name
+				});
+			} catch (e) {
+				console.log(e);
+			}
+		} else {
+			//this.props.navigation.navigate('Marker', { name: marker.name });
+			this.setState({
+				markerModalVisible: true
+			});
+		}
 	}
 	_renderMapMarker() {
 		return this.state.markers.map(marker => {
@@ -175,13 +229,14 @@ export default class MapScreen extends React.Component {
 					key={marker.key}
 					coordinate={marker.coordinate}
 					pinColor={marker.color}
-					onPress={() => this._onMarkerPress(marker)}
+					onPress={() => this._onMarkerPress(null, marker)}
 				/>
 			);
 		});
 	}
 	//see if map is ready
 	_onMapReady = () => {
+		console.log('\n\n\n map is ready bitch \n\n\n');
 		this.setState({ mapReady: true });
 	};
 	//callback on pan map
@@ -190,12 +245,35 @@ export default class MapScreen extends React.Component {
 	_onRegionChangeComplete = region => {
 		this._updateGPSButton(region);
 	};
-
+	modalSwiped = () => {
+		console.log('Modal swiped up');
+		this.setState({
+			markerModalSwipedUp: true
+		});
+	};
+	_renderModal = () => {
+		return (
+			<Modal
+				isOpen={this.state.markerModalVisible}
+				onClosed={this.onModalCloseCallback}
+				style={[
+					styles.markerModal,
+					this.state.markerModalSwipedUp ? styles.markerModalFullScreen : ''
+				]}
+				easing={Easing.in}
+				position="bottom"
+				animationDuration={200}
+			>
+				{this._renderModalContent()}
+			</Modal>
+		);
+	};
 	render() {
 		return (
 			<View style={styles.container}>
 				<MapView
-					style={styles.map}
+					provider={MapView.PROVIDER_GOOGLE}
+					style={[styles.map]}
 					onMapReady={this._onMapReady}
 					initialRegion={this.state.initialRegion}
 					showsUserLocation={true}
@@ -206,14 +284,17 @@ export default class MapScreen extends React.Component {
 					zoomEnabled={true}
 					rotateEnabled={true}
 					showsScale={true}
+					showsMyLocationButton={false}
+					showsIndoorLevelPicker={true}
 					onRegionChange={this._onRegionChange}
 					onRegionChangeComplete={this._onRegionChangeComplete}
-					onLongPress={e => this._createNewMarker(e)}
+					onLongPress={e => this._onMarkerPress(e, null)}
 					ref={element => (this.mapViewRef = element)}
 				>
 					{this._renderMapMarker()}
 				</MapView>
 				{this._renderGPSButton()}
+				{this._renderModal()}
 			</View>
 		);
 	}
@@ -228,5 +309,23 @@ const styles = StyleSheet.create({
 		...StyleSheet.absoluteFillObject,
 		flex: 1,
 		zIndex: -1
+	},
+	modalContent: {
+		backgroundColor: 'white',
+		padding: 22,
+		justifyContent: 'center',
+		alignItems: 'center',
+		borderRadius: 4,
+		borderColor: 'rgba(0, 0, 0, 0.1)'
+	},
+	markerModal: {
+		justifyContent: 'flex-end',
+		margin: 0,
+		height: 200,
+		zIndex: 10
+	},
+	markerModalFullScreen: {
+		flex: 1,
+		height: 700
 	}
 });

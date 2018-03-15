@@ -14,17 +14,16 @@
 		"react-native": "https://github.com/expo/react-native/archive/sdk-25.0.0.tar.gz",
 		"react-native-animatable": "^1.2.4",
 		"react-native-hide-with-keyboard": "^1.0.0",
+		"react-native-modalbox": "^1.4.2",
 		"react-native-platform-touchable": "^1.1.1",
 		"react-navigation": "^1.0.0-beta.26",
 		"react-redux": "^5.0.6",
 		"redux": "^3.7.2",
-		"redux-saga": "^0.16.0",
-		"rn-sliding-up-panel": "^1.1.7"
+		"redux-saga": "^0.16.0"
 	},
 	"devDependencies": {
 		"eslint": "^4.13.1",
 		"eslint-plugin-react": "^7.5.1",
-		"jest-expo": "^25.0.0",
 		"eslint-plugin-react-native": "^3.2.0",
 		"redux-logger": "^3.0.6",
 		"react-dom": "16.0.0",

@@ -50,14 +50,14 @@ const styles = StyleSheet.create({
 		alignItems: 'flex-end'
 	},
 	currentLocationButton: {
-		width: 40,
-		height: 40,
+		width: 44,
+		height: 44,
 		bottom: 30,
 		backgroundColor: Colors.navHeaderBackground,
 		justifyContent: 'center',
 		alignItems: 'center',
 		shadowColor: Colors.tabIconDefault,
-		borderRadius: 10,
+		borderRadius: 22,
 		shadowOffset: { width: 1, height: 2 },
 		shadowRadius: 2,
 		shadowOpacity: 0.25,

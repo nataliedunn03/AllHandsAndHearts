@@ -22,4 +22,6 @@ const broadCastCardsData = [
 	}
 ];
 
-export const getBroadcastCards = uerId => broadCastCardsData;
+export const getBroadcastCards = uerId => {
+	return broadCastCardsData;
+};

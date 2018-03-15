@@ -35,9 +35,8 @@ const authorize = function* authorize({
 		if (isRegistering) {
 			response = yield call(AuthService.register, username, hash);
 		} else {
-			response = yield call(AuthService.login, username, hash);
+			response = yield AuthService.getAuthToken;
 		}
-
 		return response;
 	} catch (error) {
 		yield put({ type: REQUEST_ERROR, error: error.message });
@@ -66,6 +65,7 @@ function* loginFlow(action) {
 			password,
 			isRegistering: false
 		});
+		console.log(auth);
 		if (auth) {
 			yield put({
 				type: GET_BROADCAST_CARDS_ON_LOGIN
