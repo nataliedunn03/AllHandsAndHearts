@@ -190,28 +190,28 @@ export default class MapScreen extends React.Component {
   };
   async _onMarkerPress(e, marker) {
     /*this.setState({
-				markersTouch: [
-					...this.state.markersTouch,
-					{
-						key: randomId()
-					}
-				]
-			});*/
+					markersTouch: [
+						...this.state.markersTouch,
+						{
+							key: randomId()
+						}
+					]
+				});*/
     if (e != null) {
       e.persist();
       /*		console.log(e.nativeEvent.coordinate);
-				  const coord = e.nativeEvent.coordinate;
-				  try {
-					  Location.setApiKey('AIzaSyChIWVSK41LTxJuDDYJECnBsAbMkzy13Fk');
-					  const decodedLocation = await Location.reverseGeocodeAsync(coord);
-					  console.log(decodedLocation);
-					  this._createNewMarker(e, decodedLocation[0]);
-					  this.props.navigation.navigate('Marker', {
-						  name: decodedLocation[0].name
-					  });
-				  } catch (e) {
-					  console.log(e);
-				  }*/
+						const coord = e.nativeEvent.coordinate;
+						try {
+							Location.setApiKey('AIzaSyChIWVSK41LTxJuDDYJECnBsAbMkzy13Fk');
+							const decodedLocation = await Location.reverseGeocodeAsync(coord);
+							console.log(decodedLocation);
+							this._createNewMarker(e, decodedLocation[0]);
+							this.props.navigation.navigate('Marker', {
+								name: decodedLocation[0].name
+							});
+						} catch (e) {
+							console.log(e);
+						}*/
       this.setState({
         markerModalVisible: true
       });
