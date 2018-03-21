@@ -1,32 +1,38 @@
 {
-	"main": "node_modules/expo/AppEntry.js",
-	"private": true,
-	"scripts": {
-		"test": "node ./node_modules/jest/bin/jest.js --watch",
-		"storybook": "storybook start -p 7007"
-	},
-	"jest": {
-		"preset": "jest-expo"
-	},
-	"dependencies": {
-		"expo": "^25.0.0",
-		"react": "16.2.0",
-		"react-native": "https://github.com/expo/react-native/archive/sdk-25.0.0.tar.gz",
-		"react-native-animatable": "^1.2.4",
-		"react-native-hide-with-keyboard": "^1.0.0",
-		"react-native-modalbox": "^1.4.2",
-		"react-native-platform-touchable": "^1.1.1",
-		"react-navigation": "^1.0.0-beta.26",
-		"react-redux": "^5.0.6",
-		"redux": "^3.7.2",
-		"redux-saga": "^0.16.0"
-	},
-	"devDependencies": {
-		"eslint": "^4.13.1",
-		"eslint-plugin-react": "^7.5.1",
-		"eslint-plugin-react-native": "^3.2.0",
-		"redux-logger": "^3.0.6",
-		"react-dom": "16.0.0",
-		"prop-types": "^15.6.0"
-	}
+  "main": "node_modules/expo/AppEntry.js",
+  "private": true,
+  "scripts": {
+    "test": "node ./node_modules/jest/bin/jest.js --watch",
+    "storybook": "storybook start -p 7007",
+    "precommit": "pretty-quick --staged"
+  },
+  "jest": {
+    "preset": "jest-expo"
+  },
+  "dependencies": {
+    "expo": "^25.0.0",
+    "npm": "^5.7.1",
+    "react": "16.2.0",
+    "react-native":
+      "https://github.com/expo/react-native/archive/sdk-25.0.0.tar.gz",
+    "react-native-animatable": "^1.2.4",
+    "react-native-hide-with-keyboard": "^1.0.0",
+    "react-native-modal": "^5.3.0",
+    "react-native-platform-touchable": "^1.1.1",
+    "react-navigation": "^1.5.8",
+    "react-redux": "^5.0.7",
+    "redux": "^3.7.2",
+    "redux-saga": "^0.16.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.0",
+    "eslint-plugin-react": "^7.7.0",
+    "eslint-plugin-react-native": "^3.2.1",
+    "husky": "^0.14.3",
+    "prettier": "^1.11.1",
+    "pretty-quick": "^1.4.1",
+    "prop-types": "^15.6.1",
+    "react-dom": "^16.2.0",
+    "redux-logger": "^3.0.6"
+  }
 }
