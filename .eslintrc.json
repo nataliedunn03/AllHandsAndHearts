@@ -23,6 +23,15 @@
     "react-native/no-inline-styles": 2,
     "react-native/no-color-literals": 2,
     "react/jsx-uses-react": "error",
-    "react/jsx-uses-vars": "error"
+    "react/jsx-uses-vars": "error",
+    "prettier/prettier": [
+      "error",
+      {
+        "singleQuote": true,
+        "bracketSpacing": false,
+        "jsxBracketSameLine": true,
+        "parser": "flow"
+      }
+    ]
   }
 }
