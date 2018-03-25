@@ -12,30 +12,23 @@ import Colors from "../constants/Colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import { alertIfLocationisDisabled } from "../utils/Permissions";
 
-export default class CurrentLocationButton extends React.Component {
+export default class SwitchRegionButton extends React.Component {
   constructor(props) {
     super(props);
   }
   onButtonPress = () => {
-    this.props.locationPermission
-      ? this.props.onPress()
-      : alertIfLocationisDisabled();
+    console.log("Open Region Form Modal");
   };
   render() {
+    const { onClick } = this.props;
     return (
-      <View style={[styles.currentLocationView, this.props.style]}>
+      <View style={[styles.switchRegionView, this.props.style]}>
         <TouchableOpacity
           activeOpacity={0.9}
-          style={styles.currentLocationButton}
-          onPress={this.onButtonPress}
+          style={styles.switchRegionButton}
+          onPress={onClick || this.onButtonPress}
         >
-          <MaterialIcons
-            name={
-              this.props.locationPermission ? "my-location" : "location-off"
-            }
-            size={20}
-            color={this.props.iconColor}
-          />
+          <MaterialIcons name="map" size={20} color={this.props.iconColor} />
         </TouchableOpacity>
       </View>
     );
@@ -43,13 +36,12 @@ export default class CurrentLocationButton extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  currentLocationView: {
+  switchRegionView: {
     position: "absolute",
-    left: 0,
-    right: 20,
-    alignItems: "flex-end"
+    left: 20,
+    alignItems: "flex-start"
   },
-  currentLocationButton: {
+  switchRegionButton: {
     width: 44,
     height: 44,
     bottom: 30,

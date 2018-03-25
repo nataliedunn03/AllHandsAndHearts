@@ -2,6 +2,7 @@
 import React from "react";
 import {
   StyleSheet,
+  ScrollView,
   Dimensions,
   TouchableOpacity,
   Platform,
@@ -13,9 +14,13 @@ import {
 import Touchable from "react-native-platform-touchable";
 import { MapView, Location, Constants, Permissions } from "expo";
 import CurrentLocationButton from "../components/CurrentLocationButton";
+import SwitchRegionButton from "../components/SwitchRegionButton";
+import BroadcastCard from "../components/Home/BroadcastCard";
 import { View, Image, Text } from "react-native-animatable";
 import Colors from "../constants/Colors";
 import ModalExample from "../components/Modal";
+
+import { getRegionCards } from "../services/regions";
 
 import {
   alertIfLocationisDisabled,
@@ -49,7 +54,7 @@ export default class MapScreen extends React.Component {
       markers: markers,
       visible: false,
       markersTouch: [],
-      markerModalVisible: false,
+      regionModalVisible: false,
       markerModalSwipedUp: false
     };
   }
@@ -84,7 +89,6 @@ export default class MapScreen extends React.Component {
   _moveToUserCurrentLocation = async () => {
     try {
       let { coords } = await getUserCurrentLocation();
-      console.log(coords);
       if (coords) {
         let region = {
           ...coords,
@@ -97,6 +101,7 @@ export default class MapScreen extends React.Component {
       console.log(e);
     }
   };
+
   //see if user moved the map and show button to come back to current location
   _updateGPSButton = region => {
     const { initialRegion, locationPermission } = this.state;
@@ -160,29 +165,82 @@ export default class MapScreen extends React.Component {
       </View>
     );
   }
+
+  //render the switch region button if map is moved
+  _renderSwitchRegionButton() {
+    return (
+      <View>
+        <SwitchRegionButton
+          style={{ top: -40 }}
+          onClick={this.onSwitchRegionButtonClick}
+        />
+      </View>
+    );
+  }
   onModalCloseCallback = () => {
     this.setState({
-      markerModalVisible: false
+      regionModalVisible: false
     });
   };
-  _renderModalContent = () => {
+  onSwitchRegionButtonClick = () => {
+    this.setState({
+      regionModalVisible: true
+    });
+  };
+
+  onRegionCardPress = card => {
+    let region = {
+      ...card,
+      longitudeDelta: DELTA * (Layout.width / Layout.height),
+      latitudeDelta: DELTA
+    };
+    this.mapViewRef.animateToRegion(region);
+    this.setState({
+      regionModalVisible: false
+    });
+  };
+
+  _renderRegionCards = () => {
+    const cards = getRegionCards();
+    return cards.map((card, index) => {
+      const body = "(" + card.latitude + ", " + card.longitude + ")";
+      return (
+        <BroadcastCard
+          key={index}
+          cardKey={index}
+          title={card.regionName}
+          body={body}
+          style={{
+            margin: 40,
+            width: cards.length > 1 ? Layout.width - 80 : Layout.width - 34,
+            height: 150
+          }}
+          onPress={() => this.onRegionCardPress(card)}
+        />
+      );
+    });
+  };
+
+  _renderRegionModalContent = () => {
     return (
       <View style={styles.modalContent}>
-        <Touchable
-          onPress={this.onModalCloseCallback}
-          background={Touchable.Ripple("blue")}
-        >
+        <Touchable background={Touchable.Ripple("blue")}>
           <View>
-            <Text> Hey Ye! use something like this</Text>
-            <Text> Hey Ye! use something like this</Text>
-            <Text> Hey Ye! use something like this</Text>
-            <Text> Hey Ye! use something like this</Text>
-            <Text> Hey Ye! use something like this</Text>
-            <Text> Hey Ye! use something like this</Text>
-            <Text> Hey Ye! use something like this</Text>
-            <Text> Hey Ye! use something like this</Text>
-            <Text> Hey Ye! use something like this</Text>
-            <Text> Hey Ye! use something like this</Text>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={true}
+              decelerationRate={0}
+              snapToInterval={Layout.width}
+              snapToAlignment={"center"}
+              contentInset={{
+                top: 0,
+                left: 16,
+                bottom: 0,
+                right: 16
+              }}
+            >
+              {this._renderRegionCards()}
+            </ScrollView>
           </View>
         </Touchable>
       </View>
@@ -213,12 +271,12 @@ export default class MapScreen extends React.Component {
 							console.log(e);
 						}*/
       this.setState({
-        markerModalVisible: true
+        regionModalVisible: true
       });
     } else {
       //this.props.navigation.navigate('Marker', { name: marker.name });
       this.setState({
-        markerModalVisible: true
+        regionModalVisible: true
       });
     }
   }
@@ -251,14 +309,14 @@ export default class MapScreen extends React.Component {
       markerModalSwipedUp: true
     });
   };
-  _renderModal = () => {
+  _renderRegionModal = () => {
     return (
       <ModalExample
-        show={this.state.markerModalVisible}
+        show={this.state.regionModalVisible}
         closeCallback={this.onModalCloseCallback}
         style={styles.markerModal}
       >
-        {this._renderModalContent()}
+        {this._renderRegionModalContent()}
       </ModalExample>
     );
   };
@@ -287,7 +345,8 @@ export default class MapScreen extends React.Component {
         >
           {this._renderMapMarker()}
         </MapView>{" "}
-        {this._renderGPSButton()} {this._renderModal()}
+        {this._renderSwitchRegionButton()}
+        {this._renderGPSButton()} {this._renderRegionModal()}
       </View>
     );
   }
@@ -304,13 +363,13 @@ const styles = StyleSheet.create({
     zIndex: -1
   },
   modalContent: {
-    backgroundColor: "white",
+    backgroundColor: "transparent",
     justifyContent: "center",
     alignItems: "center",
     borderTopLeftRadius: 22,
     borderTopRightRadius: 22,
-    borderColor: "rgba(0, 0, 0, 0.1)",
-    height: 400
+    borderColor: "rgba(0, 0, 0, 0.5)",
+    height: 300
   },
   markerModal: {
     justifyContent: "flex-end",
