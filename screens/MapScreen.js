@@ -1,42 +1,21 @@
-'use strict';
+import { MapView } from 'expo';
 import React from 'react';
-import {
-  StyleSheet,
-  ScrollView,
-  Dimensions,
-  TouchableOpacity,
-  Platform,
-  Animated,
-  Button,
-  TextInput,
-  Easing
-} from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
+import { View } from 'react-native-animatable';
 import Touchable from 'react-native-platform-touchable';
-import { MapView, Location, Constants, Permissions } from 'expo';
 import CurrentLocationButton from '../components/CurrentLocationButton';
-import SwitchRegionButton from '../components/SwitchRegionButton';
 import BroadcastCard from '../components/Home/BroadcastCard';
-import { View, Image, Text } from 'react-native-animatable';
-import Colors from '../constants/Colors';
 import ModalExample from '../components/Modal';
-
-import { getRegionCards } from '../services/regions';
-
-import {
-  alertIfLocationisDisabled,
-  getUserCurrentLocation
-} from '../utils/Permissions';
+import SwitchRegionButton from '../components/SwitchRegionButton';
+import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
-import StyledInput from '../components/StyledInput';
-
-import Marker from '../components/Marker';
+import { getRegionCards } from '../services/regions';
+import { getUserCurrentLocation } from '../utils/Permissions';
+import getStaticMarker, { randomId } from './StaticMarkers';
 
 const DELTA = 0.0922;
 
-import getStaticMarker, { randomId } from './StaticMarkers';
 let markers = getStaticMarker();
-
-const { width, height } = Dimensions.get('window');
 
 /**
  * 1. Be able to view details of the Map Pin on Pin click
@@ -294,7 +273,6 @@ export default class MapScreen extends React.Component {
   }
   //see if map is ready
   _onMapReady = () => {
-    console.log('\n\n\n map is ready bitch \n\n\n');
     this.setState({ mapReady: true });
   };
   //callback on pan map
@@ -344,9 +322,10 @@ export default class MapScreen extends React.Component {
           ref={element => (this.mapViewRef = element)}
         >
           {this._renderMapMarker()}
-        </MapView>{' '}
+        </MapView>
         {this._renderSwitchRegionButton()}
-        {this._renderGPSButton()} {this._renderRegionModal()}
+        {this._renderGPSButton()}
+        {this._renderRegionModal()}
       </View>
     );
   }

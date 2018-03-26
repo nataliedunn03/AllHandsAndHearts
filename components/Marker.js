@@ -1,8 +1,8 @@
-import React from 'react';
 import { Svg } from 'expo';
+import React from 'react';
+import Colors from '../constants/Colors';
 
 const { Path, G, Circle } = Svg;
-import Colors from '../constants/Colors';
 const Marker = () => (
   <Svg width="30" height="49">
     <G fill="none" fill-rule="evenodd">

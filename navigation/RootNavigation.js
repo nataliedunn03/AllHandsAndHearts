@@ -2,16 +2,11 @@ import React from 'react';
 import { Platform, BackHandler } from 'react-native';
 import { Notifications } from 'expo';
 import { connect } from 'react-redux';
-import {
-  addNavigationHelpers,
-  NavigationActions,
-  StackNavigator,
-  TabNavigator
-} from 'react-navigation';
-import Colors from '../constants/Colors';
+import { NavigationActions, StackNavigator } from 'react-navigation';
 import MainModalNavigator from './MainModalTabNavigator';
 import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
 import LoginScreen from '../containers/LoginScreenContainer';
+import { addListener } from '../utils/navigationReduxUtil';
 
 export const AppNavigator = StackNavigator({
   LoginScreen: {
@@ -80,7 +75,11 @@ class RootNavigator extends React.Component {
 
     return (
       <AppNavigator
-        navigation={addNavigationHelpers({ dispatch, state: nav })}
+        navigation={{
+          dispatch,
+          state: nav,
+          addListener
+        }}
       />
     );
   }

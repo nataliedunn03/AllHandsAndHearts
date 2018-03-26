@@ -1,21 +1,9 @@
-'use strict';
-
 import React from 'react';
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Animated,
-  Easing
-} from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import Colors from '../constants/Colors';
 import { MaterialIcons } from '@expo/vector-icons';
-import { alertIfLocationisDisabled } from '../utils/Permissions';
 
 export default class SwitchRegionButton extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   onButtonPress = () => {
     console.log('Open Region Form Modal');
   };
