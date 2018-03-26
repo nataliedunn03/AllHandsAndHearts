@@ -1,20 +1,20 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Animated,
   ScrollView,
   RefreshControl,
   TouchableHighlight,
   LayoutAnimation
-} from "react-native";
-import { View, Text } from "react-native-animatable";
-import Broadcasts from "../components/Home/Broadcasts";
-import BroadcastCard from "../components/Home/BroadcastCard";
-import ActivityCard from "../components/Home/ActivityCard";
-import Colors from "../constants/Colors";
-import { MonoText } from "../components/StyledText";
+} from 'react-native';
+import { View, Text } from 'react-native-animatable';
+import Broadcasts from '../components/Home/Broadcasts';
+import BroadcastCard from '../components/Home/BroadcastCard';
+import ActivityCard from '../components/Home/ActivityCard';
+import Colors from '../constants/Colors';
+import { MonoText } from '../components/StyledText';
 
-import StyledButton from "../components/StyledButton";
-import StyledInput from "../components/StyledInput";
+import StyledButton from '../components/StyledButton';
+import StyledInput from '../components/StyledInput';
 export default class MarkerViewScreen extends Component {
   state = {
     refresh: false,
@@ -61,14 +61,14 @@ export default class MarkerViewScreen extends Component {
         >
           <MonoText
             style={{
-              color: "#000000",
+              color: '#000000',
               fontSize: 28,
               marginTop: 10,
               marginLeft: 16,
-              fontWeight: "500",
+              fontWeight: '500',
               marginBottom: 10,
-              textAlign: "left",
-              backgroundColor: "transparent"
+              textAlign: 'left',
+              backgroundColor: 'transparent'
             }}
           >
             Enter details
@@ -77,7 +77,7 @@ export default class MarkerViewScreen extends Component {
             <StyledInput
               style={{
                 height: 200,
-                textAlignVertical: "top"
+                textAlignVertical: 'top'
               }}
               multiline={true}
               numberOfLines={8}

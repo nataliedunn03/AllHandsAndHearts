@@ -4,12 +4,14 @@
   "scripts": {
     "test": "node ./node_modules/jest/bin/jest.js --watch",
     "storybook": "storybook start -p 7007",
+    "lint": "eslint --fix *.js",
     "precommit": "lint-staged"
   },
   "jest": {
     "preset": "jest-expo"
   },
   "dependencies": {
+    "eslint-config-react-app": "^2.1.0",
     "expo": "^25.0.0",
     "npm": "^5.7.1",
     "react": "16.2.0",
@@ -29,13 +31,15 @@
     "*.{js,json,css,md}": ["prettier --write", "git add"]
   },
   "devDependencies": {
+    "babel-eslint": "^8.2.2",
     "eslint": "^4.9.0",
     "eslint-config-airbnb": "16.1.0",
     "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-flowtype": "^2.46.1",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-prettier": "^2.6.0",
-    "eslint-plugin-react": "^7.4.0",
+    "eslint-plugin-react": "^7.7.0",
     "eslint-plugin-react-native": "^3.2.1",
     "husky": "^0.14.3",
     "lint-staged": "^7.0.0",

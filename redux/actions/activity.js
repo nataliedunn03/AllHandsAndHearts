@@ -4,5 +4,5 @@
 import { GET_ACTIVITY_CARDS } from './actionTypes';
 
 export const getActivities = () => ({
-	type: GET_ACTIVITY_CARDS
+  type: GET_ACTIVITY_CARDS
 });

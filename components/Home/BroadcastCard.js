@@ -1,24 +1,24 @@
-import React from "react";
+import React from 'react';
 import {
   StyleSheet,
   TouchableHighlight,
   LayoutAnimation,
   Animated
-} from "react-native";
-import { View, Text } from "react-native-animatable";
-import { Ionicons as Icon } from "@expo/vector-icons";
-import Colors from "../../constants/Colors";
+} from 'react-native';
+import { View, Text } from 'react-native-animatable';
+import { Ionicons as Icon } from '@expo/vector-icons';
+import Colors from '../../constants/Colors';
 const styles = StyleSheet.create({
   container: {
-    height: "100%",
+    height: '100%',
     padding: 20,
-    flexDirection: "row",
-    backgroundColor: "#fff",
-    borderColor: "#EDEDED",
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    borderColor: '#EDEDED',
     borderRadius: 3,
     shadowOpacity: 0.8,
     shadowRadius: 5,
-    shadowColor: "rgba(0, 0, 0, 0.1)",
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
     shadowOffset: { width: 1, height: 1 }
   },
   mainBody: {
@@ -26,20 +26,20 @@ const styles = StyleSheet.create({
   },
   body: {
     fontSize: 16,
-    color: "#383539"
+    color: '#383539'
   },
   subText: {
-    color: "#9B9B9B",
+    color: '#9B9B9B',
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
     marginBottom: 5
   },
   remove: {
-    position: "absolute",
+    position: 'absolute',
     right: 10,
     top: 10,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     zIndex: 99
   }
 });
@@ -73,8 +73,8 @@ class BroadcastCard extends React.Component {
     return (
       <View style={[style]}>
         <TouchableHighlight
-          underlayColor={"transparent"}
-          onPress={onPress ? onPress : () => console.log("Card is clicked")}
+          underlayColor={'transparent'}
+          onPress={onPress ? onPress : () => console.log('Card is clicked')}
         >
           <View style={styles.container}>
             {/* You want to pass the on press button down to your remove component right? SO you press the function down with props*/}

@@ -1,26 +1,26 @@
-import React from "react";
+import React from 'react';
 import {
   StyleSheet,
   KeyboardAvoidingView,
   LayoutAnimation,
   UIManager,
   Platform
-} from "react-native";
-import { View, Image } from "react-native-animatable";
-import { HideWithKeyboard } from "react-native-hide-with-keyboard";
-import LoginForm from "../components/Login/LoginForm";
-import SignupForm from "../components/Login/SignupForm";
-import Colors from "../constants/Colors";
-import Layout from "../constants/Layout";
-import Slogan from "../components/Slogan";
+} from 'react-native';
+import { View, Image } from 'react-native-animatable';
+import { HideWithKeyboard } from 'react-native-hide-with-keyboard';
+import LoginForm from '../components/Login/LoginForm';
+import SignupForm from '../components/Login/SignupForm';
+import Colors from '../constants/Colors';
+import Layout from '../constants/Layout';
+import Slogan from '../components/Slogan';
 
-if (Platform.OS === "android")
+if (Platform.OS === 'android')
   UIManager.setLayoutAnimationEnabledExperimental &&
     UIManager.setLayoutAnimationEnabledExperimental(true);
 export default class Login extends React.Component {
   state = {
     shouldSloganAnimationDelay: true,
-    switchForm: "login"
+    switchForm: 'login'
   };
   componentDidMount() {
     this.setState({
@@ -29,7 +29,7 @@ export default class Login extends React.Component {
   }
   _handleSwitchForm = () => {
     this.setState(prevState => ({
-      switchForm: prevState.switchForm === "login" ? "signup" : "login"
+      switchForm: prevState.switchForm === 'login' ? 'signup' : 'login'
     }));
   };
   render() {
@@ -37,18 +37,18 @@ export default class Login extends React.Component {
       <View style={styles.container}>
         <View
           style={styles.logoContainer}
-          animation={"fadeInUp"}
+          animation={'fadeInUp'}
           duration={1200}
           delay={200}
           ref={ref => (this.logoRef = ref)}
         >
           <Image
             style={styles.logo}
-            source={require("../assets/images/logo.png")}
+            source={require('../assets/images/logo.png')}
           />
           <HideWithKeyboard>
             <Slogan
-              animation={"fadeIn"}
+              animation={'fadeIn'}
               duration={1200}
               delay={this.state.shouldSloganAnimationDelay ? 1210 : 200}
             />
@@ -56,18 +56,18 @@ export default class Login extends React.Component {
         </View>
 
         <KeyboardAvoidingView behavior="padding" style={styles.bottomContainer}>
-          <View delay={400} animation={"fadeIn"} duration={800}>
-            {this.state.switchForm === "login" && (
+          <View delay={400} animation={'fadeIn'} duration={800}>
+            {this.state.switchForm === 'login' && (
               <LoginForm
-                animation={"fadeInUpBig"}
+                animation={'fadeInUpBig'}
                 duration={350}
                 linkPress={this._handleSwitchForm}
                 {...this.props}
               />
             )}
-            {this.state.switchForm === "signup" && (
+            {this.state.switchForm === 'signup' && (
               <SignupForm
-                animation={"fadeInUpBig"}
+                animation={'fadeInUpBig'}
                 duration={350}
                 linkPress={this._handleSwitchForm}
                 {...this.props}
@@ -95,11 +95,11 @@ const styles = StyleSheet.create({
   logo: {
     width: 140,
     height: 140,
-    resizeMode: "contain"
+    resizeMode: 'contain'
   },
   logoContainer: {
     flexGrow: 1,
-    alignItems: "center",
-    justifyContent: "center"
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });

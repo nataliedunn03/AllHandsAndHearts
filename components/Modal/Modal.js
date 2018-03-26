@@ -1,8 +1,8 @@
-import React from "react";
-import { Animated, StyleSheet } from "react-native";
-import utils from "../../utils";
-import MModal from "react-native-modal";
-import { Height } from "../../constants/Layout";
+import React from 'react';
+import { Animated, StyleSheet } from 'react-native';
+import utils from '../../utils';
+import MModal from 'react-native-modal';
+import { Height } from '../../constants/Layout';
 
 const WithModal = Component => {
   const Wrapper = props => <Component {...props} />;
@@ -40,7 +40,7 @@ Modal.Footer = WithModal(ModalFooter);
 const styles = StyleSheet.create({
   container: {
     margin: 0,
-    justifyContent: "flex-end"
+    justifyContent: 'flex-end'
   }
 });
 

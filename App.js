@@ -12,22 +12,22 @@ import AppContainer from './containers/App';
 const sagaMiddleware = createSagaMiddleware();
 let middleWares = [sagaMiddleware];
 if (process.env.NODE_ENV !== 'production') {
-	middleWares = [...middleWares, logger];
+  middleWares = [...middleWares, logger];
 }
 
 const store = compose(
-	applyMiddleware(...middleWares),
-	window.devToolsExtension ? window.devToolsExtension() : f => f
+  applyMiddleware(...middleWares),
+  window.devToolsExtension ? window.devToolsExtension() : f => f
 )(createStore)(reducers);
 
 sagaMiddleware.run(rootSaga);
 
 export default class App extends React.Component {
-	render() {
-		return (
-			<Provider store={store}>
-				<AppContainer />
-			</Provider>
-		);
-	}
+  render() {
+    return (
+      <Provider store={store}>
+        <AppContainer />
+      </Provider>
+    );
+  }
 }

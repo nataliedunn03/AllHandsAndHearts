@@ -1,5 +1,5 @@
-"use strict";
-import React from "react";
+'use strict';
+import React from 'react';
 import {
   Image,
   Platform,
@@ -11,14 +11,14 @@ import {
   RefreshControl,
   Animated,
   LayoutAnimation
-} from "react-native";
-import { WebBrowser } from "expo";
-import { MonoText } from "../components/StyledText";
+} from 'react-native';
+import { WebBrowser } from 'expo';
+import { MonoText } from '../components/StyledText';
 //import BroadcastsContainer from '../containers/BroadcastsContainer';
 
-import Broadcasts from "../components/Home/Broadcasts";
-import Activities from "../components/Home/Activities";
-import Colors from "../constants/Colors";
+import Broadcasts from '../components/Home/Broadcasts';
+import Activities from '../components/Home/Activities';
+import Colors from '../constants/Colors';
 export default class HomeScreen extends React.Component {
   state = {
     scrollY: 0
@@ -87,13 +87,13 @@ export default class HomeScreen extends React.Component {
 
   _handleLearnMorePress = () => {
     WebBrowser.openBrowserAsync(
-      "https://docs.expo.io/versions/latest/guides/development-mode"
+      'https://docs.expo.io/versions/latest/guides/development-mode'
     );
   };
 
   _handleHelpPress = () => {
     WebBrowser.openBrowserAsync(
-      "https://docs.expo.io/versions/latest/guides/up-and-running.html#can-t-see-your-changes"
+      'https://docs.expo.io/versions/latest/guides/up-and-running.html#can-t-see-your-changes'
     );
   };
 }
@@ -104,55 +104,55 @@ const styles = StyleSheet.create({
   },
   developmentModeText: {
     marginBottom: 20,
-    color: "rgba(0,0,0,0.4)",
+    color: 'rgba(0,0,0,0.4)',
     fontSize: 14,
     lineHeight: 19,
-    textAlign: "center"
+    textAlign: 'center'
   },
   contentContainer: {
     paddingTop: 15
   },
   welcomeContainer: {
-    alignItems: "center",
+    alignItems: 'center',
     marginTop: 10,
     marginBottom: 20
   },
   welcomeImage: {
     width: 100,
     height: 80,
-    resizeMode: "contain",
+    resizeMode: 'contain',
     marginTop: 3,
     marginLeft: -10
   },
   getStartedContainer: {
-    alignItems: "center",
+    alignItems: 'center',
     marginHorizontal: 50
   },
   homeScreenFilename: {
     marginVertical: 7
   },
   codeHighlightText: {
-    color: "rgba(96,100,109, 0.8)"
+    color: 'rgba(96,100,109, 0.8)'
   },
   codeHighlightContainer: {
-    backgroundColor: "rgba(0,0,0,0.05)",
+    backgroundColor: 'rgba(0,0,0,0.05)',
     borderRadius: 3,
     paddingHorizontal: 4
   },
   getStartedText: {
     fontSize: 17,
-    color: "rgba(96,100,109, 1)",
+    color: 'rgba(96,100,109, 1)',
     lineHeight: 24,
-    textAlign: "center"
+    textAlign: 'center'
   },
   tabBarInfoContainer: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
     ...Platform.select({
       ios: {
-        shadowColor: "black",
+        shadowColor: 'black',
         shadowOffset: { height: -3 },
         shadowOpacity: 0.1,
         shadowRadius: 3
@@ -161,27 +161,27 @@ const styles = StyleSheet.create({
         elevation: 20
       }
     }),
-    alignItems: "center",
-    backgroundColor: "red",
+    alignItems: 'center',
+    backgroundColor: 'red',
     paddingVertical: 20
   },
   tabBarInfoText: {
     fontSize: 17,
-    color: "rgba(96,100,109, 1)",
-    textAlign: "center"
+    color: 'rgba(96,100,109, 1)',
+    textAlign: 'center'
   },
   navigationFilename: {
     marginTop: 5
   },
   helpContainer: {
     marginTop: 15,
-    alignItems: "center"
+    alignItems: 'center'
   },
   helpLink: {
     paddingVertical: 15
   },
   helpLinkText: {
     fontSize: 14,
-    color: "#2e78b7"
+    color: '#2e78b7'
   }
 });

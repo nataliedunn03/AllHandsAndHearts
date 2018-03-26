@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import { View } from "react-native-animatable";
-import { LayoutAnimation } from "react-native";
-import ActivityCard from "./ActivityCard";
-import { MonoText } from "../../components/StyledText";
+import React, { Component } from 'react';
+import { View } from 'react-native-animatable';
+import { LayoutAnimation } from 'react-native';
+import ActivityCard from './ActivityCard';
+import { MonoText } from '../../components/StyledText';
 
 export default class Activities extends Component {
   constructor(props) {
@@ -44,14 +44,14 @@ export default class Activities extends Component {
         >
           <MonoText
             style={{
-              color: "#000000",
+              color: '#000000',
               fontSize: 28,
               marginTop: 10,
               marginBottom: 16,
               marginLeft: 16,
-              fontWeight: "500",
-              textAlign: "left",
-              backgroundColor: "transparent"
+              fontWeight: '500',
+              textAlign: 'left',
+              backgroundColor: 'transparent'
             }}
           >
             Activities

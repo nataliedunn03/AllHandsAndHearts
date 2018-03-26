@@ -1,6 +1,6 @@
 const regionData = [
   {
-    regionName: "San Francisco",
+    regionName: 'San Francisco',
     accuracy: 5,
     altitude: 0,
     altitudeAccuracy: -1,
@@ -10,7 +10,7 @@ const regionData = [
     speed: -1
   },
   {
-    regionName: "New York City",
+    regionName: 'New York City',
     accuracy: 5,
     altitude: 0,
     altitudeAccuracy: -1,
@@ -20,7 +20,7 @@ const regionData = [
     speed: -1
   },
   {
-    regionName: "London",
+    regionName: 'London',
     accuracy: 5,
     altitude: 0,
     altitudeAccuracy: -1,
@@ -30,7 +30,7 @@ const regionData = [
     speed: -1
   },
   {
-    regionName: "Singapore",
+    regionName: 'Singapore',
     accuracy: 5,
     altitude: 0,
     altitudeAccuracy: -1,
@@ -40,7 +40,7 @@ const regionData = [
     speed: -1
   },
   {
-    regionName: "Seoul",
+    regionName: 'Seoul',
     accuracy: 5,
     altitude: 0,
     altitudeAccuracy: -1,

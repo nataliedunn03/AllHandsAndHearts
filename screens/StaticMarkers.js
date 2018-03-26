@@ -1,6 +1,6 @@
 export const randomId = () => {
   return (
-    "_" +
+    '_' +
     Math.random()
       .toString(36)
       .substr(2, 9)
@@ -18,7 +18,7 @@ const getMarkers = () => {
         latitude: 40.75539830640072,
         longitude: -73.993821144104
       },
-      name: "Union Station - West 38st"
+      name: 'Union Station - West 38st'
     },
     {
       key: randomId(),
@@ -27,7 +27,7 @@ const getMarkers = () => {
         latitude: 39.08454657050675,
         longitude: -76.5449656918645
       },
-      name: "Mularad Ct - Baltimore"
+      name: 'Mularad Ct - Baltimore'
     },
     {
       key: randomId(),
@@ -36,7 +36,7 @@ const getMarkers = () => {
         latitude: 37.78825,
         longitude: -122.4324
       },
-      name: "San Francisco Area"
+      name: 'San Francisco Area'
     },
     {
       key: randomId(),
@@ -45,7 +45,7 @@ const getMarkers = () => {
         latitude: 49.26310195900646,
         longitude: 10.410288870334625
       },
-      name: "Germany"
+      name: 'Germany'
     },
     {
       key: randomId(),
@@ -54,7 +54,7 @@ const getMarkers = () => {
         latitude: 17.728179838904037,
         longitude: -90.01192241907121
       },
-      name: "Campeche Area"
+      name: 'Campeche Area'
     },
     {
       key: randomId(),
@@ -63,7 +63,7 @@ const getMarkers = () => {
         latitude: 40.75733151949385,
         longitude: -73.97329218685627
       },
-      name: "Eventage Event - Park Ave"
+      name: 'Eventage Event - Park Ave'
     }
   ];
 };
