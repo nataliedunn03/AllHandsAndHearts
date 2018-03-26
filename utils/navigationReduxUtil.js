@@ -3,10 +3,10 @@ import {
   createReduxBoundAddListener
 } from 'react-navigation-redux-helpers';
 
-const middleware = createReactNavigationReduxMiddleware(
+const navMiddleware = createReactNavigationReduxMiddleware(
   'root',
   state => state.nav
 );
 const addListener = createReduxBoundAddListener('root');
 
-export { middleware, addListener };
+export { navMiddleware, addListener };

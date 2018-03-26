@@ -6,11 +6,11 @@ import logger from 'redux-logger';
 
 import reducers from './redux/reducers';
 import rootSaga from './redux/sagas';
-
+import { navMiddleware } from './utils/navigationReduxUtil';
 import AppContainer from './containers/App';
 
 const sagaMiddleware = createSagaMiddleware();
-let middleWares = [sagaMiddleware];
+let middleWares = [sagaMiddleware, navMiddleware];
 if (process.env.NODE_ENV !== 'production') {
   middleWares = [...middleWares, logger];
 }
