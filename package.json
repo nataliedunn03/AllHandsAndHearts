@@ -5,7 +5,7 @@
     "test": "node ./node_modules/jest/bin/jest.js --watch",
     "storybook": "storybook start -p 7007",
     "lint": "eslint --fix *.js",
-    "precommit": "lint-staged"
+    "precommit": "pretty-quick --staged"
   },
   "jest": {
     "preset": "jest-expo"
@@ -28,9 +28,6 @@
     "redux": "^3.7.2",
     "redux-saga": "^0.16.0"
   },
-  "lint-staged": {
-    "*.{js,json,css,md}": ["prettier --write", "git add"]
-  },
   "devDependencies": {
     "babel-eslint": "^8.2.2",
     "eslint": "^4.9.0",
@@ -43,7 +40,6 @@
     "eslint-plugin-react": "^7.7.0",
     "eslint-plugin-react-native": "^3.2.1",
     "husky": "^0.14.3",
-    "lint-staged": "^7.0.0",
     "prettier": "^1.11.1",
     "prettier-eslint": "^8.8.1",
     "pretty-quick": "^1.4.1",
