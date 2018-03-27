@@ -1,16 +1,16 @@
-"use strict";
+'use strict';
 
-import React from "react";
+import React from 'react';
 import {
   View,
   StyleSheet,
   TouchableOpacity,
   Animated,
   Easing
-} from "react-native";
-import Colors from "../constants/Colors";
-import { MaterialIcons } from "@expo/vector-icons";
-import { alertIfLocationisDisabled } from "../utils/Permissions";
+} from 'react-native';
+import Colors from '../constants/Colors';
+import { MaterialIcons } from '@expo/vector-icons';
+import { alertIfLocationisDisabled } from '../utils/Permissions';
 
 export default class CurrentLocationButton extends React.Component {
   constructor(props) {
@@ -31,7 +31,7 @@ export default class CurrentLocationButton extends React.Component {
         >
           <MaterialIcons
             name={
-              this.props.locationPermission ? "my-location" : "location-off"
+              this.props.locationPermission ? 'my-location' : 'location-off'
             }
             size={20}
             color={this.props.iconColor}
@@ -44,18 +44,18 @@ export default class CurrentLocationButton extends React.Component {
 
 const styles = StyleSheet.create({
   currentLocationView: {
-    position: "absolute",
+    position: 'absolute',
     left: 0,
     right: 20,
-    alignItems: "flex-end"
+    alignItems: 'flex-end'
   },
   currentLocationButton: {
     width: 44,
     height: 44,
     bottom: 30,
     backgroundColor: Colors.navHeaderBackground,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     shadowColor: Colors.tabIconDefault,
     borderRadius: 22,
     shadowOffset: { width: 1, height: 2 },

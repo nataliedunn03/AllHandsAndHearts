@@ -17,17 +17,14 @@ module.exports = {
     return [];
   },
   getTransformModulePath() {
-    const modulePath = path.join(
-      __dirname,
-      'transformer.js'
-    );
+    const modulePath = path.join(__dirname, 'transformer.js');
     if (!registeredTransformModulePaths.has(modulePath)) {
       babelRegisterOnly([modulePath]);
       registeredTransformModulePaths.add(modulePath);
     }
     return modulePath;
   },
-  extraNodeModules: getNodeModulesForDirectory(path.resolve('.')),
+  extraNodeModules: getNodeModulesForDirectory(path.resolve('.'))
 };
 
 function getNodeModulesForDirectory(rootPath) {

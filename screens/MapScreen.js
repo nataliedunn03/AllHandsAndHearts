@@ -1,42 +1,21 @@
-"use strict";
-import React from "react";
-import {
-  StyleSheet,
-  ScrollView,
-  Dimensions,
-  TouchableOpacity,
-  Platform,
-  Animated,
-  Button,
-  TextInput,
-  Easing
-} from "react-native";
-import Touchable from "react-native-platform-touchable";
-import { MapView, Location, Constants, Permissions } from "expo";
-import CurrentLocationButton from "../components/CurrentLocationButton";
-import SwitchRegionButton from "../components/SwitchRegionButton";
-import BroadcastCard from "../components/Home/BroadcastCard";
-import { View, Image, Text } from "react-native-animatable";
-import Colors from "../constants/Colors";
-import ModalExample from "../components/Modal";
-
-import { getRegionCards } from "../services/regions";
-
-import {
-  alertIfLocationisDisabled,
-  getUserCurrentLocation
-} from "../utils/Permissions";
-import Layout from "../constants/Layout";
-import StyledInput from "../components/StyledInput";
-
-import Marker from "../components/Marker";
+import { MapView } from 'expo';
+import React from 'react';
+import { ScrollView, StyleSheet } from 'react-native';
+import { View } from 'react-native-animatable';
+import Touchable from 'react-native-platform-touchable';
+import CurrentLocationButton from '../components/CurrentLocationButton';
+import BroadcastCard from '../components/Home/BroadcastCard';
+import ModalExample from '../components/Modal';
+import SwitchRegionButton from '../components/SwitchRegionButton';
+import Colors from '../constants/Colors';
+import Layout from '../constants/Layout';
+import { getRegionCards } from '../services/regions';
+import { getUserCurrentLocation } from '../utils/Permissions';
+import getStaticMarker, { randomId } from './StaticMarkers';
 
 const DELTA = 0.0922;
 
-import getStaticMarker, { randomId } from "./StaticMarkers";
 let markers = getStaticMarker();
-
-const { width, height } = Dimensions.get("window");
 
 /**
  * 1. Be able to view details of the Map Pin on Pin click
@@ -130,8 +109,8 @@ export default class MapScreen extends React.Component {
   };
   //see what kind of animation we should perform based on map movement
   _getGPSButtonAnimationType = () => {
-    if (!this.state.locationPermission) return "fadeIn";
-    return this.state.displayGps ? "fadeIn" : "fadeOut";
+    if (!this.state.locationPermission) return 'fadeIn';
+    return this.state.displayGps ? 'fadeIn' : 'fadeOut';
   };
 
   _createNewMarker(e, marker) {
@@ -143,7 +122,7 @@ export default class MapScreen extends React.Component {
         coordinate: e.nativeEvent.coordinate,
         key: id,
         color: Colors.defaultColor.PRIMARY_COLOR,
-        description: "This is a description",
+        description: 'This is a description',
         name: marker.name
       }
     ];
@@ -203,7 +182,7 @@ export default class MapScreen extends React.Component {
   _renderRegionCards = () => {
     const cards = getRegionCards();
     return cards.map((card, index) => {
-      const body = "(" + card.latitude + ", " + card.longitude + ")";
+      const body = '(' + card.latitude + ', ' + card.longitude + ')';
       return (
         <BroadcastCard
           key={index}
@@ -224,14 +203,14 @@ export default class MapScreen extends React.Component {
   _renderRegionModalContent = () => {
     return (
       <View style={styles.modalContent}>
-        <Touchable background={Touchable.Ripple("blue")}>
+        <Touchable background={Touchable.Ripple('blue')}>
           <View>
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={true}
               decelerationRate={0}
               snapToInterval={Layout.width}
-              snapToAlignment={"center"}
+              snapToAlignment={'center'}
               contentInset={{
                 top: 0,
                 left: 16,
@@ -294,7 +273,6 @@ export default class MapScreen extends React.Component {
   }
   //see if map is ready
   _onMapReady = () => {
-    console.log("\n\n\n map is ready bitch \n\n\n");
     this.setState({ mapReady: true });
   };
   //callback on pan map
@@ -304,7 +282,7 @@ export default class MapScreen extends React.Component {
     this._updateGPSButton(region);
   };
   modalSwiped = () => {
-    console.log("Modal swiped up");
+    console.log('Modal swiped up');
     this.setState({
       markerModalSwipedUp: true
     });
@@ -344,9 +322,10 @@ export default class MapScreen extends React.Component {
           ref={element => (this.mapViewRef = element)}
         >
           {this._renderMapMarker()}
-        </MapView>{" "}
+        </MapView>
         {this._renderSwitchRegionButton()}
-        {this._renderGPSButton()} {this._renderRegionModal()}
+        {this._renderGPSButton()}
+        {this._renderRegionModal()}
       </View>
     );
   }
@@ -355,7 +334,7 @@ export default class MapScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "column-reverse"
+    flexDirection: 'column-reverse'
   },
   map: {
     ...StyleSheet.absoluteFillObject,
@@ -363,16 +342,16 @@ const styles = StyleSheet.create({
     zIndex: -1
   },
   modalContent: {
-    backgroundColor: "transparent",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: 'transparent',
+    justifyContent: 'center',
+    alignItems: 'center',
     borderTopLeftRadius: 22,
     borderTopRightRadius: 22,
-    borderColor: "rgba(0, 0, 0, 0.5)",
+    borderColor: 'rgba(0, 0, 0, 0.5)',
     height: 300
   },
   markerModal: {
-    justifyContent: "flex-end",
+    justifyContent: 'flex-end',
     margin: 0,
     zIndex: 10
   },

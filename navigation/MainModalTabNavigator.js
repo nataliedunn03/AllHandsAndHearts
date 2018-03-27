@@ -1,39 +1,38 @@
-"use strict";
-import React from "react";
-import { Platform, StyleSheet, Animated } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { TabNavigator, TabBarBottom, StackNavigator } from "react-navigation";
+import React from 'react';
+import { Platform, StyleSheet, Animated } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { TabNavigator, TabBarBottom, StackNavigator } from 'react-navigation';
 
-import MapScreen from "../screens/MapScreen";
-import MarkerViewScreen from "../screens/MarkerViewScreen";
-import ProfileScreen from "../screens/ProfileScreen";
-import HomeScreenContainer from "../containers/HomeScreenContainer";
-import Colors from "../constants/Colors";
+import MapScreen from '../screens/MapScreen';
+import MarkerViewScreen from '../screens/MarkerViewScreen';
+import ProfileScreen from '../screens/ProfileScreen';
+import HomeScreenContainer from '../containers/HomeScreenContainer';
+import Colors from '../constants/Colors';
 
 const MainTabNavigator = TabNavigator(
   {
     Home: {
       screen: HomeScreenContainer,
-      path: "/",
+      path: '/',
       navigationOptions: {
-        headerTitle: "HOME",
-        tabBarLabel: "Home"
+        headerTitle: 'HOME',
+        tabBarLabel: 'Home'
       }
     },
     Maps: {
       screen: MapScreen,
-      path: "/maps",
+      path: '/maps',
       navigationOptions: {
-        headerTitle: "MAPS",
-        tabBarLabel: "Maps"
+        headerTitle: 'MAPS',
+        tabBarLabel: 'Maps'
       }
     },
     Profile: {
       screen: ProfileScreen,
-      path: "/profile",
+      path: '/profile',
       navigationOptions: {
-        headerTitle: "PROFILE",
-        tabBarLabel: "Profile"
+        headerTitle: 'PROFILE',
+        tabBarLabel: 'Profile'
       }
     }
   },
@@ -41,41 +40,41 @@ const MainTabNavigator = TabNavigator(
     navigationOptions: ({ navigation }) => ({
       headerTitleStyle: {
         color: Colors.defaultColor.PAPER_COLOR,
-        fontWeight: "600",
-        justifyContent: "space-between",
-        textAlign: "center"
+        fontWeight: '600',
+        justifyContent: 'space-between',
+        textAlign: 'center'
       },
       headerStyle: {
         backgroundColor: Colors.defaultColor.PRIMARY_COLOR,
-        borderBottomColor: "#F2F2F2"
+        borderBottomColor: '#F2F2F2'
       },
       tabBarIcon: ({ focused }) => {
         const { routeName } = navigation.state;
         let iconName;
         switch (routeName) {
-          case "Home":
+          case 'Home':
             iconName =
-              Platform.OS === "ios"
-                ? `ios-home${focused ? "" : "-outline"}`
-                : "md-home";
+              Platform.OS === 'ios'
+                ? `ios-home${focused ? '' : '-outline'}`
+                : 'md-home';
             break;
-          case "Maps":
+          case 'Maps':
             iconName =
-              Platform.OS === "ios"
-                ? `ios-map${focused ? "" : "-outline"}`
-                : "md-map";
+              Platform.OS === 'ios'
+                ? `ios-map${focused ? '' : '-outline'}`
+                : 'md-map';
             break;
-          /*case 'Notification':
+          /* case 'Notification':
 					iconName =
 							Platform.OS === 'ios'
 								? `ios-notifications${focused ? '' : '-outline'}`
 								: 'md-notifications';
-					break;*/
-          case "Profile":
+					break; */
+          case 'Profile':
             iconName =
-              Platform.OS === "ios"
-                ? `ios-contact${focused ? "" : "-outline"}`
-                : "md-contact";
+              Platform.OS === 'ios'
+                ? `ios-contact${focused ? '' : '-outline'}`
+                : 'md-contact';
         }
         return (
           <Ionicons
@@ -87,10 +86,10 @@ const MainTabNavigator = TabNavigator(
         );
       }
     }),
-    tabBarComponent: props => {
-      return <TabBarBottom {...props} style={styles.tabBarBottom} />;
-    },
-    tabBarPosition: "bottom",
+    tabBarComponent: props => (
+      <TabBarBottom {...props} style={styles.tabBarBottom} />
+    ),
+    tabBarPosition: 'bottom',
     tabBarOptions: {
       activeTintColor: Colors.tabIconSelected
     },
@@ -118,22 +117,22 @@ const MainModalNavigator = StackNavigator(
     },
     Marker: {
       screen: MarkerViewScreen,
-      path: "/marker/:name",
+      path: '/marker/:name',
       navigationOptions: ({ navigation }) => ({
         headerTitleStyle: {
           color: Colors.defaultColor.PAPER_COLOR,
-          fontWeight: "600",
-          justifyContent: "space-between",
-          textAlign: "center"
+          fontWeight: '600',
+          justifyContent: 'space-between',
+          textAlign: 'center'
         },
         headerStyle: {
           backgroundColor: Colors.defaultColor.PRIMARY_COLOR,
-          borderBottomColor: "#F2F2F2"
+          borderBottomColor: '#F2F2F2'
         }
       })
     }
   },
-  { headerMode: "none", mode: "modal" }
+  { headerMode: 'none', mode: 'modal' }
 );
 
 export default MainModalNavigator;

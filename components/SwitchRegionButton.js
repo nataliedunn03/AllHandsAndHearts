@@ -1,23 +1,11 @@
-"use strict";
-
-import React from "react";
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Animated,
-  Easing
-} from "react-native";
-import Colors from "../constants/Colors";
-import { MaterialIcons } from "@expo/vector-icons";
-import { alertIfLocationisDisabled } from "../utils/Permissions";
+import React from 'react';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import Colors from '../constants/Colors';
+import { MaterialIcons } from '@expo/vector-icons';
 
 export default class SwitchRegionButton extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   onButtonPress = () => {
-    console.log("Open Region Form Modal");
+    console.log('Open Region Form Modal');
   };
   render() {
     const { onClick } = this.props;
@@ -37,17 +25,17 @@ export default class SwitchRegionButton extends React.Component {
 
 const styles = StyleSheet.create({
   switchRegionView: {
-    position: "absolute",
+    position: 'absolute',
     left: 20,
-    alignItems: "flex-start"
+    alignItems: 'flex-start'
   },
   switchRegionButton: {
     width: 44,
     height: 44,
     bottom: 30,
     backgroundColor: Colors.navHeaderBackground,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     shadowColor: Colors.tabIconDefault,
     borderRadius: 22,
     shadowOffset: { width: 1, height: 2 },

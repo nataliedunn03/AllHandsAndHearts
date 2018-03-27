@@ -1,5 +1,5 @@
-import { takeEvery, call, put } from "redux-saga/effects";
-import { delay } from "redux-saga";
+import { takeEvery, call, put } from 'redux-saga/effects';
+import { delay } from 'redux-saga';
 import {
   SENDING_REQUEST,
   LOGIN_REQUEST,
@@ -12,9 +12,9 @@ import {
   RESET_TO_MAIN,
   GET_BROADCAST_CARDS_ON_LOGIN,
   GET_ACTIVITY_CARDS_ON_LOGIN
-} from "../actions/actionTypes";
-import * as AuthService from "../../services/auth";
-import { getBroadcastCards } from "../../services/broadcast";
+} from '../actions/actionTypes';
+import * as AuthService from '../../services/auth';
+import { getBroadcastCards } from '../../services/broadcast';
 
 const authorize = function* authorize({
   username,
@@ -25,7 +25,7 @@ const authorize = function* authorize({
   yield call(delay, 1000, true);
   try {
     const salt = null; // TODO: genSalt(username)
-    const hash = ""; // TODO: hashSync(password, salt)
+    const hash = ''; // TODO: hashSync(password, salt)
     let response;
 
     // For either log in or registering, we call the proper function in the `auth`
@@ -76,7 +76,7 @@ function* loginFlow(action) {
       yield put({ type: SET_AUTH, newAuthState: true });
       yield put({ type: RESET_TO_MAIN });
     } else {
-      yield put({ type: LOGIN_REQUEST_FAILED, error: "Login failed." });
+      yield put({ type: LOGIN_REQUEST_FAILED, error: 'Login failed.' });
     }
   } catch (e) {
     yield put({ type: LOGIN_REQUEST_FAILED, error: e });
