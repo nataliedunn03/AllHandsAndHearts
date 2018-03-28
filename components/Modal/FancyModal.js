@@ -8,12 +8,13 @@
 import React, { Component } from 'react';
 import {
   StyleSheet,
-  Text,
   View,
   Dimensions,
   PanResponder,
   Animated,
-  SafeAreaView
+  SafeAreaView,
+  LayoutAnimation,
+  UIManager
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { Feather as Icon } from '@expo/vector-icons';
@@ -22,22 +23,32 @@ const { width, height: screenHeight } = Dimensions.get('window');
 const height = width * 0.5625;
 
 export default class FancyModal extends Component {
-  state = {
-    openModal: false
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      openModal: false
+    };
+    UIManager.setLayoutAnimationEnabledExperimental &&
+      UIManager.setLayoutAnimationEnabledExperimental(true);
+  }
+
   componentWillMount() {
     //the y axis of the screen
     this.yAxis = 0;
     //initially we want to open the modal half way
     this.modalAnimation = new Animated.Value(50);
     //whenever our animationc changes set the yAxis to that value
-    this.modalAnimation.addListener(({ value }) => {
+    this.modalAnimation.addListener(value => {
       this.yAxis = value;
     });
 
     this._panResponder = PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponder: () => true,
+
+      onPanResponderGrant: () => {
+        this.modalAnimation.extractOffset();
+      },
       onPanResponderMove: Animated.event([
         null,
         {
@@ -45,34 +56,33 @@ export default class FancyModal extends Component {
         }
       ]),
       onPanResponderRelease: (e, gestureState) => {
-        // top of the screen starts at 0 {X, Y}
-        // so when we hit 90y on drag close the modal
-        if (gestureState.dy > 90) {
-          this.modalAnimation.setOffset(300);
+        // vy = how fast dragged in y axis (- is up + down)
+        // so when we swipe down fast or drag half the screen close the modal
+        if (gestureState.vy >= 0.5 || gestureState.dy >= 0.5 * screenHeight) {
           Animated.timing(this.modalAnimation, {
-            toValue: 300,
-            duration: 300
-          }).start(this.handleClose); //when the animation is complete close the modal
+            toValue: gestureState.dy > 0 ? screenHeight : -screenHeight,
+            duration: 200
+          }).start(this.handleClose);
         } else {
           //else open the modal to full
           this.modalAnimation.setOffset(0);
-          Animated.timing(this.modalAnimation, {
+          Animated.spring(this.modalAnimation, {
             toValue: 0,
-            duration: 300
-          }).start(() => {
-            console.log('ON TOP OF THE PAGE');
-          });
+            duration: 300,
+            tension: 1
+          }).start(() => {});
         }
       }
     });
   }
-
   componentDidUpdate(prevProps, prevState) {
     if (this.props.show && !prevProps.show) {
       this.handleOpen();
     }
   }
-
+  componentWillUnmount() {
+    this.modalAnimation.removeAllListeners();
+  }
   handleOpen = () => {
     this.setState({
       show: true
@@ -121,7 +131,7 @@ export default class FancyModal extends Component {
       opacity: opacityInterpolate,
       transform: [
         {
-          translateY: translateYInterpolate
+          translateY: this.modalAnimation
         }
       ]
     };
@@ -137,9 +147,7 @@ export default class FancyModal extends Component {
             margin: 0,
             overflow: 'hidden'
           }}
-          onModalShow={() => {
-            console.log('Im now shown');
-          }}
+          onModalShow={() => {}}
           onModalHide={this.props.closeCallback}
           avoidKeyboard={true}
           useNativeDriver
@@ -161,7 +169,7 @@ export default class FancyModal extends Component {
                 style={[
                   ...StyleSheet.absoluteFill,
                   {
-                    height: 20,
+                    height: 30,
                     backgroundColor: '#ffffffff',
                     justifyContent: 'center',
                     alignItems: 'center'
