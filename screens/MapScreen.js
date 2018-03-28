@@ -5,7 +5,7 @@ import { View } from 'react-native-animatable';
 import Touchable from 'react-native-platform-touchable';
 import CurrentLocationButton from '../components/CurrentLocationButton';
 import BroadcastCard from '../components/Home/BroadcastCard';
-import ModalExample from '../components/Modal';
+import SimepleModal from '../components/Modal/SimpleModal';
 import SwitchRegionButton from '../components/SwitchRegionButton';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
@@ -289,13 +289,13 @@ export default class MapScreen extends React.Component {
   };
   _renderRegionModal = () => {
     return (
-      <ModalExample
+      <SimepleModal
         show={this.state.regionModalVisible}
         closeCallback={this.onModalCloseCallback}
         style={styles.markerModal}
       >
         {this._renderRegionModalContent()}
-      </ModalExample>
+      </SimepleModal>
     );
   };
   render() {

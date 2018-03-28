@@ -52,7 +52,7 @@ export default class FancyModal extends Component {
           Animated.timing(this.modalAnimation, {
             toValue: 300,
             duration: 300
-          }).start(this.handleClose);
+          }).start(this.handleClose); //when the animation is complete close the modal
         } else {
           //else open the modal to full
           this.modalAnimation.setOffset(0);
