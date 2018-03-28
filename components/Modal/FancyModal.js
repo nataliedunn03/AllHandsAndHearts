@@ -1,3 +1,10 @@
+/**
+ * Modal that uses gesture:
+ * 1. To expand on scroll up
+ * 2. To close on scroll down
+ * Note: Initially it will open half of the screen
+ * Further scrolling will make the modal full
+ */
 import React, { Component } from 'react';
 import {
   StyleSheet,
@@ -8,22 +15,24 @@ import {
   Animated,
   SafeAreaView
 } from 'react-native';
-import Touchable from 'react-native-platform-touchable';
 import Modal from 'react-native-modal';
 import { Feather as Icon } from '@expo/vector-icons';
 
 const { width, height: screenHeight } = Dimensions.get('window');
 const height = width * 0.5625;
 
-export default class StyledModal extends Component {
+export default class FancyModal extends Component {
   state = {
     openModal: false
   };
   componentWillMount() {
-    this._y = 0;
-    this._animation = new Animated.Value(0);
-    this._animation.addListener(({ value }) => {
-      this._y = value;
+    //the y axis of the screen
+    this.yAxis = 0;
+    //initially we want to open the modal half way
+    this.modalAnimation = new Animated.Value(50);
+    //whenever our animationc changes set the yAxis to that value
+    this.modalAnimation.addListener(({ value }) => {
+      this.yAxis = value;
     });
 
     this._panResponder = PanResponder.create({
@@ -32,60 +41,84 @@ export default class StyledModal extends Component {
       onPanResponderMove: Animated.event([
         null,
         {
-          dy: this._animation
+          dy: this.modalAnimation
         }
       ]),
       onPanResponderRelease: (e, gestureState) => {
-        console.log(gestureState.dy);
-        if (gestureState.dy > 170) {
-          Animated.timing(this._animation, {
+        // top of the screen starts at 0 {X, Y}
+        // so when we hit 90y on drag close the modal
+        if (gestureState.dy > 90) {
+          this.modalAnimation.setOffset(300);
+          Animated.timing(this.modalAnimation, {
             toValue: 300,
-            duration: 200
-          }).start();
-          this._animation.setOffset(300);
-          this.setState({
-            openModal: false
-          });
+            duration: 300
+          }).start(this.handleClose);
         } else {
-          this._animation.setOffset(0);
-          Animated.timing(this._animation, {
+          //else open the modal to full
+          this.modalAnimation.setOffset(0);
+          Animated.timing(this.modalAnimation, {
             toValue: 0,
-            duration: 200
-          }).start();
+            duration: 300
+          }).start(() => {
+            console.log('ON TOP OF THE PAGE');
+          });
         }
       }
     });
   }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.show && !prevProps.show) {
+      this.handleOpen();
+    }
+  }
+
   handleOpen = () => {
     this.setState({
-      openModal: true
+      show: true
     });
-    this._animation.setOffset(0);
-    Animated.timing(this._animation, {
-      toValue: 0,
-      duration: 200
+    this.modalAnimation.setOffset(50);
+    Animated.timing(this.modalAnimation, {
+      toValue: 50,
+      duration: 300
     }).start();
   };
+  //Close the modal
+  //But also trigger the callback
+  handleClose = () => {
+    this.setState({
+      show: false
+    });
+    if (this.props.closeCallback) {
+      this.props.closeCallback();
+    }
+  };
   render() {
-    const backdropOpacityInterpolate = this._animation.interpolate({
+    //turn the back of the screen dark to focus on modal content
+    const backdropOpacityInterpolate = this.modalAnimation.interpolate({
       inputRange: [0, 300],
       outputRange: [0.7, 0],
       extrapolate: 'clamp'
     });
 
-    const opacityInterpolate = this._animation.interpolate({
-      inputRange: [0, screenHeight - height + 40],
+    //we want to gradually increase the opacity of the view when we scroll it up
+    // and decrease when we scroll it down
+    const opacityInterpolate = this.modalAnimation.interpolate({
+      inputRange: [100, 500],
       outputRange: [1, 0],
       extrapolate: 'clamp'
     });
 
-    const translateYInterpolate = this._animation.interpolate({
+    //we want to gradually increase the view when we scroll it up
+    // and decrease when we scroll it down
+    const translateYInterpolate = this.modalAnimation.interpolate({
       inputRange: [0, 300],
       outputRange: [0, screenHeight],
       extrapolate: 'clamp'
     });
+
     const scrollStyles = {
-      // opacity: opacityInterpolate,
+      opacity: opacityInterpolate,
       transform: [
         {
           translateY: translateYInterpolate
@@ -94,20 +127,8 @@ export default class StyledModal extends Component {
     };
     return (
       <View style={styles.container}>
-        <Touchable
-          onPress={this.handleOpen}
-          style={{
-            backgroundColor: '#ffffffff',
-            paddingVertical: 30,
-            paddingHorizontal: 80
-          }}
-          background={Touchable.Ripple('blue')}
-        >
-          <Text>Let's come back to this!</Text>
-        </Touchable>
         <Modal
-          isVisible={this.state.openModal}
-          transparent={true}
+          isVisible={this.state.show}
           backdropOpacity={backdropOpacityInterpolate}
           ref={modal => {
             this.modal = modal;
@@ -116,6 +137,12 @@ export default class StyledModal extends Component {
             margin: 0,
             overflow: 'hidden'
           }}
+          onModalShow={() => {
+            console.log('Im now shown');
+          }}
+          onModalHide={this.props.closeCallback}
+          avoidKeyboard={true}
+          useNativeDriver
         >
           <SafeAreaView style={StyleSheet.absoluteFill}>
             <Animated.View
@@ -148,7 +175,8 @@ export default class StyledModal extends Component {
             <Animated.View
               style={[
                 {
-                  flex: 1
+                  flex: 1,
+                  backgroundColor: '#ffffffff'
                 },
                 scrollStyles
               ]}

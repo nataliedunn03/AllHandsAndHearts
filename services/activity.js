@@ -23,6 +23,21 @@ const activities = [
     name: 'Adrian',
     location: 'Added a pin in Puerto Rico',
     detail: 'School collapsed. Evacuation and transportation needed.'
+  },
+  {
+    name: 'Ye',
+    location: 'Added a pin in Puerto Rico',
+    detail: 'School collapsed. Evacuation and transportation needed.'
+  },
+  {
+    name: 'Some one else',
+    location: 'Added a pin in Puerto Rico',
+    detail: 'School collapsed. Evacuation and transportation needed.'
+  },
+  {
+    name: 'Testing scrolling',
+    location: 'Added a pin in Puerto Rico',
+    detail: 'School collapsed. Evacuation and transportation needed.'
   }
 ];
 

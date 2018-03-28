@@ -5,18 +5,20 @@ import {
   StyleSheet,
   Text,
   RefreshControl,
-  Animated
+  Animated,
+  TouchableHighlight,
+  View
 } from 'react-native';
 import { WebBrowser } from 'expo';
 
 import Broadcasts from '../components/Home/Broadcasts';
 import Activities from '../components/Home/Activities';
 import Colors from '../constants/Colors';
-import Modal from '../components/GrowingModal';
+import { FancyModal } from '../components/Modal';
 export default class HomeScreen extends React.Component {
   state = {
     scrollY: 0,
-    show: true
+    show: false
   };
   _handleRefresh = async () => {
     try {
@@ -26,46 +28,79 @@ export default class HomeScreen extends React.Component {
       console.log(e);
     }
   };
+  handleOpen = () => {
+    this.setState({
+      show: true
+    });
+    console.log("I'm being clicked", this.state.show);
+  };
+  handleClose = () => {
+    this.setState({
+      show: false
+    });
+    console.log('handleClose is triggered', this.state.show);
+  };
   render() {
-    console.log(this.props);
+    console.log(this.state.show);
     return (
-      <Modal
-        show={this.state.show}
-        onClose={() => this.setState({ show: false })}
+      <View
+        style={{
+          justifyContent: 'center'
+        }}
       >
-        {
-          <ScrollView
+        <TouchableHighlight
+          onPress={this.handleOpen}
+          style={{
+            height: 50,
+            backgroundColor: '#ffff12',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <Text
             style={{
-              flex: 1,
-              backgroundColor: Colors.defaultColor.PAGE_BACKGROUND
+              color: 'red',
+              fontSize: 24
             }}
-            ref={ref => {
-              this.homeScreenComponentRef = ref;
-            }}
-            refreshControl={
-              <RefreshControl
-                refreshing={false}
-                onRefresh={this._handleRefresh}
-              />
-            }
-            scrollEventThrottle={16}
-            showsVerticalScrollIndicator={false}
-            onScroll={Animated.event([
-              { nativeEvent: { contentOffset: { y: this.state.scrollY } } }
-            ])}
           >
-            {this.props.broadcast && (
-              <Broadcasts
-                broadcast={this.props.broadcast}
-                removeBroadcastCard={this.props.removeBroadcastCard}
-              />
-            )}
-            {this.props.activity && (
-              <Activities activity={this.props.activity} />
-            )}
-          </ScrollView>
-        }
-      </Modal>
+            Ye, Click me to open.
+          </Text>
+        </TouchableHighlight>
+        <FancyModal show={this.state.show} closeCallback={this.handleClose}>
+          {
+            <ScrollView
+              style={{
+                flex: 1,
+                backgroundColor: Colors.defaultColor.PAGE_BACKGROUND
+              }}
+              ref={ref => {
+                this.homeScreenComponentRef = ref;
+              }}
+              refreshControl={
+                <RefreshControl
+                  refreshing={false}
+                  onRefresh={this._handleRefresh}
+                />
+              }
+              scrollEventThrottle={16}
+              showsVerticalScrollIndicator={false}
+              onScroll={Animated.event([
+                { nativeEvent: { contentOffset: { y: this.state.scrollY } } }
+              ])}
+            >
+              {this.props.broadcast && (
+                <Broadcasts
+                  broadcast={this.props.broadcast}
+                  removeBroadcastCard={this.props.removeBroadcastCard}
+                />
+              )}
+              {this.props.activity && (
+                <Activities activity={this.props.activity} />
+              )}
+            </ScrollView>
+          }
+        </FancyModal>
+      </View>
     );
   }
 
