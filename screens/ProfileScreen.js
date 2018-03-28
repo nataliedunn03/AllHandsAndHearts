@@ -1,4 +1,3 @@
-//import { ExpoConfigView } from '@expo/samples';
 import React from 'react';
 import Touchable from 'react-native-platform-touchable';
 import { Text, View } from 'react-native';

@@ -1,27 +1,22 @@
-'use strict';
 import React from 'react';
 import {
-  Image,
   Platform,
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
-  View,
   RefreshControl,
-  Animated,
-  LayoutAnimation
+  Animated
 } from 'react-native';
 import { WebBrowser } from 'expo';
-import { MonoText } from '../components/StyledText';
-//import BroadcastsContainer from '../containers/BroadcastsContainer';
 
 import Broadcasts from '../components/Home/Broadcasts';
 import Activities from '../components/Home/Activities';
 import Colors from '../constants/Colors';
+import Modal from '../components/GrowingModal';
 export default class HomeScreen extends React.Component {
   state = {
-    scrollY: 0
+    scrollY: 0,
+    show: true
   };
   _handleRefresh = async () => {
     try {
@@ -34,31 +29,43 @@ export default class HomeScreen extends React.Component {
   render() {
     console.log(this.props);
     return (
-      <ScrollView
-        style={{
-          flex: 1,
-          backgroundColor: Colors.defaultColor.PAGE_BACKGROUND
-        }}
-        ref={ref => {
-          this.homeScreenComponentRef = ref;
-        }}
-        refreshControl={
-          <RefreshControl refreshing={false} onRefresh={this._handleRefresh} />
-        }
-        scrollEventThrottle={16}
-        showsVerticalScrollIndicator={false}
-        onScroll={Animated.event([
-          { nativeEvent: { contentOffset: { y: this.state.scrollY } } }
-        ])}
+      <Modal
+        show={this.state.show}
+        onClose={() => this.setState({ show: false })}
       >
-        {this.props.broadcast && (
-          <Broadcasts
-            broadcast={this.props.broadcast}
-            removeBroadcastCard={this.props.removeBroadcastCard}
-          />
-        )}
-        {this.props.activity && <Activities activity={this.props.activity} />}
-      </ScrollView>
+        {
+          <ScrollView
+            style={{
+              flex: 1,
+              backgroundColor: Colors.defaultColor.PAGE_BACKGROUND
+            }}
+            ref={ref => {
+              this.homeScreenComponentRef = ref;
+            }}
+            refreshControl={
+              <RefreshControl
+                refreshing={false}
+                onRefresh={this._handleRefresh}
+              />
+            }
+            scrollEventThrottle={16}
+            showsVerticalScrollIndicator={false}
+            onScroll={Animated.event([
+              { nativeEvent: { contentOffset: { y: this.state.scrollY } } }
+            ])}
+          >
+            {this.props.broadcast && (
+              <Broadcasts
+                broadcast={this.props.broadcast}
+                removeBroadcastCard={this.props.removeBroadcastCard}
+              />
+            )}
+            {this.props.activity && (
+              <Activities activity={this.props.activity} />
+            )}
+          </ScrollView>
+        }
+      </Modal>
     );
   }
 
