@@ -66,7 +66,11 @@ export default class HomeScreen extends React.Component {
             Ye, Click me to open.
           </Text>
         </TouchableHighlight>
-        <FancyModal show={this.state.show} closeCallback={this.handleClose}>
+        <FancyModal
+          show={this.state.show}
+          closeCallback={this.handleClose}
+          avoidKeyboard
+        >
           {
             <ScrollView
               style={{
