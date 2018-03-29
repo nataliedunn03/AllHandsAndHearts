@@ -1,19 +1,19 @@
 /**
- * Modal that uses gesture:
+ * Just a React Native Modal Component that that uses gesture:
  * 1. To expand on scroll up
  * 2. To close on scroll down
- * Note: Initially it will open half of the screen
- * Further scrolling will make the modal full
+ * Note: Initially it will fill half of the screen
+ * Further scrolling will make the modal take full screen
  */
 import React, { Component } from 'react';
 import {
-  StyleSheet,
-  View,
-  Dimensions,
-  PanResponder,
   Animated,
+  Dimensions,
+  Keyboard,
+  PanResponder,
   SafeAreaView,
-  Keyboard
+  StyleSheet,
+  View
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { Feather as Icon } from '@expo/vector-icons';
