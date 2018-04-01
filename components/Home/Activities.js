@@ -12,7 +12,6 @@ export default class Activities extends Component {
     };
   }
   componentDidUpdate() {
-    console.log('\n\n\n okay this is in Activities \n\n\n');
     setTimeout(() => {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     }, 5);
