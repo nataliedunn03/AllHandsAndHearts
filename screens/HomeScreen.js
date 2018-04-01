@@ -5,20 +5,16 @@ import {
   StyleSheet,
   Text,
   RefreshControl,
-  Animated,
-  TouchableHighlight,
-  View
+  Animated
 } from 'react-native';
 import { WebBrowser } from 'expo';
 
 import Broadcasts from '../components/Home/Broadcasts';
 import Activities from '../components/Home/Activities';
 import Colors from '../constants/Colors';
-import { FancyModal } from '../components/Modal';
 export default class HomeScreen extends React.Component {
   state = {
-    scrollY: 0,
-    show: false
+    scrollY: 0
   };
   _handleRefresh = async () => {
     try {
@@ -28,83 +24,33 @@ export default class HomeScreen extends React.Component {
       console.log(e);
     }
   };
-  handleOpen = () => {
-    this.setState({
-      show: true
-    });
-    console.log("I'm being clicked", this.state.show);
-  };
-  handleClose = () => {
-    this.setState({
-      show: false
-    });
-    console.log('handleClose is triggered', this.state.show);
-  };
   render() {
-    console.log(this.state.show);
     return (
-      <View
+      <ScrollView
         style={{
-          justifyContent: 'center'
+          flex: 1,
+          backgroundColor: Colors.defaultColor.PAGE_BACKGROUND
         }}
+        ref={ref => {
+          this.homeScreenComponentRef = ref;
+        }}
+        refreshControl={
+          <RefreshControl refreshing={false} onRefresh={this._handleRefresh} />
+        }
+        scrollEventThrottle={16}
+        showsVerticalScrollIndicator={false}
+        onScroll={Animated.event([
+          { nativeEvent: { contentOffset: { y: this.state.scrollY } } }
+        ])}
       >
-        <TouchableHighlight
-          onPress={this.handleOpen}
-          style={{
-            height: 50,
-            backgroundColor: '#ffff12',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
-          <Text
-            style={{
-              color: 'red',
-              fontSize: 24
-            }}
-          >
-            Ye, Click me to open.
-          </Text>
-        </TouchableHighlight>
-        <FancyModal
-          show={this.state.show}
-          closeCallback={this.handleClose}
-          avoidKeyboard
-        >
-          {
-            <ScrollView
-              style={{
-                flex: 1,
-                backgroundColor: Colors.defaultColor.PAGE_BACKGROUND
-              }}
-              ref={ref => {
-                this.homeScreenComponentRef = ref;
-              }}
-              refreshControl={
-                <RefreshControl
-                  refreshing={false}
-                  onRefresh={this._handleRefresh}
-                />
-              }
-              scrollEventThrottle={16}
-              showsVerticalScrollIndicator={false}
-              onScroll={Animated.event([
-                { nativeEvent: { contentOffset: { y: this.state.scrollY } } }
-              ])}
-            >
-              {this.props.broadcast && (
-                <Broadcasts
-                  broadcast={this.props.broadcast}
-                  removeBroadcastCard={this.props.removeBroadcastCard}
-                />
-              )}
-              {this.props.activity && (
-                <Activities activity={this.props.activity} />
-              )}
-            </ScrollView>
-          }
-        </FancyModal>
-      </View>
+        {this.props.broadcast && (
+          <Broadcasts
+            broadcast={this.props.broadcast}
+            removeBroadcastCard={this.props.removeBroadcastCard}
+          />
+        )}
+        {this.props.activity && <Activities activity={this.props.activity} />}
+      </ScrollView>
     );
   }
 

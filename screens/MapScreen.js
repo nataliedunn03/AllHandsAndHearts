@@ -2,7 +2,7 @@ import { MapView } from 'expo';
 import React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { View } from 'react-native-animatable';
-import Touchable from 'react-native-platform-touchable';
+
 import CurrentLocationButton from '../components/CurrentLocationButton';
 import BroadcastCard from '../components/Home/BroadcastCard';
 import SimepleModal from '../components/Modal/SimpleModal';
@@ -203,25 +203,21 @@ export default class MapScreen extends React.Component {
   _renderRegionModalContent = () => {
     return (
       <View style={styles.modalContent}>
-        <Touchable background={Touchable.Ripple('blue')}>
-          <View>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={true}
-              decelerationRate={0}
-              snapToInterval={Layout.width}
-              snapToAlignment={'center'}
-              contentInset={{
-                top: 0,
-                left: 16,
-                bottom: 0,
-                right: 16
-              }}
-            >
-              {this._renderRegionCards()}
-            </ScrollView>
-          </View>
-        </Touchable>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={true}
+          decelerationRate={0}
+          snapToInterval={Layout.width}
+          snapToAlignment={'center'}
+          contentInset={{
+            top: 0,
+            left: 16,
+            bottom: 0,
+            right: 16
+          }}
+        >
+          {this._renderRegionCards()}
+        </ScrollView>
       </View>
     );
   };
