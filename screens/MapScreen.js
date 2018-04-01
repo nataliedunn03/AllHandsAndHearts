@@ -9,7 +9,7 @@ import SimepleModal from '../components/Modal/SimpleModal';
 import SwitchRegionButton from '../components/SwitchRegionButton';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
-import { getRegionCards } from '../services/regions';
+import { getStaticRegionData, getRegionList } from '../services/regions';
 import { getUserCurrentLocation } from '../utils/Permissions';
 import getStaticMarker, { randomId } from './StaticMarkers';
 
@@ -23,6 +23,14 @@ let markers = getStaticMarker();
  * 3. Be able to save those data
  */
 
+/*
+TODO:
+  I feel like this file is getting a bit too cluttered.
+  We should probably consider refactoring once the MVP requirements are met?
+  (i.e refactor separate file for GPS button, map region button, and their respective calls)
+  - Ye
+ */
+
 export default class MapScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -33,6 +41,7 @@ export default class MapScreen extends React.Component {
       markers: markers,
       visible: false,
       markersTouch: [],
+      regionData: [],
       regionModalVisible: false,
       markerModalSwipedUp: false
     };
@@ -151,7 +160,10 @@ export default class MapScreen extends React.Component {
       <View>
         <SwitchRegionButton
           style={{ top: -40 }}
-          onClick={this.onSwitchRegionButtonClick}
+          //onClick={this.triggerRegionModal}
+          onClick={() => {
+            getRegionList(this.triggerRegionModal);
+          }}
         />
       </View>
     );
@@ -161,8 +173,9 @@ export default class MapScreen extends React.Component {
       regionModalVisible: false
     });
   };
-  onSwitchRegionButtonClick = () => {
+  triggerRegionModal = regionData => {
     this.setState({
+      regionData: regionData,
       regionModalVisible: true
     });
   };
@@ -180,18 +193,30 @@ export default class MapScreen extends React.Component {
   };
 
   _renderRegionCards = () => {
-    const cards = getRegionCards();
-    return cards.map((card, index) => {
+    const { regionData } = this.state;
+
+    // If there are no regionData from Salesforce, use the static region data.
+    const regionCards =
+      regionData !== undefined ? regionData : getStaticRegionData();
+
+    return regionCards.map((region, index) => {
+      const card = {
+        name: region.Name,
+        latitude: region.Coordinates__Latitude__s,
+        longitude: region.Coordinates__Longitude__s
+      };
+
       const body = '(' + card.latitude + ', ' + card.longitude + ')';
       return (
         <BroadcastCard
           key={index}
           cardKey={index}
-          title={card.regionName}
+          title={card.name}
           body={body}
           style={{
             margin: 40,
-            width: cards.length > 1 ? Layout.width - 80 : Layout.width - 34,
+            width:
+              regionCards.length > 1 ? Layout.width - 80 : Layout.width - 34,
             height: 150
           }}
           onPress={() => this.onRegionCardPress(card)}

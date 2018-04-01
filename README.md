@@ -35,3 +35,7 @@ Post:
 `/reducers` Reducers should go here
 `/sagas` Redux-Sagas should go here
 `/containers` Redux containers that wraps screen and components should go here. i.e mapStateToProps, mapDispatchToProps
+
+### Notes On Salesforce API
+
+GOTO: [Note on salesforce API calls.](API_Notes.md)

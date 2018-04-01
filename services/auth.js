@@ -16,7 +16,7 @@ export const getAuthToken = () => {
     '3MVG9Vik22TUgUphE4Ci7YrLJUWXWmDsMRbP_vZUSuotxwrxduN9uO46e6wPDw_vLHPdcQP2e3Hu6axkpM0fB';
   const client_secret = '150414908105213374';
   const username = 'edwardchen93@gmail.com';
-  const password = 'jpmchase1'; //It seems we don't need to append the security token in this case...?
+  const password = 'jpmchase2'; //It seems we don't need to append the security token in this case...?
 
   const URL =
     'https://test.salesforce.com/services/oauth2/token?' +
@@ -48,6 +48,6 @@ export const getAuthToken = () => {
       return '';
     });
 
-  //This should return the auth token below (1 per app? user?):
-  //00D29000000DglJ!ARUAQI5pKVmtu2S7PO0wTGSjfgv5CwrvOHnXn51aUs4zt_Ay0F25cYMA6xV5BS8xYJHq60Jir9T5eB85zGkMYe799gYncRNy
+  // Auth token 3/31/17 - Seems like it changed..? TODO: Figure out how to make it more permanent.
+  // 00D29000000DglJ!ARUAQNq4VA5wGgB3RONuLHpUqPV7MmcSBwOmLGWj3WZvYk3M4LdiYScaNF8gFQcqa71CXAYW5x3Slu6nzuB.wW1PGiAFwd0C
 };
