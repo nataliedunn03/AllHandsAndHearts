@@ -1,20 +1,13 @@
-'use strict';
 import React from 'react';
 import {
-  Image,
   Platform,
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
-  View,
   RefreshControl,
-  Animated,
-  LayoutAnimation
+  Animated
 } from 'react-native';
 import { WebBrowser } from 'expo';
-import { MonoText } from '../components/StyledText';
-//import BroadcastsContainer from '../containers/BroadcastsContainer';
 
 import Broadcasts from '../components/Home/Broadcasts';
 import Activities from '../components/Home/Activities';
@@ -32,7 +25,6 @@ export default class HomeScreen extends React.Component {
     }
   };
   render() {
-    console.log(this.props);
     return (
       <ScrollView
         style={{

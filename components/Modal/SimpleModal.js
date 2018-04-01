@@ -1,20 +1,24 @@
+/**
+ * Just a Modal that opens up on top of the view
+ * Takes the entire screens (unless you set the styles)
+ */
 import React from 'react';
 import { Animated, StyleSheet } from 'react-native';
 import utils from '../../utils';
 import MModal from 'react-native-modal';
-import { Height } from '../../constants/Layout';
 
-const WithModal = Component => {
+const WithSimpleModal = Component => {
   const Wrapper = props => <Component {...props} />;
-  Wrapper.displayName = `withModal(${Component.displayName || Component.name})`;
+  Wrapper.displayName = `withSimpleModal(${Component.displayName ||
+    Component.name})`;
   return Wrapper;
 };
 
-const ModalHeader = ({ children }) => {
+const SimpleModalHeader = ({ children }) => {
   return children && <Animated.View />;
 };
-const ModalFooter = ({ children }) => {};
-const Modal = ({ show, closeCallback, style, children, ...props }) => {
+const SimpleModalFooter = ({ children }) => {};
+const SimpleModal = ({ show, closeCallback, style, children, ...props }) => {
   return (
     <MModal
       isVisible={show}
@@ -24,7 +28,7 @@ const Modal = ({ show, closeCallback, style, children, ...props }) => {
       swipeDirection="down"
       animationIn="slideInUp"
       avoidKeyboard={true}
-      style={[styles.container, ...style]}
+      style={[styles.container, style]}
       backdropOpacity={0.3}
     >
       <Animated.View>
@@ -34,8 +38,8 @@ const Modal = ({ show, closeCallback, style, children, ...props }) => {
   );
 };
 
-Modal.Header = WithModal(ModalHeader);
-Modal.Footer = WithModal(ModalFooter);
+SimpleModal.Header = WithSimpleModal(SimpleModalHeader);
+SimpleModal.Footer = WithSimpleModal(SimpleModalFooter);
 
 const styles = StyleSheet.create({
   container: {
@@ -44,4 +48,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Modal;
+export default SimpleModal;

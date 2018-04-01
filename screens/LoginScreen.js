@@ -2,7 +2,6 @@ import React from 'react';
 import {
   StyleSheet,
   KeyboardAvoidingView,
-  LayoutAnimation,
   UIManager,
   Platform
 } from 'react-native';

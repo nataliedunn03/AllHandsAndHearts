@@ -61,9 +61,6 @@ const RemoveComponent = ({ cardKey, onClosePress }) => (
 );
 
 class BroadcastCard extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   componentDidUpdate() {
     //LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
   }

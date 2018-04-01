@@ -1,2 +1,3 @@
-import Modal from './Modal';
-export default Modal;
+import FancyModal from './FancyModal';
+import SimpleModal from './SimpleModal';
+export { FancyModal, SimpleModal };
