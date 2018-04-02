@@ -1,7 +1,8 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { View, Text } from 'react-native-animatable';
-import Colors from '../constants/Colors';
+import Colors from '../../constants/Colors';
+
 const Slogan = props => {
   return (
     <View style={styles.container} {...props}>

@@ -12,6 +12,7 @@ import { WebBrowser } from 'expo';
 import Broadcasts from '../components/Home/Broadcasts';
 import Activities from '../components/Home/Activities';
 import Colors from '../constants/Colors';
+
 export default class HomeScreen extends React.Component {
   state = {
     scrollY: 0
@@ -42,6 +43,7 @@ export default class HomeScreen extends React.Component {
         onScroll={Animated.event([
           { nativeEvent: { contentOffset: { y: this.state.scrollY } } }
         ])}
+        alwaysBounceVertical
       >
         {this.props.broadcast && (
           <Broadcasts

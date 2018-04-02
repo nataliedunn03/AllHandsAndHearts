@@ -1,9 +1,9 @@
 import { Svg } from 'expo';
 import React from 'react';
-import Colors from '../constants/Colors';
+import Colors from '../../constants/Colors';
 
 const { Path, G, Circle } = Svg;
-const Marker = () => (
+const StyledMarker = () => (
   <Svg width="30" height="49">
     <G fill="none" fill-rule="evenodd">
       <G fill={Colors.defaultColor.PRIMARY_COLOR} fill-rule="nonzero">
@@ -20,4 +20,4 @@ const Marker = () => (
   </Svg>
 );
 
-export default Marker;
+export default StyledMarker;

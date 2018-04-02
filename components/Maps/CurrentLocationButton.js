@@ -1,21 +1,10 @@
-'use strict';
-
 import React from 'react';
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Animated,
-  Easing
-} from 'react-native';
-import Colors from '../constants/Colors';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import Colors from '../../constants/Colors';
 import { MaterialIcons } from '@expo/vector-icons';
-import { alertIfLocationisDisabled } from '../utils/Permissions';
+import { alertIfLocationisDisabled } from '../../utils/Permissions';
 
 export default class CurrentLocationButton extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   onButtonPress = () => {
     this.props.locationPermission
       ? this.props.onPress()
@@ -44,15 +33,12 @@ export default class CurrentLocationButton extends React.Component {
 
 const styles = StyleSheet.create({
   currentLocationView: {
-    position: 'absolute',
-    left: 0,
     right: 20,
     alignItems: 'flex-end'
   },
   currentLocationButton: {
     width: 44,
     height: 44,
-    bottom: 30,
     backgroundColor: Colors.navHeaderBackground,
     justifyContent: 'center',
     alignItems: 'center',

@@ -1,25 +1,40 @@
 import React, { Component } from 'react';
+import { Location } from 'expo';
 import {
   Animated,
   ScrollView,
   RefreshControl,
   TouchableHighlight,
-  LayoutAnimation
+  LayoutAnimation,
+  Modal
 } from 'react-native';
 import { View, Text } from 'react-native-animatable';
-import Broadcasts from '../components/Home/Broadcasts';
-import BroadcastCard from '../components/Home/BroadcastCard';
-import ActivityCard from '../components/Home/ActivityCard';
+
 import Colors from '../constants/Colors';
 import { MonoText } from '../components/StyledText';
-
 import StyledButton from '../components/StyledButton';
 import StyledInput from '../components/StyledInput';
+import SlidingModal from '../components/Modal';
+
 export default class MarkerViewScreen extends Component {
   state = {
     refresh: false,
-    scrollY: 0
+    scrollY: 0,
+    show: false,
+    name: ''
   };
+
+  componentDidMount() {
+    let { state: { params: { name } } } = this.props.navigation;
+    this._getLocationName(name);
+  }
+
+  _handleClose = () => {
+    this.setState({
+      show: false
+    });
+  };
+
   _handleRefresh = async () => {
     this.setState({ refresh: true });
     await setTimeout(() => {
@@ -29,73 +44,66 @@ export default class MarkerViewScreen extends Component {
       this.props.navigation.goBack(null);
     }, 500);
   };
+
+  _getLocationName = async coord => {
+    try {
+      Location.setApiKey('AIzaSyChIWVSK41LTxJuDDYJECnBsAbMkzy13Fk');
+      const decodedLocation = await Location.reverseGeocodeAsync(coord);
+      this.setState({
+        name: decodedLocation[0].name
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   render() {
     return (
-      <ScrollView
-        style={{
-          flex: 1,
-          backgroundColor: Colors.defaultColor.PAGE_BACKGROUND
-        }}
+      <View
         ref={ref => {
-          this.resortInfoCardScrollView = ref;
+          this.resortInfoCard = ref;
         }}
-        refreshControl={
-          <RefreshControl
-            refreshing={this.state.refresh}
-            onRefresh={this._handleRefresh}
-          />
-        }
-        scrollEventThrottle={16}
-        showsVerticalScrollIndicator={false}
-        onScroll={Animated.event([
-          { nativeEvent: { contentOffset: { y: this.state.scrollY } } }
-        ])}
+        style={{
+          flex: 1
+        }}
       >
-        <View
-          ref={ref => {
-            this.resortInfoCard = ref;
-          }}
+        <MonoText
           style={{
-            flex: 1
+            color: '#000000',
+            fontSize: 28,
+            marginTop: 10,
+            marginLeft: 16,
+            fontWeight: '500',
+            marginBottom: 10,
+            textAlign: 'left',
+            backgroundColor: 'transparent'
           }}
         >
-          <MonoText
+          Enter details
+        </MonoText>
+        <View style={{ flex: 1 }}>
+          <StyledInput
             style={{
-              color: '#000000',
-              fontSize: 28,
-              marginTop: 10,
-              marginLeft: 16,
-              fontWeight: '500',
-              marginBottom: 10,
-              textAlign: 'left',
-              backgroundColor: 'transparent'
+              height: 200,
+              textAlignVertical: 'top'
             }}
-          >
-            Enter details
-          </MonoText>
-          <View style={{ flex: 1 }}>
-            <StyledInput
-              style={{
-                height: 200,
-                textAlignVertical: 'top'
-              }}
-              multiline={true}
-              numberOfLines={8}
-            />
-            <StyledButton
-              text="Save"
-              onPress={() => {
-                //LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-                this.props.navigation.goBack(null);
-              }}
-              style={{
-                height: 42,
-                backgroundColor: Colors.defaultColor.PRIMARY_COLOR
-              }}
-            />
-          </View>
+            multiline={true}
+            numberOfLines={8}
+            placeholder={this.state.name}
+          />
+          <StyledButton
+            text="Save"
+            onPress={() => {
+              //LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+              this.props.navigation.goBack(null);
+            }}
+            style={{
+              height: 42,
+              backgroundColor: Colors.defaultColor.PRIMARY_COLOR
+            }}
+          />
         </View>
-      </ScrollView>
+      </View>
     );
   }
 }

@@ -44,8 +44,7 @@ const styles = StyleSheet.create({
     marginLeft: 12
   },
   mainBody: {
-    flexGrow: 0,
-    flexBasis: '50%',
+    flexDirection: 'column',
     height: '100%'
   },
   body: {
@@ -101,7 +100,13 @@ const ActivityCard = props => {
             }}
           >
             <View style={styles.mainBody}>
-              <Text style={styles.body} numberOfLines={2} ellipsizeMode="tail">
+              <Text
+                style={styles.body}
+                numberOfLines={2}
+                ellipsizeMode="tail"
+                selectable
+                selectionColor={Colors.PRIMARY_COLOR}
+              >
                 {taskDetail}
               </Text>
             </View>

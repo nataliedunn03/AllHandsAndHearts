@@ -4,15 +4,13 @@ import {
   StyleSheet,
   ScrollView,
   LayoutAnimation,
-  UIManager,
-  InteractionManager
+  UIManager
 } from 'react-native';
 
 import { View } from 'react-native-animatable';
-import Colors from '../../constants/Colors';
 import Layout from '../../constants/Layout';
 import BroadcastCard from './BroadcastCard';
-import { MonoText } from '../../components/StyledText';
+import { MonoText } from '../StyledText';
 
 //enable in android
 if (Layout.android)
@@ -29,7 +27,7 @@ export default class Broadcasts extends Component {
   componentDidMount() {
     //set this to the -10 which is equivalent to margin 0 as to parent
     setTimeout(() => {
-      if (this.scrollViewRef) this.scrollViewRef.scrollTo({ x: -10 });
+      if (this.scrollViewRef) this.scrollViewRef.scrollTo({ x: -9 });
     }, 0);
   }
 
@@ -88,6 +86,7 @@ export default class Broadcasts extends Component {
               bottom: 0,
               right: 16
             }}
+            alwaysBounceHorizontal
           >
             {this._renderCards(broadcastCards)}
           </ScrollView>

@@ -9,6 +9,4 @@ const synthesizeChildren = (children, props) => {
     : children && children;
 };
 
-export default {
-  synthesizeChildren
-};
+export default { synthesizeChildren };

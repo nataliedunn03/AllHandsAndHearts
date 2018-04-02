@@ -1,8 +1,4 @@
 import Permissions from './Permissions';
-import utils from './utils';
+import utilityFunctions from './utils';
 import navigationReduxUtil from './navigationReduxUtil';
-export default {
-  Permissions,
-  utils,
-  navigationReduxUtil
-};
+export { Permissions, utilityFunctions, navigationReduxUtil };

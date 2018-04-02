@@ -4,7 +4,7 @@
  */
 import React from 'react';
 import { Animated, StyleSheet } from 'react-native';
-import utils from '../../utils';
+import { utilityFunctions } from '../../utils';
 import MModal from 'react-native-modal';
 
 const WithSimpleModal = Component => {
@@ -32,7 +32,7 @@ const SimpleModal = ({ show, closeCallback, style, children, ...props }) => {
       backdropOpacity={0.3}
     >
       <Animated.View>
-        {utils.utils.synthesizeChildren(children, props)}
+        {utilityFunctions.synthesizeChildren(children, props)}
       </Animated.View>
     </MModal>
   );

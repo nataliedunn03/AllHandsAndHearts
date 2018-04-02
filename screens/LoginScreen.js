@@ -11,7 +11,7 @@ import LoginForm from '../components/Login/LoginForm';
 import SignupForm from '../components/Login/SignupForm';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
-import Slogan from '../components/Slogan';
+import Slogan from '../components/Login/Slogan';
 
 if (Platform.OS === 'android')
   UIManager.setLayoutAnimationEnabledExperimental &&

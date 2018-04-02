@@ -23,7 +23,6 @@ import { Feather as Icon } from '@expo/vector-icons';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 const MIDDLE_OF_THE_SCREEN = SCREEN_HEIGHT * 0.5;
-const MIDDLE_OF_THE_SCREEN_OFFSET = MIDDLE_OF_THE_SCREEN - 120;
 const TOP_OF_THE_SCREEN_POINT = { x: 0, y: 0 };
 const MODAL_SHOWN_HALF = 'HALF';
 const MODAL_SHOWN_FULL = 'FULL';
@@ -31,24 +30,31 @@ const MODAL_SHOWN_FULL = 'FULL';
 export default class SlidingModal extends PureComponent {
   static defaultProps = {
     show: false,
-    closeCallback: () => {}
+    closeCallback: () => {},
+    top: null //top behaves like css top property
   };
   static propTypes = {
     show: PropTypes.bool.isRequired,
-    children: PropTypes.node,
-    closeCallback: PropTypes.func
+    children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
+    closeCallback: PropTypes.func,
+    top: PropTypes.number
   };
   constructor(props) {
     super(props);
     //initially we want to open the modal half way
+    this.MIDDLE_OF_THE_SCREEN_OFFSET = this.props.top
+      ? this.props.top
+      : MIDDLE_OF_THE_SCREEN - 120;
+
     this.modalAnimation = new Animated.ValueXY({
       x: 0,
-      y: MIDDLE_OF_THE_SCREEN_OFFSET
+      y: this.MIDDLE_OF_THE_SCREEN_OFFSET
     });
     this.state = {
       openModal: false,
       modalState: MODAL_SHOWN_HALF
     };
+    this.setupPanHandler();
   }
 
   componentDidMount() {
@@ -60,6 +66,19 @@ export default class SlidingModal extends PureComponent {
       'keyboardWillHide',
       this.keyboardWillHide
     );
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.show && !prevProps.show) {
+      this.handleOpen();
+    }
+  }
+  componentWillUnmount() {
+    this.modalAnimation.y.removeAllListeners();
+    this.keyboardWillShowListener.remove();
+    this.keyboardWillHideListener.remove();
+  }
+
+  setupPanHandler = () => {
     this.modalPanResponder = PanResponder.create({
       onStartShouldSetPanResponder: (evt, gestureState) => true,
       onMoveShouldSetPanResponder: (evt, gestureState) => true,
@@ -77,7 +96,7 @@ export default class SlidingModal extends PureComponent {
         // so when we swipe down fast or drag half the screen close the modal
         if (
           gestureState.vy >= 0.5 ||
-          gestureState.moveY - 30 > MIDDLE_OF_THE_SCREEN_OFFSET
+          gestureState.moveY - 30 > this.MIDDLE_OF_THE_SCREEN_OFFSET
         ) {
           this.slideModalDown();
         } else {
@@ -85,17 +104,7 @@ export default class SlidingModal extends PureComponent {
         }
       }
     });
-  }
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props.show && !prevProps.show) {
-      this.handleOpen();
-    }
-  }
-  componentWillUnmount() {
-    this.modalAnimation.y.removeAllListeners();
-    this.keyboardWillShowListener.remove();
-    this.keyboardWillHideListener.remove();
-  }
+  };
 
   /**
    * just a hack to expand modal on keyboard show and hide when keyboard is hidden
@@ -123,7 +132,7 @@ export default class SlidingModal extends PureComponent {
 
   openModalHalfway = () => {
     Animated.timing(this.modalAnimation.y, {
-      toValue: MIDDLE_OF_THE_SCREEN_OFFSET,
+      toValue: this.MIDDLE_OF_THE_SCREEN_OFFSET,
       duration: 300,
       easing: Easing.in(Easing.sin)
     }).start(() => {
@@ -155,8 +164,8 @@ export default class SlidingModal extends PureComponent {
       duration: 300,
       easing: Easing.out(Easing.quad)
     }).start(() => {
-      this.handleClose();
       this.modalAnimation.y.setOffset(SCREEN_HEIGHT);
+      this.handleClose();
     });
   };
 
@@ -177,9 +186,12 @@ export default class SlidingModal extends PureComponent {
     }
   };
   render() {
+    if (this.props.show === false) {
+      return null;
+    }
     //turn the back of the screen dark to focus on modal content
     const backdropOpacity = this.modalAnimation.y.interpolate({
-      inputRange: [MIDDLE_OF_THE_SCREEN_OFFSET / 2, SCREEN_HEIGHT],
+      inputRange: [this.MIDDLE_OF_THE_SCREEN_OFFSET / 2, SCREEN_HEIGHT],
       outputRange: [0.8, 0],
       extrapolate: 'clamp'
     });
@@ -187,7 +199,7 @@ export default class SlidingModal extends PureComponent {
     //we want to gradually increase the opacity of the view when we scroll it up
     // and decrease when we scroll it down
     const modalContentOpacity = this.modalAnimation.y.interpolate({
-      inputRange: [MIDDLE_OF_THE_SCREEN_OFFSET, SCREEN_HEIGHT],
+      inputRange: [this.MIDDLE_OF_THE_SCREEN_OFFSET, SCREEN_HEIGHT],
       outputRange: [1, 0],
       extrapolate: 'clamp'
     });

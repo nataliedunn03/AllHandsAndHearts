@@ -1,13 +1,52 @@
 import React from 'react';
-import {
-  StyleSheet,
-  TouchableHighlight,
-  LayoutAnimation,
-  Animated
-} from 'react-native';
+import { StyleSheet, TouchableHighlight } from 'react-native';
 import { View, Text } from 'react-native-animatable';
 import { Ionicons as Icon } from '@expo/vector-icons';
-import Colors from '../../constants/Colors';
+
+const RemoveComponent = ({ cardKey, onClosePress }) => (
+  <View style={styles.remove}>
+    <TouchableHighlight
+      onPress={() => onClosePress(cardKey)}
+      hitSlop={{ top: 16, left: 16, bottom: 16, right: 16 }}
+      underlayColor="transparent"
+    >
+      <View style={{ flex: 1 }}>
+        <Icon name="ios-close-circle-outline" size={20} color="#9B9B9B" />
+      </View>
+    </TouchableHighlight>
+  </View>
+);
+
+const BroadcastCard = ({
+  style,
+  title,
+  body,
+  cardKey,
+  onClosePress,
+  onPress
+}) => {
+  return (
+    <View style={[style]}>
+      <TouchableHighlight
+        underlayColor={'transparent'}
+        onPress={onPress ? onPress : () => console.log('Card is clicked')}
+      >
+        <View style={styles.container}>
+          {onClosePress ? (
+            <RemoveComponent cardKey={cardKey} onClosePress={onClosePress} />
+          ) : null}
+          <View style={styles.mainBody}>
+            <Text style={styles.subText}>
+              {title ? title.toUpperCase() : title}
+            </Text>
+            <Text style={styles.body}>{body}</Text>
+          </View>
+        </View>
+      </TouchableHighlight>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
   container: {
     height: '100%',
@@ -43,50 +82,5 @@ const styles = StyleSheet.create({
     zIndex: 99
   }
 });
-
-// destructre in JS
-// look this up on google
-const RemoveComponent = ({ cardKey, onClosePress }) => (
-  <View style={styles.remove}>
-    <TouchableHighlight
-      onPress={() => onClosePress(cardKey)}
-      hitSlop={{ top: 16, left: 16, bottom: 16, right: 16 }}
-      underlayColor="transparent"
-    >
-      <View style={{ flex: 1 }}>
-        <Icon name="ios-close-circle-outline" size={20} color="#9B9B9B" />
-      </View>
-    </TouchableHighlight>
-  </View>
-);
-
-class BroadcastCard extends React.Component {
-  componentDidUpdate() {
-    //LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-  }
-
-  render() {
-    const { style, title, body, cardKey, onClosePress, onPress } = this.props;
-    return (
-      <View style={[style]}>
-        <TouchableHighlight
-          underlayColor={'transparent'}
-          onPress={onPress ? onPress : () => console.log('Card is clicked')}
-        >
-          <View style={styles.container}>
-            {/* You want to pass the on press button down to your remove component right? SO you press the function down with props*/}
-            {onClosePress ? (
-              <RemoveComponent cardKey={cardKey} onClosePress={onClosePress} />
-            ) : null}
-            <View style={styles.mainBody}>
-              <Text style={styles.subText}>{title.toUpperCase()}</Text>
-              <Text style={styles.body}>{body}</Text>
-            </View>
-          </View>
-        </TouchableHighlight>
-      </View>
-    );
-  }
-}
 
 export default BroadcastCard;

@@ -12,7 +12,7 @@ import AppContainer from './containers/App';
 const sagaMiddleware = createSagaMiddleware();
 let middleWares = [sagaMiddleware, navMiddleware];
 if (process.env.NODE_ENV !== 'production') {
-  middleWares = [...middleWares, logger];
+  middleWares = [...middleWares];
 }
 
 const store = compose(

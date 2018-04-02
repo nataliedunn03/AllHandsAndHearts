@@ -1,17 +1,17 @@
 import { MapView } from 'expo';
 import React from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { StyleSheet, Text, TouchableHighlight } from 'react-native';
 import { View } from 'react-native-animatable';
 
-import CurrentLocationButton from '../components/CurrentLocationButton';
-import BroadcastCard from '../components/Home/BroadcastCard';
-import SimepleModal from '../components/Modal/SimpleModal';
-import SwitchRegionButton from '../components/SwitchRegionButton';
+import { CurrentLocationButton, SwitchRegionButton } from '../components/Maps';
+
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import { getStaticRegionData, getRegionList } from '../services/regions';
 import { getUserCurrentLocation } from '../utils/Permissions';
 import getStaticMarker, { randomId } from './StaticMarkers';
+import { SlidingModal, SimpleModal } from '../components/Modal';
+import { ScrollCard } from '../components/Card';
 
 const DELTA = 0.0922;
 
@@ -43,7 +43,8 @@ export default class MapScreen extends React.Component {
       markersTouch: [],
       regionData: [],
       regionModalVisible: false,
-      markerModalSwipedUp: false
+      showMarkerModal: false, //open model onLongPress on map
+      markerCoord: {}
     };
   }
   componentDidMount() {
@@ -122,30 +123,12 @@ export default class MapScreen extends React.Component {
     return this.state.displayGps ? 'fadeIn' : 'fadeOut';
   };
 
-  _createNewMarker(e, marker) {
-    console.log(e.nativeEvent.coordinate);
-    const id = randomId();
-    let markers = [
-      ...this.state.markers,
-      {
-        coordinate: e.nativeEvent.coordinate,
-        key: id,
-        color: Colors.defaultColor.PRIMARY_COLOR,
-        description: 'This is a description',
-        name: marker.name
-      }
-    ];
-    this.setState({
-      markers
-    });
-  }
-
   //render the gps button if map is moved
   _renderGPSButton() {
     return (
       <View animation={this._getGPSButtonAnimationType()} useNativeDriver>
         <CurrentLocationButton
-          style={{ top: -40 }}
+          style={{ top: -20 }}
           locationPermission={this.state.locationPermission}
           onPress={this._moveToUserCurrentLocation}
           iconColor={this.state.gpsButtonColor}
@@ -159,23 +142,26 @@ export default class MapScreen extends React.Component {
     return (
       <View>
         <SwitchRegionButton
-          style={{ top: -40 }}
-          //onClick={this.triggerRegionModal}
-          onClick={() => {
+          style={{ top: 10 }}
+          onClick={this.openRegionModal}
+          color={Colors.defaultColor.PRIMARY_COLOR}
+          /*onClick={() => {
             getRegionList(this.triggerRegionModal);
-          }}
+          }}*/
         />
       </View>
     );
   }
-  onModalCloseCallback = () => {
+
+  closeRegionModal = () => {
+    console.log('closedRegionModal');
     this.setState({
       regionModalVisible: false
     });
   };
-  triggerRegionModal = regionData => {
+
+  openRegionModal = () => {
     this.setState({
-      regionData: regionData,
       regionModalVisible: true
     });
   };
@@ -187,17 +173,15 @@ export default class MapScreen extends React.Component {
       latitudeDelta: DELTA
     };
     this.mapViewRef.animateToRegion(region);
-    this.setState({
-      regionModalVisible: false
-    });
   };
 
   _renderRegionCards = () => {
-    const { regionData } = this.state;
+    //const { regionData } = this.state;
 
     // If there are no regionData from Salesforce, use the static region data.
-    const regionCards =
-      regionData !== undefined ? regionData : getStaticRegionData();
+    /*const regionCards =
+      regionData !== undefined ? regionData : getStaticRegionData();*/
+    const regionCards = getStaticRegionData();
 
     return regionCards.map((region, index) => {
       const card = {
@@ -208,19 +192,24 @@ export default class MapScreen extends React.Component {
 
       const body = '(' + card.latitude + ', ' + card.longitude + ')';
       return (
-        <BroadcastCard
+        <TouchableHighlight
+          underlayColor="transparent"
           key={index}
-          cardKey={index}
-          title={card.name}
-          body={body}
+          onPress={() => {
+            this.onRegionCardPress(card);
+          }}
           style={{
             margin: 40,
             width:
               regionCards.length > 1 ? Layout.width - 80 : Layout.width - 34,
             height: 150
           }}
-          onPress={() => this.onRegionCardPress(card)}
-        />
+        >
+          <View>
+            <Text>{card.name}</Text>
+            <Text>{body}</Text>
+          </View>
+        </TouchableHighlight>
       );
     });
   };
@@ -228,9 +217,9 @@ export default class MapScreen extends React.Component {
   _renderRegionModalContent = () => {
     return (
       <View style={styles.modalContent}>
-        <ScrollView
+        <ScrollCard
           horizontal
-          showsHorizontalScrollIndicator={true}
+          showsHorizontalScrollIndicator={false}
           decelerationRate={0}
           snapToInterval={Layout.width}
           snapToAlignment={'center'}
@@ -242,43 +231,37 @@ export default class MapScreen extends React.Component {
           }}
         >
           {this._renderRegionCards()}
-        </ScrollView>
+        </ScrollCard>
       </View>
     );
   };
+
+  _createNewMarker = async e => {
+    e.persist();
+    const coord = e.nativeEvent.coordinate;
+    this.setState({
+      showMarkerModal: true,
+      markerCoord: coord
+    });
+  };
+
+  _closeMarkerModal = () => {
+    this.setState({
+      showMarkerModal: false
+    });
+  };
+
+  _renderPinModal = () => {
+    return (
+      <SlidingModal
+        show={this.state.showMarkerModal}
+        closeCallback={this._closeMarkerModal}
+      />
+    );
+  };
+
   async _onMarkerPress(e, marker) {
-    /*this.setState({
-					markersTouch: [
-						...this.state.markersTouch,
-						{
-							key: randomId()
-						}
-					]
-				});*/
-    if (e != null) {
-      e.persist();
-      /*		console.log(e.nativeEvent.coordinate);
-						const coord = e.nativeEvent.coordinate;
-						try {
-							Location.setApiKey('AIzaSyChIWVSK41LTxJuDDYJECnBsAbMkzy13Fk');
-							const decodedLocation = await Location.reverseGeocodeAsync(coord);
-							console.log(decodedLocation);
-							this._createNewMarker(e, decodedLocation[0]);
-							this.props.navigation.navigate('Marker', {
-								name: decodedLocation[0].name
-							});
-						} catch (e) {
-							console.log(e);
-						}*/
-      this.setState({
-        regionModalVisible: true
-      });
-    } else {
-      //this.props.navigation.navigate('Marker', { name: marker.name });
-      this.setState({
-        regionModalVisible: true
-      });
-    }
+    console.log('on marker pressed');
   }
   _renderMapMarker() {
     return this.state.markers.map(marker => {
@@ -302,21 +285,21 @@ export default class MapScreen extends React.Component {
   _onRegionChangeComplete = region => {
     this._updateGPSButton(region);
   };
-  modalSwiped = () => {
-    console.log('Modal swiped up');
+  showMarkerModal = () => {
     this.setState({
-      markerModalSwipedUp: true
+      showMarkerModal: true
     });
   };
+
   _renderRegionModal = () => {
     return (
-      <SimepleModal
+      <SlidingModal
         show={this.state.regionModalVisible}
-        closeCallback={this.onModalCloseCallback}
-        style={styles.markerModal}
+        closeCallback={this.closeRegionModal}
+        top={Layout.height - 400}
       >
         {this._renderRegionModalContent()}
-      </SimepleModal>
+      </SlidingModal>
     );
   };
   render() {
@@ -339,7 +322,7 @@ export default class MapScreen extends React.Component {
           showsIndoorLevelPicker={true}
           onRegionChange={this._onRegionChange}
           onRegionChangeComplete={this._onRegionChangeComplete}
-          onLongPress={e => this._onMarkerPress(e, null)}
+          onLongPress={e => this._createNewMarker(e)}
           ref={element => (this.mapViewRef = element)}
         >
           {this._renderMapMarker()}
@@ -347,6 +330,7 @@ export default class MapScreen extends React.Component {
         {this._renderSwitchRegionButton()}
         {this._renderGPSButton()}
         {this._renderRegionModal()}
+        {this._renderPinModal()}
       </View>
     );
   }
