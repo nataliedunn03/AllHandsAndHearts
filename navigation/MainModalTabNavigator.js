@@ -3,10 +3,10 @@ import { Platform, StyleSheet, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { TabNavigator, TabBarBottom, StackNavigator } from 'react-navigation';
 
-import MapScreen from '../screens/MapScreen';
 import MarkerViewScreen from '../screens/MarkerViewScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import HomeScreenContainer from '../containers/HomeScreenContainer';
+import MapScreenContainer from '../containers/MapScreenContainers';
 import Colors from '../constants/Colors';
 
 const MainTabNavigator = TabNavigator(
@@ -20,8 +20,8 @@ const MainTabNavigator = TabNavigator(
       }
     },
     Maps: {
-      screen: MapScreen,
-      path: '/maps',
+      screen: MapScreenContainer,
+      path: '/',
       navigationOptions: {
         headerTitle: 'MAPS',
         tabBarLabel: 'Maps'

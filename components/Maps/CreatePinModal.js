@@ -42,7 +42,7 @@ export default class CreatePinModal extends React.PureComponent {
         closeCallback={this.props.closeCallback}
       >
         <View>
-          <Text>Bitch lol</Text>
+          <Text>Placeholdre text</Text>
         </View>
       </SlidingModal>
     );
