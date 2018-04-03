@@ -1,6 +1,7 @@
 import { takeEvery, call, put } from 'redux-saga/effects';
 import {
   GET_REGION_DATA,
+  GET_REGION_DATA_LOADING,
   GET_REGION_DATA_RECEIVED,
   GET_REGION_DATA_ERROR
 } from '../actions/actionTypes';
@@ -11,6 +12,7 @@ import { getRegionList } from '../../services/regions';
  */
 
 const getRegionDataHelper = function* getRegionDataHelper() {
+  yield put({ type: GET_REGION_DATA_LOADING, loading: true });
   let response;
   try {
     response = yield call(getRegionList);
@@ -19,7 +21,7 @@ const getRegionDataHelper = function* getRegionDataHelper() {
     yield put({ type: GET_REGION_DATA_ERROR, error: error.message });
     return false;
   } finally {
-    yield put({ type: GET_REGION_DATA_RECEIVED, sending: false });
+    yield put({ type: GET_REGION_DATA_RECEIVED, loading: false });
   }
 };
 
