@@ -143,11 +143,10 @@ export default class MapScreen extends React.Component {
       <View>
         <SwitchRegionButton
           style={{ top: 10 }}
-          onClick={this.openRegionModal}
+          onClick={() => {
+            this.props.getRegionData();
+          }}
           color={Colors.defaultColor.PRIMARY_COLOR}
-          /*onClick={() => {
-            getRegionList(this.triggerRegionModal);
-          }}*/
         />
       </View>
     );
@@ -176,12 +175,12 @@ export default class MapScreen extends React.Component {
   };
 
   _renderRegionCards = () => {
-    //const { regionData } = this.state;
+    const { regionData } = this.props;
 
     // If there are no regionData from Salesforce, use the static region data.
-    /*const regionCards =
-      regionData !== undefined ? regionData : getStaticRegionData();*/
-    const regionCards = getStaticRegionData();
+    const regionCards =
+      regionData !== undefined ? regionData : getStaticRegionData();
+    // const regionCards = getStaticRegionData();
 
     return regionCards.map((region, index) => {
       const card = {
@@ -294,7 +293,7 @@ export default class MapScreen extends React.Component {
   _renderRegionModal = () => {
     return (
       <SlidingModal
-        show={this.state.regionModalVisible}
+        show={this.props.regionModalVisible}
         closeCallback={this.closeRegionModal}
         top={Layout.height - 400}
       >
