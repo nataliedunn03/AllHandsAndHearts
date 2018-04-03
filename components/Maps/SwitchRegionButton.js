@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     bottom: 30,
-    backgroundColor: '#ffffffff',
+    backgroundColor: Colors.navHeaderBackground,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: Colors.tabIconDefault,

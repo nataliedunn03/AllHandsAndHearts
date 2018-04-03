@@ -1,6 +1,11 @@
 import { MapView } from 'expo';
 import React from 'react';
-import { StyleSheet, Text, TouchableHighlight } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableHighlight,
+  ActivityIndicator
+} from 'react-native';
 import { View } from 'react-native-animatable';
 
 import { CurrentLocationButton, SwitchRegionButton } from '../components/Maps';
@@ -144,6 +149,7 @@ export default class MapScreen extends React.Component {
         <SwitchRegionButton
           style={{ top: 10 }}
           onClick={() => {
+            this.openRegionModal();
             this.props.getRegionData();
           }}
           color={Colors.defaultColor.PRIMARY_COLOR}
@@ -176,7 +182,6 @@ export default class MapScreen extends React.Component {
 
   _renderRegionCards = () => {
     const { regionData } = this.props;
-
     // If there are no regionData from Salesforce, use the static region data.
     const regionCards =
       regionData !== undefined ? regionData : getStaticRegionData();
@@ -214,23 +219,33 @@ export default class MapScreen extends React.Component {
   };
 
   _renderRegionModalContent = () => {
+    const { regionData } = this.props;
     return (
       <View style={styles.modalContent}>
-        <ScrollCard
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          decelerationRate={0}
-          snapToInterval={Layout.width}
-          snapToAlignment={'center'}
-          contentInset={{
-            top: 0,
-            left: 16,
-            bottom: 0,
-            right: 16
-          }}
-        >
-          {this._renderRegionCards()}
-        </ScrollCard>
+        {regionData && (
+          <ScrollCard
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            decelerationRate={0}
+            snapToInterval={Layout.width}
+            snapToAlignment={'center'}
+            contentInset={{
+              top: 0,
+              left: 16,
+              bottom: 0,
+              right: 16
+            }}
+          >
+            {this._renderRegionCards()}
+          </ScrollCard>
+        )}
+        {!regionData && (
+          <ActivityIndicator
+            animating={true}
+            size="small"
+            color={Colors.defaultColor.PRIMARY_COLOR}
+          />
+        )}
       </View>
     );
   };
@@ -293,7 +308,7 @@ export default class MapScreen extends React.Component {
   _renderRegionModal = () => {
     return (
       <SlidingModal
-        show={this.props.regionModalVisible}
+        show={this.state.regionModalVisible}
         closeCallback={this.closeRegionModal}
         top={Layout.height - 400}
       >
