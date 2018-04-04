@@ -55,6 +55,7 @@ export default class MapScreen extends React.Component {
   componentDidMount() {
     this._getUserCurrentLocation();
   }
+
   /**
    * Get current lcoation then set the delta to viewport
    */
@@ -171,12 +172,13 @@ export default class MapScreen extends React.Component {
     });
   };
 
-  onRegionCardPress = card => {
+  onRegionCardPress = async card => {
     let region = {
       ...card,
       longitudeDelta: DELTA * (Layout.width / Layout.height),
       latitudeDelta: DELTA
     };
+    await this.props.getPinsByRegion(card.id);
     this.mapViewRef.animateToRegion(region);
   };
 
@@ -189,6 +191,7 @@ export default class MapScreen extends React.Component {
 
     return regionCards.map((region, index) => {
       const card = {
+        id: region.Id,
         name: region.Name,
         latitude: region.Coordinates__Latitude__s,
         longitude: region.Coordinates__Longitude__s
@@ -278,12 +281,15 @@ export default class MapScreen extends React.Component {
     console.log('on marker pressed');
   }
   _renderMapMarker() {
-    return this.state.markers.map(marker => {
+    return this.props.pinData.map(marker => {
       return (
         <MapView.Marker
-          key={marker.key}
-          coordinate={marker.coordinate}
-          pinColor={marker.color}
+          key={marker.Id}
+          coordinate={{
+            latitude: marker.Coordinates__Latitude__s,
+            longitude: marker.Coordinates__Longitude__s
+          }}
+          pinColor={'#FF0000'}
           onPress={() => this._onMarkerPress(null, marker)}
         />
       );
