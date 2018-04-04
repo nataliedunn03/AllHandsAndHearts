@@ -4,6 +4,10 @@
  If you see these pop up in the modal, something is wrong with the saga/reducers.
  */
 import * as AuthService from './auth';
+const BASE_URL = 'https://cs19.salesforce.com/services/apexrest';
+const auth_token =
+  '00D29000000DglJ!ARUAQJa5AbK9qUgh_3pOTqw8jf_22IR9sPnkIwL3xvNWuP5XchBhfACsWtlRCegO9rFyGu9VAPqPdbo06xhnzvhXFkICni5u';
+
 const staticRegionData = [
   {
     Name: 'NO DATA FROM SALESFORCE1',
@@ -45,10 +49,7 @@ export const getRegionList = async () => {
   // High chance that this token below will have probably expired. curl for another token if that's the case.
   // See: auth.js for auth token request.
   //const auth_token = AuthService.getAuthToken(); //'00D29000000DglJ!ARUAQGRPOShJOzMOgBXiNO8aqP0QbnqvzhwtNvOngNqF2GZxvFXiWqoeBJ2_8Pb5DwSGrQDqf2Zyy5u4olt3wDZD.8XqCmnm';
-  const auth_token =
-    '00D29000000DglJ!ARUAQMw03a_8EcVwXaCzOoMM1IibbD.GeKqX1SJwmrZkemxGDIAg2TRvy4wVD28.iEbJv9Ah033staGgZspGlDZNIyFoLgfG';
 
-  const BASE_URL = 'https://cs19.salesforce.com/services/apexrest';
   const queryEndpoint = `${BASE_URL + '/getRegionLists'}`;
 
   console.log('Fetching region data from Salesforce');
@@ -70,6 +71,38 @@ export const getRegionList = async () => {
       return data;
     } else {
       console.log('-Region Query NO DATA Response-\n');
+      console.log('Check auth_token and API call.-\n');
+      return undefined;
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getPinsListByRegion = async regionId => {
+  const queryEndpoint = `${BASE_URL +
+    '/getPinsListByRegion?regionId=' +
+    regionId}`;
+
+  console.log('Fetching pins data from Salesforce for regionId::', regionId);
+  console.log(queryEndpoint);
+
+  try {
+    const response = await fetch(queryEndpoint, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    const data = await response.json();
+    if (data) {
+      console.log('-Pins Query DATA Response-\n');
+      console.log(data);
+      return data;
+    } else {
+      console.log('-Pins Query NO DATA Response-\n');
       console.log('Check auth_token and API call.-\n');
       return undefined;
     }

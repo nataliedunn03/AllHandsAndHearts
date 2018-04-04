@@ -69,3 +69,6 @@ bower_components
 .temp
 .tmp
 .expo
+
+# Intellij stuff
+.idea
