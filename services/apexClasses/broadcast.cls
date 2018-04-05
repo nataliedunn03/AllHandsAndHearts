@@ -1,5 +1,5 @@
-tResource(urlMapping='/getBroadcastList/*')
-global class getBroadcastList{
+tResource(urlMapping='/broadcasts/*')
+global class WEBSERVICE_Broadcasts{
     @HttpGet
     global static List<Broadcast__c> getBroadcastList(){
         List<Broadcast__c> regions;

@@ -1,6 +1,6 @@
 const broadCastCardsData = [
   {
-    mport * as AuthService from './auth';
+   import * as AuthService from './auth';
 const BASE_URL = 'https://cs19.salesforce.com/services/apexrest';
 const auth_token =
   '00D29000000DglJ!ARUAQJa5AbK9qUgh_3pOTqw8jf_22IR9sPnkIwL3xvNWuP5XchBhfACsWtlRCegO9rFyGu9VAPqPdbo06xhnzvhXFkICni5u';
