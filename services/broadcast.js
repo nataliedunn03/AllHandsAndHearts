@@ -33,7 +33,7 @@ const broadCastCardsData = [
 
 export const getBroacastObjs = async () => {
 
-	const queryEndpoint = `${BASE_URL + '/getBroadcastList'}`;
+	const queryEndpoint = `${BASE_URL + '/broadcast'}`;
 
 	console.log('Fetching broadcast data from Salesforce');
 	console.log(queryEndpoint);

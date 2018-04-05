@@ -1,4 +1,4 @@
-Resource(urlMapping='/broadcasts/*')
+@RestResource(urlMapping='/broadcasts/*')
 global class WEBSERVICE_Broadcasts{
     @HttpGet
     global static List<Broadcast_Object__c> getBroadcastList(){
