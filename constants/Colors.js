@@ -1,5 +1,3 @@
-'use strict';
-
 const tintColor = '#659CEC';
 
 const defaultColor = {

@@ -4,7 +4,9 @@ import {
   StyleSheet,
   Text,
   TouchableHighlight,
-  ActivityIndicator
+  ActivityIndicator,
+  UIManager,
+  LayoutAnimation
 } from 'react-native';
 import { View } from 'react-native-animatable';
 
@@ -17,6 +19,7 @@ import { getUserCurrentLocation } from '../utils/Permissions';
 import getStaticMarker, { randomId } from './StaticMarkers';
 import { SlidingModal, SimpleModal } from '../components/Modal';
 import { ScrollCard } from '../components/Card';
+import { StyledText } from '../components/StyledText';
 
 const DELTA = 0.0922;
 
@@ -39,6 +42,8 @@ TODO:
 export default class MapScreen extends React.Component {
   constructor(props) {
     super(props);
+    UIManager.setLayoutAnimationEnabledExperimental &&
+      UIManager.setLayoutAnimationEnabledExperimental(true);
     this.state = {
       locationPermission: false,
       mapReady: false,
@@ -49,7 +54,8 @@ export default class MapScreen extends React.Component {
       regionData: [],
       regionModalVisible: false,
       showMarkerModal: false, //open model onLongPress on map
-      markerCoord: {}
+      markerCoord: {},
+      regionModalIsFull: false
     };
   }
   componentDidMount() {
@@ -148,10 +154,12 @@ export default class MapScreen extends React.Component {
     return (
       <View>
         <SwitchRegionButton
-          style={{ top: 10 }}
+          style={{ top: -10 }}
           onClick={() => {
             this.openRegionModal();
             this.props.getRegionData();
+            //console.log(this.props);
+            //this.props.navigation.navigate('Marker');
           }}
           color={Colors.defaultColor.PRIMARY_COLOR}
         />
@@ -162,7 +170,8 @@ export default class MapScreen extends React.Component {
   closeRegionModal = () => {
     console.log('closedRegionModal');
     this.setState({
-      regionModalVisible: false
+      regionModalVisible: false,
+      regionModalIsFull: false
     });
   };
 
@@ -206,9 +215,8 @@ export default class MapScreen extends React.Component {
             this.onRegionCardPress(card);
           }}
           style={{
-            margin: 40,
-            width:
-              regionCards.length > 1 ? Layout.width - 80 : Layout.width - 34,
+            flex: 1,
+            backgroundColor: 'green',
             height: 150
           }}
         >
@@ -225,29 +233,39 @@ export default class MapScreen extends React.Component {
     const { regionData } = this.props;
     return (
       <View style={styles.modalContent}>
-        {regionData && (
-          <ScrollCard
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            decelerationRate={0}
-            snapToInterval={Layout.width}
-            snapToAlignment={'center'}
-            contentInset={{
-              top: 0,
-              left: 16,
-              bottom: 0,
-              right: 16
-            }}
-          >
-            {this._renderRegionCards()}
-          </ScrollCard>
-        )}
+        <StyledText
+          style={{
+            color: '#000000',
+            fontSize: 28,
+            marginTop: 10,
+            marginBottom: 16,
+            marginLeft: 16,
+            fontWeight: '500',
+            textAlign: 'left',
+            backgroundColor: 'transparent'
+          }}
+        >
+          Disaster Sites
+        </StyledText>
         {!regionData && (
           <ActivityIndicator
             animating={true}
             size="small"
             color={Colors.defaultColor.PRIMARY_COLOR}
           />
+        )}
+        {regionData && (
+          <ScrollCard
+            horizontal={this.state.regionModalIsFull ? false : true}
+            vertical={this.state.regionModalIsFull ? true : false}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            decelerationRate={0}
+            snapToInterval={Layout.width}
+            snapToAlignment={'center'}
+          >
+            {this._renderRegionCards()}
+          </ScrollCard>
         )}
       </View>
     );
@@ -312,11 +330,17 @@ export default class MapScreen extends React.Component {
   };
 
   _renderRegionModal = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     return (
       <SlidingModal
         show={this.state.regionModalVisible}
         closeCallback={this.closeRegionModal}
-        top={Layout.height - 400}
+        top={Layout.height - 350}
+        fullScreenCallback={() =>
+          this.setState({
+            regionModalIsFull: true
+          })
+        }
       >
         {this._renderRegionModalContent()}
       </SlidingModal>
@@ -367,13 +391,8 @@ const styles = StyleSheet.create({
     zIndex: -1
   },
   modalContent: {
-    backgroundColor: 'transparent',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderTopLeftRadius: 22,
-    borderTopRightRadius: 22,
-    borderColor: 'rgba(0, 0, 0, 0.5)',
-    height: 300
+    flex: 1,
+    backgroundColor: 'transparent'
   },
   markerModal: {
     justifyContent: 'flex-end',

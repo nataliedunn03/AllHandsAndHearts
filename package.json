@@ -45,6 +45,7 @@
     "pretty-quick": "^1.4.1",
     "prop-types": "^15.6.1",
     "react-dom": "^16.3.0",
+    "react-native-dotenv": "^0.1.1",
     "redux-logger": "^3.0.6"
   }
 }

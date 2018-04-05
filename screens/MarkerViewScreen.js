@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Location } from 'expo';
+import { GOOGLEMAPS_API_KEY } from 'react-native-dotenv';
 import {
   Animated,
   ScrollView,
@@ -11,7 +12,7 @@ import {
 import { View, Text } from 'react-native-animatable';
 
 import Colors from '../constants/Colors';
-import { MonoText } from '../components/StyledText';
+import { StyledText } from '../components/StyledText';
 import StyledButton from '../components/StyledButton';
 import StyledInput from '../components/StyledInput';
 import SlidingModal from '../components/Modal';
@@ -47,7 +48,7 @@ export default class MarkerViewScreen extends Component {
 
   _getLocationName = async coord => {
     try {
-      Location.setApiKey('AIzaSyChIWVSK41LTxJuDDYJECnBsAbMkzy13Fk');
+      Location.setApiKey(GOOGLEMAPS_API_KEY);
       const decodedLocation = await Location.reverseGeocodeAsync(coord);
       this.setState({
         name: decodedLocation[0].name
@@ -67,7 +68,7 @@ export default class MarkerViewScreen extends Component {
           flex: 1
         }}
       >
-        <MonoText
+        <StyledText
           style={{
             color: '#000000',
             fontSize: 28,
@@ -80,7 +81,7 @@ export default class MarkerViewScreen extends Component {
           }}
         >
           Enter details
-        </MonoText>
+        </StyledText>
         <View style={{ flex: 1 }}>
           <StyledInput
             style={{

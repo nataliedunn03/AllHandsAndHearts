@@ -1,5 +1,5 @@
 {
-  "presets": ["react-native", "babel-preset-expo"],
+  "presets": ["react-native", "babel-preset-expo", "react-native-dotenv"],
   "retainLines": true,
   "env": {
     "development": {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, View, Vibration } from 'react-native';
+import { StyleSheet, TouchableHighlight, View } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import Colors from '../../constants/Colors';
 import { Feather as Icon } from '@expo/vector-icons';
@@ -12,11 +12,10 @@ export default class SwitchRegionButton extends React.Component {
     const { onClick } = this.props;
     return (
       <View style={[styles.switchRegionView, this.props.style]}>
-        <TouchableOpacity
-          activeOpacity={0.9}
+        <TouchableHighlight
           style={styles.switchRegionButton}
           onPress={onClick || this.onButtonPress}
-          onPressIn={() => Vibration.vibrate()}
+          underlayColor={`${Colors.defaultColor.PRIMARY_COLOR}4d`}
         >
           <Animatable.View
             animation={{
@@ -35,7 +34,7 @@ export default class SwitchRegionButton extends React.Component {
           >
             <Icon name="chevrons-up" size={24} color={this.props.color} />
           </Animatable.View>
-        </TouchableOpacity>
+        </TouchableHighlight>
       </View>
     );
   }
@@ -43,13 +42,11 @@ export default class SwitchRegionButton extends React.Component {
 
 const styles = StyleSheet.create({
   switchRegionView: {
-    alignItems: 'center',
-    zIndex: 999999
+    alignItems: 'center'
   },
   switchRegionButton: {
     width: 44,
     height: 44,
-    bottom: 30,
     backgroundColor: Colors.navHeaderBackground,
     justifyContent: 'center',
     alignItems: 'center',

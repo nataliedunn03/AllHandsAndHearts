@@ -20,6 +20,7 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { Feather as Icon } from '@expo/vector-icons';
+import Colors from '../../constants/Colors';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 const MIDDLE_OF_THE_SCREEN = SCREEN_HEIGHT * 0.5;
@@ -37,8 +38,11 @@ export default class SlidingModal extends PureComponent {
     show: PropTypes.bool.isRequired,
     children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
     closeCallback: PropTypes.func,
+    fullScreenCallback: PropTypes.func, //callback fires when modal is full screen
+    halfScreenCallback: PropTypes.func, //callback fires when modal if half
     top: PropTypes.number
   };
+
   constructor(props) {
     super(props);
     //initially we want to open the modal half way
@@ -46,9 +50,13 @@ export default class SlidingModal extends PureComponent {
       ? this.props.top
       : MIDDLE_OF_THE_SCREEN - 120;
 
+    this.backdropOpacity = this.props.backdropOpacity
+      ? this.props.backdropOpacity
+      : 0.5;
+
     this.modalAnimation = new Animated.ValueXY({
       x: 0,
-      y: this.MIDDLE_OF_THE_SCREEN_OFFSET
+      y: SCREEN_HEIGHT
     });
     this.state = {
       openModal: false,
@@ -141,21 +149,25 @@ export default class SlidingModal extends PureComponent {
       });
     });
     this.modalAnimation.flattenOffset();
+    if (this.props.halfScreenCallback) {
+      this.props.halfScreenCallback();
+    }
   };
 
   openModalToFullHeight = () => {
     //else open the modal to full
     this.modalAnimation.setOffset(TOP_OF_THE_SCREEN_POINT);
-    Animated.timing(this.modalAnimation.y, {
-      toValue: TOP_OF_THE_SCREEN_POINT.y,
-      duration: 750,
-      easing: Easing.out(Easing.poly(4))
+    Animated.spring(this.modalAnimation.y, {
+      toValue: TOP_OF_THE_SCREEN_POINT.y
     }).start(() => {
       this.modalAnimation.flattenOffset();
       this.setState({
         modalState: MODAL_SHOWN_FULL
       });
     });
+    if (this.props.fullScreenCallback) {
+      this.props.fullScreenCallback();
+    }
   };
 
   slideModalDown = () => {
@@ -192,7 +204,7 @@ export default class SlidingModal extends PureComponent {
     //turn the back of the screen dark to focus on modal content
     const backdropOpacity = this.modalAnimation.y.interpolate({
       inputRange: [this.MIDDLE_OF_THE_SCREEN_OFFSET / 2, SCREEN_HEIGHT],
-      outputRange: [0.8, 0],
+      outputRange: [this.backdropOpacity, 0],
       extrapolate: 'clamp'
     });
 
@@ -247,12 +259,40 @@ export default class SlidingModal extends PureComponent {
               style={[styles.headerStyle, contentTransformedStyles]}
               {...this.modalPanResponder.panHandlers}
             >
-              <View pointerEvents="box-none">
-                <Icon name="minus" color="#d0c9d499" size={32} />
-              </View>
+              <Animated.View
+                pointerEvents="box-none"
+                style={{
+                  flex: 1,
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                <Icon
+                  name="minus"
+                  color="#5d0e8b8f"
+                  size={32}
+                  style={{
+                    top: -3
+                  }}
+                />
+                {/* <TouchableOpacity
+                  style={{
+                    alignSelf: 'flex-end',
+                    right: 5,
+                    bottom: 6
+                  }}
+                >
+                  <Icon name="x" color="#5d0e8b8f" size={22} />
+                </TouchableOpacity>*/}
+              </Animated.View>
             </Animated.View>
             <Animated.View
-              style={[styles.contentContainer, contentTransformedStyles]}
+              style={[
+                styles.contentContainer,
+                contentTransformedStyles,
+                { ...this.props.style }
+              ]}
             >
               {this.props.children}
             </Animated.View>
@@ -269,15 +309,16 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    backgroundColor: '#ffffffff'
+    backgroundColor: Colors.navHeaderBackground
   },
   headerStyle: {
+    flexDirection: 'row',
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
-    height: 20,
-    backgroundColor: '#ffffffff',
+    borderWidth: 0,
+    height: 25,
+    backgroundColor: Colors.navHeaderBackground,
     justifyContent: 'center',
-    alignItems: 'center',
-    overflow: 'hidden'
+    alignItems: 'center'
   }
 });
