@@ -1,7 +1,7 @@
 Resource(urlMapping='/broadcasts/*')
 global class WEBSERVICE_Broadcasts{
     @HttpGet
-    global static List<Broadcast__c> getBroadcastList(){
+    global static List<Broadcast_Object__c> getBroadcastList(){
         List<Broadcast__c> regions;
         try{
             broadcast = [SELECT Broadcast_Type__c,Summary__c FROM Broadcast_Object__c];
