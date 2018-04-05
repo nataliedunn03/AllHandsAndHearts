@@ -2,7 +2,7 @@
 global class WEBSERVICE_Broadcasts{
     @HttpGet
     global static List<Broadcast_Object__c> getBroadcastList(){
-        List<Broadcast_Object__c> regions;
+        List<Broadcast_Object__c> broadcast;
         try{
             broadcast = [SELECT Broadcast_Type__c,Summary__c FROM Broadcast_Object__c];
             return broadcast;

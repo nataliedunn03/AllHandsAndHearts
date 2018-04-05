@@ -4,7 +4,7 @@ global class WEBSERVICES_user{
     global static List<User__c> getUsers(){
         List<User__c> regions;
         try{
-            broadcast = [SELECT Username__c,Password__c FROM User__c];
+            broadcast = [SELECT email__c, Username__c,Password__c FROM User__c];
             return user;
         }catch(Exception ex){
             System.debug('Error: '+ex.getMessage());
