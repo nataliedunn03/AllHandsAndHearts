@@ -1,15 +1,17 @@
 @RestResource(urlMapping='/users/*')
 global class WEBSERVICES_user{
     @HttpGet
-    global static List<User__c> getUsers(){
-        List<User__c> users;
+    global static User__c getUser(){
+        User__c user;
         try{
-            users = [SELECT email__c, Name__c,Password__c FROM User__c];
-            return users;
+            String email = RestContext.request.params.get('email');
+            String password  RestContext.request.params.get('password');
+            users = [SELECT Name__c FROM User__c WHERE  email__c := email AND Password__c := password];
+            return user;
         }catch(Exception ex){
             System.debug('Error: '+ex.getMessage());
         }
-        return users;
+        return user;
     }
 }
 
