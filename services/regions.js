@@ -83,7 +83,7 @@ export const getRegionList = async () => {
     if (data) {
       console.log('-Region Query DATA Response-\n');
       console.log(data);
-      return data;
+      return staticRegionData;
     } else {
       console.log('-Region Query NO DATA Response-\n');
       console.log('Check auth_token and API call.-\n');

@@ -20,6 +20,7 @@
     "react-native":
       "https://github.com/expo/react-native/archive/sdk-26.0.0.tar.gz",
     "react-native-animatable": "^1.2.4",
+    "react-native-google-static-map": "^0.1.11",
     "react-native-hide-with-keyboard": "^1.0.0",
     "react-native-modal": "^5.4.0",
     "react-navigation": "1.5.9",

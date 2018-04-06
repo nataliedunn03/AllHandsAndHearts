@@ -115,9 +115,25 @@ const MainModalNavigator = StackNavigator(
     MainTabNavigator: {
       screen: MainTabNavigator
     },
-    Marker: {
+    EditMarker: {
       screen: MarkerViewScreen,
-      path: '/marker/:name',
+      path: '/editMarker/:name',
+      navigationOptions: ({ navigation }) => ({
+        headerTitleStyle: {
+          color: Colors.defaultColor.PAPER_COLOR,
+          fontWeight: '600',
+          justifyContent: 'space-between',
+          textAlign: 'center'
+        },
+        headerStyle: {
+          backgroundColor: Colors.defaultColor.PRIMARY_COLOR,
+          borderBottomColor: '#F2F2F2'
+        }
+      })
+    },
+    EditRegion: {
+      screen: MarkerViewScreen,
+      path: '/editRegion/:name',
       navigationOptions: ({ navigation }) => ({
         headerTitleStyle: {
           color: Colors.defaultColor.PAPER_COLOR,
@@ -132,7 +148,7 @@ const MainModalNavigator = StackNavigator(
       })
     }
   },
-  { headerMode: 'none', mode: 'modal' }
+  { headerMode: 'none', mode: 'screen' }
 );
 
 export default MainModalNavigator;

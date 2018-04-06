@@ -32,8 +32,8 @@ export default class Broadcasts extends Component {
   }
 
   _removeItem = async index => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     await this.props.removeBroadcastCard(index);
-    LayoutAnimation.easeInEaseOut();
   };
   removeBroadcastCard = async index => {
     this._removeItem(index);
