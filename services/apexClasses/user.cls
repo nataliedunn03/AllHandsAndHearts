@@ -1,4 +1,4 @@
-@RestResource(urlMapping='/login/*')
+@RestResource(urlMapping='/users/*')
 global class WEBSERVICES_user{
     @HttpGet
     global static List<User__c> getUsers(){
