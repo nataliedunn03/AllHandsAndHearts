@@ -21,6 +21,9 @@ import { SlidingModal, SimpleModal } from '../components/Modal';
 import { ScrollCard } from '../components/Card';
 import { StyledText } from '../components/StyledText';
 import GoogleStaticMap from 'react-native-google-static-map';
+import StyledInput from '../components/StyledInput';
+import StyledButton from '../components/StyledButton';
+
 const DELTA = 0.0922;
 
 let markers = getStaticMarker();
@@ -52,17 +55,18 @@ export default class MapScreen extends React.Component {
       visible: false,
       markersTouch: [],
       regionData: [],
+      currentRegionId: '',
       regionModalVisible: false,
       showMarkerModal: false, //open model onLongPress on map
       markerCoord: {},
       regionModalIsFull: false,
-      markerIds: [] //keep track of marker Identifiers to focus
+      markerIds: [], //keep track of marker Identifiers to focus
+      currentMarkerData: {}
     };
   }
   componentDidMount() {
     this._getUserCurrentLocation();
   }
-
   componentWillReceiveProps(nextProps) {
     const markerIds = nextProps.pinData.map(marker => {
       return {
@@ -74,6 +78,11 @@ export default class MapScreen extends React.Component {
       markerIds
     });
   }
+  _updateCurrentMarkerData = currentMarkerData => {
+    this.setState({
+      currentMarkerData
+    });
+  };
 
   /**
    * Get current lcoation then set the delta to viewport
@@ -218,6 +227,9 @@ export default class MapScreen extends React.Component {
         this._focusOnCoordinates();
       }, 500);
     }
+    this.setState({
+      currentRegionId: card.id
+    });
   };
 
   _renderRegionCards = () => {
@@ -416,28 +428,96 @@ export default class MapScreen extends React.Component {
     const coord = e.nativeEvent.coordinate;
     this.setState({
       showMarkerModal: true,
-      markerCoord: coord
+      currentMarkerData: {
+        latitude: coord.latitude,
+        longitude: coord.longitude
+      }
     });
   };
 
   _closeMarkerModal = () => {
     this.setState({
-      showMarkerModal: false
+      showMarkerModal: false,
+      currentMarkerData: []
     });
   };
 
   _renderPinModal = () => {
+    console.log('current _rednerPinModal: ', this.state.currentMarkerData);
+    let { currentMarkerData, currentRegionId } = this.state;
+    /*
+     * TODO: Major stuff left to be done for writing pin data
+     * 1) Add a dropdown option for pin type
+     * 2) Write the proper dispatch and limit using setStates
+     * 3) Finally make the POST call to Salesforce, and update current view with the new added pin.
+     *    3.1) Make different Apex endpoint for Add/Update
+     */
     return (
       <SlidingModal
         show={this.state.showMarkerModal}
         closeCallback={this._closeMarkerModal}
-      />
+        top={Layout.height - 400}
+      >
+        <StyledInput
+          style={styles.input}
+          placeholder={currentMarkerData.name ? currentMarkerData.name : 'Name'}
+          returnKeyType="next"
+          autoCapitalize="none"
+          autoCorrect={false}
+          enablesReturnKeyAutomatically
+          onChangeText={value => {
+            currentMarkerData.name = value;
+            this._updateCurrentMarkerData(currentMarkerData);
+          }}
+        />
+        <StyledInput
+          style={styles.inputWide}
+          placeholder={
+            currentMarkerData.description
+              ? currentMarkerData.description
+              : 'Description'
+          }
+          enablesReturnKeyAutomatically
+          multiline
+          numberOfLines={3}
+          onChangeText={value => {
+            currentMarkerData.description = value;
+            this._updateCurrentMarkerData(currentMarkerData);
+          }}
+        />
+        <StyledButton
+          style={styles.addPinButton}
+          textStyle={styles.addButtonTextStyle}
+          text={currentMarkerData.id ? 'Update Pin' : 'Add Pin'}
+          onPress={e => {
+            console.log(
+              'Write pin data to SalesForce for RegionId:',
+              currentRegionId
+            );
+          }}
+        />
+      </SlidingModal>
     );
   };
 
+  // What's e used for here?
   async _onMarkerPress(e, marker) {
-    console.log('on marker pressed');
+    console.log('Marker pressed: ', marker);
+    const data = {
+      id: marker.Id,
+      description: marker.Additional_Descriptors__c,
+      latitude: marker.Coordinates__Latitude__s,
+      longitude: marker.Coordinates__Longitude__s,
+      name: marker.Name,
+      type: marker.PinLocationType__c,
+      regionId: marker.RegionId__c
+    };
+    this.setState({
+      showMarkerModal: true,
+      currentMarkerData: data
+    });
   }
+
   _renderMapMarker() {
     return this.props.pinData.map(marker => {
       return (
@@ -551,5 +631,28 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     shadowColor: 'hsla(0, 0%, 0%, 0.2)',
     shadowOffset: { width: 1, height: 1 }
+  },
+  input: {
+    height: 42,
+    color: Colors.defaultColor.PRIMARY_COLOR,
+    backgroundColor: Colors.defaultColor.PAPER_COLOR,
+    borderColor: '#BFBFC0',
+    borderWidth: 0.3,
+    borderRadius: Colors.Input.BORDER.RADIUS
+  },
+  inputWide: {
+    height: 110,
+    color: Colors.defaultColor.PRIMARY_COLOR,
+    backgroundColor: Colors.defaultColor.PAPER_COLOR,
+    borderColor: '#BFBFC0',
+    borderWidth: 0.3,
+    borderRadius: Colors.Input.BORDER.RADIUS
+  },
+  addPinButton: {
+    height: 42,
+    backgroundColor: Colors.defaultColor.PRIMARY_COLOR
+  },
+  addButtonTextStyle: {
+    color: Colors.defaultColor.PAPER_COLOR
   }
 });

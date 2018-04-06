@@ -4,6 +4,7 @@
  If you see these pop up in the modal, something is wrong with the saga/reducers.
  */
 import * as AuthService from './auth';
+
 import {
   SF_BASE_URL as BASE_URL,
   SF_ACCESS_TOKEN as auth_token
@@ -65,7 +66,7 @@ export const getRegionList = async () => {
   // See: auth.js for auth token request.
   //const auth_token = AuthService.getAuthToken(); //'00D29000000DglJ!ARUAQGRPOShJOzMOgBXiNO8aqP0QbnqvzhwtNvOngNqF2GZxvFXiWqoeBJ2_8Pb5DwSGrQDqf2Zyy5u4olt3wDZD.8XqCmnm';
 
-  const queryEndpoint = `${BASE_URL + '/getRegionLists'}`;
+  const queryEndpoint = `${BASE_URL + '/regions'}`;
 
   console.log('Fetching region data from Salesforce');
   console.log(queryEndpoint);
@@ -83,7 +84,7 @@ export const getRegionList = async () => {
     if (data) {
       console.log('-Region Query DATA Response-\n');
       console.log(data);
-      return staticRegionData;
+      return data;
     } else {
       console.log('-Region Query NO DATA Response-\n');
       console.log('Check auth_token and API call.-\n');
