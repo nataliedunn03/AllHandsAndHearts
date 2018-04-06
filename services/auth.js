@@ -1,6 +1,35 @@
 export const register = (username, passwordHash) => true;
+export const register = (username, passwordHash) => true;
 
-export const login = (username, passwordHash) => true;
+export const login = (email, passwordHash) => {
+    const queryEndpoint = `${BASE_URL + '/login?email=' + email + '?password=' + passwordHash}`;
+    console.log('Fetching user data from Salesforce');
+    console.log(queryEndpoint);
+	
+    try {
+      const response = await fetch(queryEndpoint, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    const data = await response.json();
+    if (data) {
+      console.log('-User Query DATA Response-\n');
+      console.log(data);
+      return data;
+    } else {
+      console.log('-User Query NO DATA Response-\n');
+      console.log('Check auth_token and API call.-\n');
+      return undefined;
+    }
+  } catch (e) {
+    console.log(e);
+  }
+
+};
 
 export const logout = () => true;
 
