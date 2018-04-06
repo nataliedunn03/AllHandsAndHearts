@@ -10,6 +10,7 @@ import {
   LOGOUT_REQUEST,
   REQUEST_ERROR,
   RESET_TO_MAIN,
+  RESET_TO_SIGN_IN,
   GET_BROADCAST_CARDS_ON_LOGIN,
   GET_ACTIVITY_CARDS_ON_LOGIN
 } from '../actions/actionTypes';
@@ -47,9 +48,11 @@ const authorize = function* authorize({
 const logout = function* logout() {
   yield put({ type: SENDING_REQUEST, sending: true });
   try {
-    const response = yield call(AuthService.logout);
+    //const response = yield call(AuthService.logout);
     yield put({ type: SENDING_REQUEST, sending: false });
-    return response;
+    //return response;
+    yield AuthService.removeCookie();
+    yield put({ type: RESET_TO_SIGN_IN });
   } catch (error) {
     yield put({ type: REQUEST_ERROR, error: error.message });
     return false;
@@ -73,7 +76,7 @@ function* loginFlow(action) {
         type: GET_ACTIVITY_CARDS_ON_LOGIN
       });
       yield put({ type: SET_AUTH, newAuthState: true });
-      AuthService.setCookie();
+      yield AuthService.setCookie();
       yield put({ type: RESET_TO_MAIN });
     } else {
       yield put({ type: LOGIN_REQUEST_FAILED, error: 'Login failed.' });
@@ -108,7 +111,7 @@ function* registerFlow(action) {
   // If we could register a user, we send the appropiate actions
   if (wasSuccessful) {
     yield put({ type: SET_AUTH, newAuthState: true });
-    AuthService.setCookie();
+    yield AuthService.setCookie();
     yield put({ type: RESET_TO_MAIN });
     // TODO: clear the login form
     // yield put({ type: CHANGE_FORM, newFormState: { username: '', password: '' } });

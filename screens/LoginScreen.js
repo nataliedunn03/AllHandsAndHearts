@@ -12,6 +12,7 @@ import SignupForm from '../components/Login/SignupForm';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import Slogan from '../components/Login/Slogan';
+import * as AuthService from '../services/auth';
 
 if (Platform.OS === 'android')
   UIManager.setLayoutAnimationEnabledExperimental &&
@@ -21,6 +22,10 @@ export default class Login extends React.Component {
     shouldSloganAnimationDelay: true,
     switchForm: 'login'
   };
+  async componentWillMount() {
+    const value = await AuthService.isLoggedIn();
+    if (value) this.props.navigation.navigate('MainModalNavigator');
+  }
   componentDidMount() {
     this.setState({
       shouldSloganAnimationDelay: false
@@ -32,6 +37,7 @@ export default class Login extends React.Component {
     }));
   };
   render() {
+    console.log(this.props);
     return (
       <View style={styles.container}>
         <View

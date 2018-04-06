@@ -11,9 +11,10 @@ import {
   REGISTER_REQUEST_SUCCESS,
   REGISTER_REQUEST_FAILED
 } from '../actions/actionTypes';
-
+import * as AuthService from '../../services/auth';
+const isLoggefIn = AuthService.isLoggedIn();
 const INITIAL_STATE = {
-  loggedIn: false
+  loggedIn: isLoggefIn
 };
 
 export const auth = (state = INITIAL_STATE, action) => {
@@ -33,6 +34,9 @@ export const auth = (state = INITIAL_STATE, action) => {
       return { ...state, loggedIn: action.newAuthState };
     case REGISTER_REQUEST_FAILED:
       return { ...state, loginError: action.error };
+
+    case LOGOUT_REQUEST_SUCCESS:
+      return { ...state, loggedIn: false };
 
     default:
       return state;

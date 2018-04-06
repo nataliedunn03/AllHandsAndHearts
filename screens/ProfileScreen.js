@@ -7,14 +7,14 @@ export default class ProfileScreen extends React.Component {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <TouchableHighlight
-          onPress={() => console.log('hello!')}
+          onPress={() => this.props.logout()}
           style={{
             backgroundColor: '#fff',
             paddingVertical: 30,
             paddingHorizontal: 80
           }}
         >
-          <Text>Let's come back to this!</Text>
+          <Text>Log me out!</Text>
         </TouchableHighlight>
       </View>
     );

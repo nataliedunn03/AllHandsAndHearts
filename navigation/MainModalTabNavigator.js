@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { TabNavigator, TabBarBottom, StackNavigator } from 'react-navigation';
 
 import MarkerViewScreen from '../screens/MarkerViewScreen';
-import ProfileScreen from '../screens/ProfileScreen';
+import ProfileScreenContainer from '../containers/ProfileContainer';
 import HomeScreenContainer from '../containers/HomeScreenContainer';
 import MapScreenContainer from '../containers/MapScreenContainers';
 import Colors from '../constants/Colors';
@@ -28,7 +28,7 @@ const MainTabNavigator = TabNavigator(
       }
     },
     Profile: {
-      screen: ProfileScreen,
+      screen: ProfileScreenContainer,
       path: '/profile',
       navigationOptions: {
         headerTitle: 'PROFILE',

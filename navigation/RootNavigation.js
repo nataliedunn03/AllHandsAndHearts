@@ -12,10 +12,17 @@ export const AppNavigator = StackNavigator({
   LoginScreen: {
     screen: LoginScreen,
     navigationOptions: {
-      header: null
+      header: null,
+      left: null
     }
   },
-  MainModalNavigator: { screen: MainModalNavigator }
+  MainModalNavigator: {
+    screen: MainModalNavigator,
+    navigationOptions: {
+      left: null,
+      headerLeft: null
+    }
+  }
 });
 class RootNavigator extends React.Component {
   componentWillMount() {

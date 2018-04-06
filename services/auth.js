@@ -10,19 +10,8 @@ export const setCookie = () =>
 
 export const removeCookie = () => AsyncStorage.removeItem(FFG_AUTH_STORAGE_KEY);
 
-export const isLoggedIn = () => {
-  return new Promise((resolve, reject) => {
-    AsyncStorage.getItem(FFG_AUTH_STORAGE_KEY)
-      .then(res => {
-        if (res !== null) {
-          resolve(true);
-        } else {
-          resolve(false);
-        }
-      })
-      .catch(err => reject(err));
-  });
-};
+export const isLoggedIn = async () =>
+  await AsyncStorage.getItem(FFG_AUTH_STORAGE_KEY);
 
 export const register = async (email, passwordHash, name) => {
   const queryEndpoint = `${BASE_URL}/users`;
@@ -89,6 +78,6 @@ export const login = async (email, passwordHash) => {
   }
 };
 
-export const logout = () => true;
+export const logout = () => removeCookie();
 
 export const loggedIn = () => false;
