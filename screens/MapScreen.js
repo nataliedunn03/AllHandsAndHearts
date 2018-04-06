@@ -204,6 +204,7 @@ export default class MapScreen extends React.Component {
   };
 
   _focusOnCoordinates = () => {
+    console.log(this.state.markerIds);
     if (this.mapViewRef && this.state.markerIds.length > 0) {
       // this.mapViewRef.fitToSuppliedMarkers(this.state.markerIds, true);
       //this.mapViewRef.fitToElements(true); // this will fill all the markers, not ideal when we will have all the region on the map.
@@ -244,10 +245,11 @@ export default class MapScreen extends React.Component {
         id: region.Id,
         name: region.Name,
         latitude: region.Coordinates__Latitude__s,
-        longitude: region.Coordinates__Longitude__s
+        longitude: region.Coordinates__Longitude__s,
+        type: region.DisasterType__c,
+        customName: region.DisasterLocation__c
       };
 
-      const body = '(' + card.latitude + ', ' + card.longitude + ')';
       return (
         <TouchableHighlight
           key={index}
@@ -277,8 +279,16 @@ export default class MapScreen extends React.Component {
               ]}
             >
               <GoogleStaticMap
-                latitude={'37.785834'}
-                longitude={'-122.406417'}
+                latitude={
+                  !isNaN(card.latitude)
+                    ? card.latitude.toString()
+                    : card.latitude
+                }
+                longitude={
+                  !isNaN(card.longitude)
+                    ? card.longitude.toString()
+                    : card.longitude
+                }
                 zoom={14}
                 size={{
                   width: this.state.regionModalIsFull
@@ -326,7 +336,7 @@ export default class MapScreen extends React.Component {
                     fontWeight: '700'
                   }}
                 >
-                  HURRICANE
+                  {card.type ? card.type.toUpperCase() : card.type}
                 </Text>,
                 <Text
                   style={{
@@ -336,7 +346,7 @@ export default class MapScreen extends React.Component {
                     color: 'hsl(0, 0%, 97%)'
                   }}
                 >
-                  Bagmati, Nepal
+                  {card.name}
                 </Text>
               </View>
               <View style={{ alignSelf: 'flex-end', left: -40 }}>

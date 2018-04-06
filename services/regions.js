@@ -5,11 +5,9 @@
  */
 import * as AuthService from './auth';
 
-import {
-  SF_BASE_URL as BASE_URL,
-  SF_ACCESS_TOKEN as auth_token
-} from 'react-native-dotenv';
-
+import { SF_BASE_URL as BASE_URL } from 'react-native-dotenv';
+const auth_token =
+  '00D29000000DglJ!ARUAQPH13vUKCmwLGjGfndn_7NW1IQkh0XeEHENVOTweesv0lpdu7Qqcl8mmnd8BXqieujmbE6i7WjllqOz93GKoZwDIybAG';
 const staticRegionData = [
   {
     Id: 9,
