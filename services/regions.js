@@ -6,7 +6,7 @@
 import * as AuthService from './auth';
 const BASE_URL = 'https://cs19.salesforce.com/services/apexrest';
 const auth_token =
-  '00D29000000DglJ!ARUAQJa5AbK9qUgh_3pOTqw8jf_22IR9sPnkIwL3xvNWuP5XchBhfACsWtlRCegO9rFyGu9VAPqPdbo06xhnzvhXFkICni5u';
+  '00D29000000DglJ!ARUAQDNAIet0W8eVExLpTqLtJ44iTDHeCDKt7X8Va.wfFDHbewGwty87wDkOjgJBqxNv3y4L2e812MoCaD0YYT_v8yHzHWay';
 
 const staticRegionData = [
   {
@@ -50,7 +50,7 @@ export const getRegionList = async () => {
   // See: auth.js for auth token request.
   //const auth_token = AuthService.getAuthToken(); //'00D29000000DglJ!ARUAQGRPOShJOzMOgBXiNO8aqP0QbnqvzhwtNvOngNqF2GZxvFXiWqoeBJ2_8Pb5DwSGrQDqf2Zyy5u4olt3wDZD.8XqCmnm';
 
-  const queryEndpoint = `${BASE_URL + '/getRegionLists'}`;
+  const queryEndpoint = `${BASE_URL + '/regions'}`;
 
   console.log('Fetching region data from Salesforce');
   console.log(queryEndpoint);
