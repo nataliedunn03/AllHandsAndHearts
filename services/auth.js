@@ -19,11 +19,11 @@ export const login = (email, passwordHash) => {
     if (data) {
       console.log('-User Query DATA Response-\n');
       console.log(data);
-      return true;
+      return data;
     } else {
       console.log('-User Query NO DATA Response-\n');
       console.log('Check auth_token and API call.-\n');
-      return false;
+      return undefined;
     }
   } catch (e) {
     console.log(e);
