@@ -1,8 +1,8 @@
 export const register = (username, passwordHash) => true;
 export const register = (username, passwordHash) => true;
 
-export const login = (username, passwordHash) => {
-    const queryEndpoint = `${BASE_URL + '/login'}`;
+export const login = (email, passwordHash) => {
+    const queryEndpoint = `${BASE_URL + '/login?email=' + email + '?password=' + passwordHash}`;
     console.log('Fetching user data from Salesforce');
     console.log(queryEndpoint);
 	
@@ -19,11 +19,11 @@ export const login = (username, passwordHash) => {
     if (data) {
       console.log('-User Query DATA Response-\n');
       console.log(data);
-      return data;
+      return true;
     } else {
       console.log('-User Query NO DATA Response-\n');
       console.log('Check auth_token and API call.-\n');
-      return undefined;
+      return false;
     }
   } catch (e) {
     console.log(e);
