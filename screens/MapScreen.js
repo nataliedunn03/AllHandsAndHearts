@@ -14,7 +14,7 @@ import { CurrentLocationButton, SwitchRegionButton } from '../components/Maps';
 
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
-import { getStaticRegionData, getRegionList } from '../services/regions';
+import { getStaticRegionData } from '../services/regions';
 import { getUserCurrentLocation } from '../utils/Permissions';
 import getStaticMarker, { randomId } from './StaticMarkers';
 import { SlidingModal, SimpleModal } from '../components/Modal';
@@ -499,11 +499,11 @@ export default class MapScreen extends React.Component {
           style={styles.addPinButton}
           textStyle={styles.addButtonTextStyle}
           text={currentMarkerData.id ? 'Update Pin' : 'Add Pin'}
-          onPress={e => {
-            console.log(
-              'Write pin data to SalesForce for RegionId:',
-              currentRegionId
-            );
+          onPress={() => {
+            this.props.setPinByRegion(currentRegionId, currentMarkerData);
+            this.setState({
+              showMarkerModal: false
+            });
           }}
         />
       </SlidingModal>

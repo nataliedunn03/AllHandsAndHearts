@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { getRegionData } from '../redux/actions/region';
-import { getPinsByRegion } from '../redux/actions/pins';
+import { getPinsByRegion, setPinByRegion } from '../redux/actions/pins';
 import MapScreen from '../screens/MapScreen';
 
 const mapDispatchToProps = dispatch => {
@@ -10,11 +10,15 @@ const mapDispatchToProps = dispatch => {
     },
     getPinsByRegion: regionId => {
       dispatch(getPinsByRegion(regionId));
+    },
+    setPinByRegion: (regionId, pinData) => {
+      dispatch(setPinByRegion(regionId, pinData));
     }
   };
 };
 const mapStateToProps = state => {
-  const { regionData, pinData } = state.region;
-  return { regionData, pinData };
+  console.log(state.region);
+  const { regionData, pinData, showMarkerModal } = state.region;
+  return { regionData, pinData, showMarkerModal };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(MapScreen);
