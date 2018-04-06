@@ -1,13 +1,16 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { loginRequest } from '../redux/actions/auth';
+import { loginRequest, registerRequest } from '../redux/actions/auth';
 import LoginScreen from '../screens/LoginScreen';
 
 const mapDispatchToProps = dispatch => {
   return {
     login: user => {
       dispatch(loginRequest(user));
+    },
+    register: user => {
+      dispatch(registerRequest(user));
     }
   };
 };

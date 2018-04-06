@@ -22,7 +22,6 @@ class RootNavigator extends React.Component {
     if (Platform.OS !== 'android') {
       return;
     }
-
     BackHandler.addEventListener('hardwareBackPress', () => {
       const { dispatch, nav } = this.props;
 
@@ -71,11 +70,13 @@ class RootNavigator extends React.Component {
     );
   };
   render() {
-    const { dispatch, nav } = this.props;
-
+    const { dispatch, nav, isLoggedIn } = this.props;
+    console.log('is logged in ');
+    console.log(isLoggedIn);
     return (
       <AppNavigator
         navigation={{
+          auth: isLoggedIn,
           dispatch,
           state: nav,
           addListener

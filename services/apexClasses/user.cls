@@ -1,12 +1,10 @@
 @RestResource(urlMapping='/users/*')
-global class WEBSERVICES_userVolunteer{
-    @HttpGet
-    global static User__c getUser(){
+global class WEBSERVICES_usersVolunteerLogin{
+    @HttpPut
+    global static User__c getUser(String email, String password){
         User__c user;
         try{
-            String email = RestContext.request.params.get('email');
-            String password = RestContext.request.params.get('password');
-            user = [SELECT Id, Name__c, Email_c FROM User__c WHERE Email__c = email AND Password__c = password];
+            user = [SELECT Id, Name__c, Email__c FROM User__c WHERE Email__c = :email AND Password__c = :password];
             return user;
         }catch(Exception ex){
             System.debug('Error: '+ex.getMessage());
@@ -20,7 +18,7 @@ global class WEBSERVICES_userVolunteer{
         try{
             user = new User__c();
             if(String.isNotBlank(email) && String.isNotBlank(password) && String.isNotBlank(name)){
-                user.Email_c = email;
+                user.Email__c = email;
                 user.Password__c = password;
                 user.Name__c = name;
                 insert user;
@@ -32,4 +30,3 @@ global class WEBSERVICES_userVolunteer{
         return user;
     }
 }
-

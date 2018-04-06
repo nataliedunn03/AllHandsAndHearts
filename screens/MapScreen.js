@@ -1,4 +1,4 @@
-import { MapView, LinearGradient } from 'expo';
+import { MapView, LinearGradient, Location } from 'expo';
 import React from 'react';
 import {
   StyleSheet,
@@ -9,7 +9,7 @@ import {
   LayoutAnimation
 } from 'react-native';
 import { View } from 'react-native-animatable';
-
+import { GOOGLEMAPS_API_KEY } from 'react-native-dotenv';
 import { CurrentLocationButton, SwitchRegionButton } from '../components/Maps';
 
 import Colors from '../constants/Colors';
@@ -78,6 +78,13 @@ export default class MapScreen extends React.Component {
       markerIds
     });
   }
+
+  _handleOnChangeText = (key, value) => {
+    this.setState({
+      [key]: value
+    });
+  };
+
   _updateCurrentMarkerData = currentMarkerData => {
     this.setState({
       currentMarkerData
@@ -437,9 +444,13 @@ export default class MapScreen extends React.Component {
   _createNewMarker = async e => {
     e.persist();
     const coord = e.nativeEvent.coordinate;
+    Location.setApiKey(GOOGLEMAPS_API_KEY);
+    const decodedLocation = await Location.reverseGeocodeAsync(coord);
+    console.log(decodedLocation);
     this.setState({
       showMarkerModal: true,
       currentMarkerData: {
+        name: decodedLocation[0].name,
         latitude: coord.latitude,
         longitude: coord.longitude
       }
@@ -502,9 +513,7 @@ export default class MapScreen extends React.Component {
           text={currentMarkerData.id ? 'Update Pin' : 'Add Pin'}
           onPress={() => {
             this.props.setPinByRegion(currentRegionId, currentMarkerData);
-            this.setState({
-              showMarkerModal: false
-            });
+            this._closeMarkerModal();
           }}
         />
       </SlidingModal>

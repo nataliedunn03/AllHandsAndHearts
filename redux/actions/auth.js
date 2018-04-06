@@ -28,14 +28,14 @@ export const loginRequestSuccess = newAuthState => ({
   newAuthState
 });
 
-export const setAuth = newAuthState => ({
-  type: SET_AUTH,
-  newAuthState
-});
-
 export const loginRequestFailed = error => ({
   type: LOGIN_REQUEST_FAILED,
   error
+});
+
+export const setAuth = newAuthState => ({
+  type: SET_AUTH,
+  newAuthState
 });
 
 export const logout = () => ({

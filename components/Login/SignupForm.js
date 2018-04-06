@@ -17,6 +17,23 @@ export default class SignupForm extends React.Component {
       [key]: value
     });
   };
+
+  handleRegister = () => {
+    let { email, password, name } = this.state;
+    email = email.trim();
+    password = password.trim();
+    console.log(email, password, name);
+    if (email.length > 0 && password.length > 0 && name.length > 0) {
+      this.props.register({
+        email,
+        password,
+        name
+      });
+    } else {
+      console.log('\n\n You must enter all fileds to register \n\n');
+    }
+  };
+
   render() {
     return (
       <View style={styles.container} {...this.props}>
@@ -28,7 +45,7 @@ export default class SignupForm extends React.Component {
             autoCorrect={false}
             enablesReturnKeyAutomatically
             onSubmitEditing={() => this.emailRef.focus()}
-            onChangeText={value => this._handleOnChangeText('email', value)}
+            onChangeText={value => this._handleOnChangeText('name', value)}
           />
           <StyledInput
             style={styles.input}
@@ -56,9 +73,7 @@ export default class SignupForm extends React.Component {
             style={styles.loginButton}
             textStyle={styles.textStyle}
             text="Sign up"
-            onPress={e =>
-              this.props.login(this.state.email, this.state.password)
-            }
+            onPress={this.handleRegister}
             isLoading={this.props.auth.loading}
           />
         </View>

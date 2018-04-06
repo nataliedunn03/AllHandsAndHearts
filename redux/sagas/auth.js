@@ -14,18 +14,18 @@ import {
   GET_ACTIVITY_CARDS_ON_LOGIN
 } from '../actions/actionTypes';
 import * as AuthService from '../../services/auth';
-import { getBroadcastCards } from '../../services/broadcast';
 
 const authorize = function* authorize({
-  username,
+  email,
   password,
+  name,
   isRegistering = false
 }) {
   yield put({ type: LOGIN_REQUEST_LOADING, loading: true });
   yield call(delay, 1000, true);
   try {
     const salt = null; // TODO: genSalt(username)
-    const hash = ''; // TODO: hashSync(password, salt)
+    const hash = password; // TODO: hashSync(password, salt)
     let response;
 
     // For either log in or registering, we call the proper function in the `auth`
@@ -33,9 +33,9 @@ const authorize = function* authorize({
     // as if it's synchronous because we pause execution until the call is done
     // with `yield`!
     if (isRegistering) {
-      response = yield call(AuthService.register, username, hash);
+      response = yield call(AuthService.register, email, hash, name);
     } else {
-      response = yield AuthService.getAuthToken;
+      response = yield call(AuthService.login, email, hash);
     }
     return response;
   } catch (error) {
@@ -59,13 +59,12 @@ const logout = function* logout() {
 function* loginFlow(action) {
   yield put({ type: LOGIN_REQUEST_LOADING, loading: true });
   try {
-    const { username, password } = action.data;
+    const { email, password } = action.data;
     const auth = yield call(authorize, {
-      username,
+      email,
       password,
       isRegistering: false
     });
-    console.log(auth);
     if (auth) {
       yield put({
         type: GET_BROADCAST_CARDS_ON_LOGIN
@@ -74,6 +73,7 @@ function* loginFlow(action) {
         type: GET_ACTIVITY_CARDS_ON_LOGIN
       });
       yield put({ type: SET_AUTH, newAuthState: true });
+      AuthService.setCookie();
       yield put({ type: RESET_TO_MAIN });
     } else {
       yield put({ type: LOGIN_REQUEST_FAILED, error: 'Login failed.' });
@@ -91,20 +91,25 @@ function* logoutFlow() {
 }
 
 function* registerFlow(action) {
-  const { username, password } = action.data;
+  console.log(action);
+  const { email, password, name } = action.data;
 
   // We call the `authorize` task with the data, telling it that we are registering a user
   // This returns `true` if the registering was successful, `false` if not
   const wasSuccessful = yield call(authorize, {
-    username,
+    email,
     password,
+    name,
     isRegistering: true
   });
+
+  console.log(wasSuccessful);
 
   // If we could register a user, we send the appropiate actions
   if (wasSuccessful) {
     yield put({ type: SET_AUTH, newAuthState: true });
-
+    AuthService.setCookie();
+    yield put({ type: RESET_TO_MAIN });
     // TODO: clear the login form
     // yield put({ type: CHANGE_FORM, newFormState: { username: '', password: '' } });
 

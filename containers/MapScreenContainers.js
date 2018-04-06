@@ -17,7 +17,6 @@ const mapDispatchToProps = dispatch => {
   };
 };
 const mapStateToProps = state => {
-  console.log(state.region);
   const { regionData, pinData, showMarkerModal } = state.region;
   return { regionData, pinData, showMarkerModal };
 };

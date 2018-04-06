@@ -16,6 +16,19 @@ export default class LoginForm extends React.Component {
       [key]: value
     });
   };
+  handleLogin = () => {
+    let { email, password } = this.state;
+    email = email.trim();
+    password = password.trim();
+    if (email.length > 0 && password.length > 0) {
+      this.props.login({
+        email,
+        password
+      });
+    } else {
+      console.log('\n\n You must enter creds to login \n\n');
+    }
+  };
   render() {
     return (
       <View style={styles.container} {...this.props}>
@@ -45,9 +58,7 @@ export default class LoginForm extends React.Component {
             style={styles.loginButton}
             textStyle={styles.textStyle}
             text="Log in"
-            onPress={e =>
-              this.props.login(this.state.email, this.state.password)
-            }
+            onPress={this.handleLogin}
             isLoading={this.props.auth.loading}
           />
         </View>

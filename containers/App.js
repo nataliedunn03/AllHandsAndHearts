@@ -4,11 +4,20 @@ import { AppLoading, Asset, Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import RootNavigator from '../navigation/RootNavigation';
 import Colors from '../constants/Colors';
+import * as AuthService from '../services/auth';
+
 export default class AppContainer extends React.Component {
   state = {
-    isLoadingComplete: false
+    isLoadingComplete: false,
+    isLoggedIn: false
   };
-
+  componentDidMount() {
+    AuthService.isLoggedIn()
+      .then(res => {
+        this.setState({ isLoggedIn: res });
+      })
+      .catch(err => console.log('Not logged in -- app container'));
+  }
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
@@ -25,7 +34,7 @@ export default class AppContainer extends React.Component {
           {Platform.OS === 'android' && (
             <View style={styles.statusBarUnderlay} />
           )}
-          <RootNavigator />
+          <RootNavigator isLoggedIn={this.state.isLoggedIn} />
         </View>
       );
     }
