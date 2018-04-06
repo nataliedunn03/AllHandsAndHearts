@@ -4,10 +4,10 @@
  If you see these pop up in the modal, something is wrong with the saga/reducers.
  */
 import * as AuthService from './auth';
-const BASE_URL = 'https://cs19.salesforce.com/services/apexrest';
-const auth_token =
-  '00D29000000DglJ!ARUAQPH13vUKCmwLGjGfndn_7NW1IQkh0XeEHENVOTweesv0lpdu7Qqcl8mmnd8BXqieujmbE6i7WjllqOz93GKoZwDIybAG';
-
+import {
+  SF_BASE_URL as BASE_URL,
+  SF_ACCESS_TOKEN as auth_token
+} from 'react-native-dotenv';
 const staticRegionData = [
   {
     Name: 'NO DATA FROM SALESFORCE1',
