@@ -6,9 +6,14 @@ import {
   GET_REGION_DATA_ERROR,
   GET_PINS_BY_REGION,
   GET_PINS_BY_REGION_RECEIVED,
-  GET_PINS_BY_REGION_ERROR
+  GET_PINS_BY_REGION_ERROR,
+  SET_PINS_BY_REGION
 } from '../actions/actionTypes';
-import { getRegionList, getPinsListByRegion } from '../../services/regions';
+import {
+  getRegionList,
+  getPinsListByRegion,
+  setPinByRegion
+} from '../../services/regions';
 
 /**
  * Region saga
@@ -58,8 +63,19 @@ function* getPinsByRegion(action) {
   });
 }
 
+function* setPinDataByRegion(action) {
+  const newPin = yield call(setPinByRegion, action.regionId, action.pinData);
+  console.log('New Pin Added::');
+  console.log(newPin);
+  yield put({
+    type: GET_PINS_BY_REGION,
+    regionId: action.regionId
+  });
+}
+
 function* saga() {
   yield takeEvery(GET_REGION_DATA, getRegion);
   yield takeEvery(GET_PINS_BY_REGION, getPinsByRegion);
+  yield takeEvery(SET_PINS_BY_REGION, setPinDataByRegion);
 }
 export default saga;
