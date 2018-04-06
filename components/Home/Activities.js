@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View } from 'react-native-animatable';
 import { LayoutAnimation } from 'react-native';
 import ActivityCard from './ActivityCard';
-import { MonoText } from '../../components/StyledText';
+import { StyledText } from '../../components/StyledText';
 
 export default class Activities extends Component {
   constructor(props) {
@@ -42,7 +42,7 @@ export default class Activities extends Component {
             flex: 1
           }}
         >
-          <MonoText
+          <StyledText
             style={{
               color: '#000000',
               fontSize: 28,
@@ -55,7 +55,7 @@ export default class Activities extends Component {
             }}
           >
             Activities
-          </MonoText>
+          </StyledText>
           {this._renderCards(activityCards)}
         </View>
       )

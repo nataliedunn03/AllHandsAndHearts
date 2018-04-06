@@ -1,10 +1,12 @@
-import { MapView } from 'expo';
+import { MapView, LinearGradient } from 'expo';
 import React from 'react';
 import {
   StyleSheet,
   Text,
   TouchableHighlight,
-  ActivityIndicator
+  ActivityIndicator,
+  UIManager,
+  LayoutAnimation
 } from 'react-native';
 import { View } from 'react-native-animatable';
 
@@ -17,6 +19,8 @@ import { getUserCurrentLocation } from '../utils/Permissions';
 import getStaticMarker, { randomId } from './StaticMarkers';
 import { SlidingModal, SimpleModal } from '../components/Modal';
 import { ScrollCard } from '../components/Card';
+import { StyledText } from '../components/StyledText';
+import GoogleStaticMap from 'react-native-google-static-map';
 import StyledInput from '../components/StyledInput';
 import StyledButton from '../components/StyledButton';
 
@@ -41,6 +45,8 @@ TODO:
 export default class MapScreen extends React.Component {
   constructor(props) {
     super(props);
+    UIManager.setLayoutAnimationEnabledExperimental &&
+      UIManager.setLayoutAnimationEnabledExperimental(true);
     this.state = {
       locationPermission: false,
       mapReady: false,
@@ -52,13 +58,26 @@ export default class MapScreen extends React.Component {
       currentRegionId: '',
       regionModalVisible: false,
       showMarkerModal: false, //open model onLongPress on map
+      markerCoord: {},
+      regionModalIsFull: false,
+      markerIds: [], //keep track of marker Identifiers to focus
       currentMarkerData: {}
     };
   }
   componentDidMount() {
     this._getUserCurrentLocation();
   }
-
+  componentWillReceiveProps(nextProps) {
+    const markerIds = nextProps.pinData.map(marker => {
+      return {
+        latitude: marker.Coordinates__Latitude__s,
+        longitude: marker.Coordinates__Longitude__s
+      };
+    });
+    this.setState({
+      markerIds
+    });
+  }
   _updateCurrentMarkerData = currentMarkerData => {
     this.setState({
       currentMarkerData
@@ -157,10 +176,12 @@ export default class MapScreen extends React.Component {
     return (
       <View>
         <SwitchRegionButton
-          style={{ top: 10 }}
+          style={{ top: -10 }}
           onClick={() => {
             this.openRegionModal();
             this.props.getRegionData();
+            //console.log(this.props);
+            //this.props.navigation.navigate('Marker');
           }}
           color={Colors.defaultColor.PRIMARY_COLOR}
         />
@@ -171,7 +192,8 @@ export default class MapScreen extends React.Component {
   closeRegionModal = () => {
     console.log('closedRegionModal');
     this.setState({
-      regionModalVisible: false
+      regionModalVisible: false,
+      regionModalIsFull: false
     });
   };
 
@@ -179,6 +201,18 @@ export default class MapScreen extends React.Component {
     this.setState({
       regionModalVisible: true
     });
+  };
+
+  _focusOnCoordinates = () => {
+    console.log(this.state.markerIds);
+    if (this.mapViewRef && this.state.markerIds.length > 0) {
+      // this.mapViewRef.fitToSuppliedMarkers(this.state.markerIds, true);
+      //this.mapViewRef.fitToElements(true); // this will fill all the markers, not ideal when we will have all the region on the map.
+      this.mapViewRef.fitToCoordinates(this.state.markerIds, {
+        edgePadding: { top: 100, right: 100, bottom: 100, left: 100 },
+        animated: true
+      });
+    }
   };
 
   onRegionCardPress = async card => {
@@ -189,6 +223,11 @@ export default class MapScreen extends React.Component {
     };
     await this.props.getPinsByRegion(card.id);
     this.mapViewRef.animateToRegion(region);
+    if (this.state.mapReady && this.mapViewRef) {
+      setTimeout(() => {
+        this._focusOnCoordinates();
+      }, 500);
+    }
     this.setState({
       currentRegionId: card.id
     });
@@ -206,27 +245,143 @@ export default class MapScreen extends React.Component {
         id: region.Id,
         name: region.Name,
         latitude: region.Coordinates__Latitude__s,
-        longitude: region.Coordinates__Longitude__s
+        longitude: region.Coordinates__Longitude__s,
+        type: region.DisasterType__c,
+        customName: region.DisasterLocation__c
       };
 
-      const body = '(' + card.latitude + ', ' + card.longitude + ')';
       return (
         <TouchableHighlight
-          underlayColor="transparent"
           key={index}
+          underlayColor="transparent"
           onPress={() => {
             this.onRegionCardPress(card);
           }}
           style={{
-            margin: 40,
-            width:
-              regionCards.length > 1 ? Layout.width - 80 : Layout.width - 34,
-            height: 150
+            flex: 1,
+            height: 190,
+            overflow: 'hidden',
+            margin: 8,
+            marginTop: 0,
+            padding: 0,
+            borderRadius: 8
           }}
         >
           <View>
-            <Text>{card.name}</Text>
-            <Text>{body}</Text>
+            <View
+              style={[
+                {
+                  width: this.state.regionModalIsFull
+                    ? Layout.width - 20
+                    : Layout.width - 34,
+                  height: 190
+                }
+              ]}
+            >
+              <GoogleStaticMap
+                latitude={
+                  !isNaN(card.latitude)
+                    ? card.latitude.toString()
+                    : card.latitude
+                }
+                longitude={
+                  !isNaN(card.longitude)
+                    ? card.longitude.toString()
+                    : card.longitude
+                }
+                zoom={14}
+                size={{
+                  width: this.state.regionModalIsFull
+                    ? Layout.width - 20
+                    : Layout.width - 34,
+                  height: 210
+                }}
+                apiKey={''}
+                hasCenterMarker={false}
+              />
+              <LinearGradient
+                colors={['#000000ff', 'rgba(0, 0, 0, 0.2)']}
+                style={{
+                  position: 'absolute',
+                  opacity: 0.8,
+                  left: 0,
+                  right: 0,
+                  top: 0,
+                  height: 190
+                }}
+              />
+            </View>
+            <View
+              style={[
+                {
+                  top: 0,
+                  left: 0,
+                  width: this.state.regionModalIsFull
+                    ? Layout.width - 20
+                    : Layout.width - 34,
+                  height: 190,
+                  position: 'absolute',
+                  padding: 20,
+                  flex: 1,
+                  flexDirection: 'row'
+                }
+              ]}
+            >
+              <View style={{ alignSelf: 'flex-start' }}>
+                <Text
+                  style={{
+                    color: 'rgba(255, 255, 255, 70)',
+                    fontSize: 15,
+                    letterSpacing: -0.24,
+                    fontWeight: '700'
+                  }}
+                >
+                  {card.type ? card.type.toUpperCase() : card.type}
+                </Text>,
+                <Text
+                  style={{
+                    fontSize: 28,
+                    letterSpacing: 0.34,
+                    fontWeight: '700',
+                    color: 'hsl(0, 0%, 97%)'
+                  }}
+                >
+                  {card.name}
+                </Text>
+              </View>
+              <View style={{ alignSelf: 'flex-end', left: -40 }}>
+                <Text
+                  style={{
+                    color: '#ffffff',
+                    fontSize: 16,
+                    letterSpacing: -0.32,
+                    lineHeight: 21,
+                    fontWeight: '700',
+                    shadowOpacity: 1,
+                    shadowRadius: 0,
+                    shadowColor: 'rgba(0, 0, 0, 20)',
+                    shadowOffset: { width: 0, height: 1 }
+                  }}
+                >
+                  End: May 02, 2018
+                </Text>
+                <Text
+                  style={{
+                    color: '#ffffff',
+                    fontSize: 16,
+                    letterSpacing: -0.32,
+                    lineHeight: 21,
+                    fontWeight: '700',
+                    shadowOpacity: 1,
+                    shadowRadius: 0,
+                    shadowColor: 'rgba(0, 0, 0, 20)',
+                    shadowOffset: { width: 0, height: 1 }
+                  }}
+                >
+                  Start: May 02, 2018
+                </Text>
+              </View>
+            </View>
           </View>
         </TouchableHighlight>
       );
@@ -237,29 +392,42 @@ export default class MapScreen extends React.Component {
     const { regionData } = this.props;
     return (
       <View style={styles.modalContent}>
-        {regionData && (
-          <ScrollCard
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            decelerationRate={0}
-            snapToInterval={Layout.width}
-            snapToAlignment={'center'}
-            contentInset={{
-              top: 0,
-              left: 16,
-              bottom: 0,
-              right: 16
-            }}
-          >
-            {this._renderRegionCards()}
-          </ScrollCard>
-        )}
+        <StyledText
+          style={{
+            color: '#000000',
+            fontSize: 28,
+            marginTop: 10,
+            marginBottom: 16,
+            marginLeft: 16,
+            fontWeight: '500',
+            textAlign: 'left',
+            backgroundColor: 'transparent'
+          }}
+        >
+          Disaster Sites
+        </StyledText>
         {!regionData && (
           <ActivityIndicator
             animating={true}
             size="small"
             color={Colors.defaultColor.PRIMARY_COLOR}
           />
+        )}
+        {regionData && (
+          <ScrollCard
+            horizontal={this.state.regionModalIsFull ? false : true}
+            vertical={this.state.regionModalIsFull ? true : false}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            decelerationRate={0}
+            snapToInterval={Layout.width}
+            snapToAlignment={'center'}
+            cardStyle={{
+              overflow: 'hidden'
+            }}
+          >
+            {this._renderRegionCards()}
+          </ScrollCard>
         )}
       </View>
     );
@@ -364,6 +532,7 @@ export default class MapScreen extends React.Component {
     return this.props.pinData.map(marker => {
       return (
         <MapView.Marker
+          identifier={marker.Id}
           key={marker.Id}
           coordinate={{
             latitude: marker.Coordinates__Latitude__s,
@@ -392,11 +561,17 @@ export default class MapScreen extends React.Component {
   };
 
   _renderRegionModal = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     return (
       <SlidingModal
         show={this.state.regionModalVisible}
         closeCallback={this.closeRegionModal}
-        top={Layout.height - 400}
+        top={Layout.height - 350}
+        fullScreenCallback={() =>
+          this.setState({
+            regionModalIsFull: true
+          })
+        }
       >
         {this._renderRegionModalContent()}
       </SlidingModal>
@@ -447,13 +622,8 @@ const styles = StyleSheet.create({
     zIndex: -1
   },
   modalContent: {
-    backgroundColor: 'transparent',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderTopLeftRadius: 22,
-    borderTopRightRadius: 22,
-    borderColor: 'rgba(0, 0, 0, 0.5)',
-    height: 300
+    flex: 1,
+    backgroundColor: 'transparent'
   },
   markerModal: {
     justifyContent: 'flex-end',
@@ -463,6 +633,14 @@ const styles = StyleSheet.create({
   markerModalFullScreen: {
     flex: 1,
     height: 700
+  },
+  commonStyleRegionModalContent: {
+    borderColor: '#EDEDED',
+    borderRadius: 3,
+    shadowOpacity: 0.8,
+    shadowRadius: 5,
+    shadowColor: 'hsla(0, 0%, 0%, 0.2)',
+    shadowOffset: { width: 1, height: 1 }
   },
   input: {
     height: 42,

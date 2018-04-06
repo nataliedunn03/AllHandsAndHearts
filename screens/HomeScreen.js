@@ -5,14 +5,19 @@ import {
   StyleSheet,
   Text,
   RefreshControl,
-  Animated
+  Animated,
+  TouchableHighlight,
+  View
 } from 'react-native';
-import { WebBrowser } from 'expo';
+import { WebBrowser, LinearGradient } from 'expo';
 
 import Broadcasts from '../components/Home/Broadcasts';
 import Activities from '../components/Home/Activities';
 import Colors from '../constants/Colors';
-
+import Layout from '../constants/Layout';
+import { StyledText } from '../components/StyledText';
+import { ScrollCard } from '../components/Card';
+import GoogleStaticMap from 'react-native-google-static-map';
 export default class HomeScreen extends React.Component {
   state = {
     scrollY: 0

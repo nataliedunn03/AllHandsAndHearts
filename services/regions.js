@@ -4,17 +4,31 @@
  If you see these pop up in the modal, something is wrong with the saga/reducers.
  */
 import * as AuthService from './auth';
-const BASE_URL = 'https://cs19.salesforce.com/services/apexrest';
-const auth_token =
-  '00D29000000DglJ!ARUAQDNAIet0W8eVExLpTqLtJ44iTDHeCDKt7X8Va.wfFDHbewGwty87wDkOjgJBqxNv3y4L2e812MoCaD0YYT_v8yHzHWay';
 
+import { SF_BASE_URL as BASE_URL } from 'react-native-dotenv';
+const auth_token =
+  '00D29000000DglJ!ARUAQPH13vUKCmwLGjGfndn_7NW1IQkh0XeEHENVOTweesv0lpdu7Qqcl8mmnd8BXqieujmbE6i7WjllqOz93GKoZwDIybAG';
 const staticRegionData = [
   {
+    Id: 9,
     Name: 'NO DATA FROM SALESFORCE1',
     Coordinates__Latitude__s: 37.785834,
     Coordinates__Longitude__s: -122.406417
   },
   {
+    Id: 1,
+    Name: 'CHECK CONNECTION',
+    Coordinates__Latitude__s: 40.7127753,
+    Coordinates__Longitude__s: -74.0059728
+  },
+  {
+    Id: 6,
+    Name: 'CHECK CONNECTION',
+    Coordinates__Latitude__s: 40.7127753,
+    Coordinates__Longitude__s: -74.0059728
+  },
+  {
+    Id: 5,
     Name: 'CHECK CONNECTION',
     Coordinates__Latitude__s: 40.7127753,
     Coordinates__Longitude__s: -74.0059728
@@ -72,7 +86,7 @@ export const getRegionList = async () => {
     } else {
       console.log('-Region Query NO DATA Response-\n');
       console.log('Check auth_token and API call.-\n');
-      return undefined;
+      return null;
     }
   } catch (e) {
     console.log(e);

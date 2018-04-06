@@ -10,7 +10,7 @@ import {
 import { View } from 'react-native-animatable';
 import Layout from '../../constants/Layout';
 import BroadcastCard from './BroadcastCard';
-import { MonoText } from '../StyledText';
+import { StyledText } from '../StyledText';
 
 //enable in android
 if (Layout.android)
@@ -32,8 +32,8 @@ export default class Broadcasts extends Component {
   }
 
   _removeItem = async index => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     await this.props.removeBroadcastCard(index);
-    LayoutAnimation.easeInEaseOut();
   };
   removeBroadcastCard = async index => {
     this._removeItem(index);
@@ -69,7 +69,7 @@ export default class Broadcasts extends Component {
           }}
           style={[styles.broadcastContainer]}
         >
-          <MonoText style={styles.monoText}>Broadcast</MonoText>
+          <StyledText style={styles.monoText}>Alerts</StyledText>
           <ScrollView
             ref={scrollView => {
               this.scrollViewRef = scrollView;

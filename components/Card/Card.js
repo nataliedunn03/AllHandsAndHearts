@@ -15,13 +15,14 @@ const Card = ({ style, children, ...props }) => {
 
 const styles = StyleSheet.create({
   container: {
+    overflow: 'hidden',
     padding: 20,
     backgroundColor: '#fff',
     borderColor: '#EDEDED',
     borderRadius: 3,
     shadowOpacity: 0.8,
     shadowRadius: 5,
-    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowColor: 'hsla(0, 0%, 0%, 0.2)',
     shadowOffset: { width: 1, height: 1 },
     margin: 10,
     height: 150
