@@ -6,7 +6,7 @@ global class WEBSERVICES_user{
         try{
             String email = RestContext.request.params.get('email');
             String password  RestContext.request.params.get('password');
-            users = [SELECT Name__c FROM User__c WHERE  email__c := email AND Password__c := password];
+            users = [SELECT Name__c, email_c FROM User__c WHERE email__c := email AND Password__c := password];
             return user;
         }catch(Exception ex){
             System.debug('Error: '+ex.getMessage());
