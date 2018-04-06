@@ -27,7 +27,7 @@ const getBroadcastsHelper = function* getBroadcastsHelper() {
   yield put({ type: SENDING_REQUEST, sending: true });
   try {
     //pass a username to get the cards
-    const broadcastCards = yield call(getBroadcastCards, '');
+    const broadcastCards = yield call(getBroadcastCards);
     //yield call(delay, 1000, true); // simulate network events
     return broadcastCards;
   } catch (error) {

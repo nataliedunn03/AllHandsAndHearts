@@ -42,10 +42,10 @@ export default class Broadcasts extends Component {
     return cards.map((card, index) => {
       return (
         <BroadcastCard
-          key={index}
+          key={card.Id}
           cardKey={index}
-          title={card.title}
-          body={card.body}
+          title={card.Broadcast_Type__c}
+          body={card.Summary__c}
           style={{
             margin: 10,
             marginTop: 0,

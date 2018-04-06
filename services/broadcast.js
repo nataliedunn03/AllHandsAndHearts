@@ -1,44 +1,16 @@
-const broadCastCardsData = [
-  {
-   import * as AuthService from './auth';
+import * as AuthService from './auth';
 const BASE_URL = 'https://cs19.salesforce.com/services/apexrest';
 const auth_token =
-  '00D29000000DglJ!ARUAQJa5AbK9qUgh_3pOTqw8jf_22IR9sPnkIwL3xvNWuP5XchBhfACsWtlRCegO9rFyGu9VAPqPdbo06xhnzvhXFkICni5u';
+  '00D29000000DglJ!ARUAQPH13vUKCmwLGjGfndn_7NW1IQkh0XeEHENVOTweesv0lpdu7Qqcl8mmnd8BXqieujmbE6i7WjllqOz93GKoZwDIybAG';
 // const auth_token = AuthService.getAuthToken()
 
- 
-const broadCastCardsData = [
-  {
-    title: 'HELP',
-    body: "We're looking for volunteers in Texas."
-  },
-  {
-    title: 'NEWS',
-    body:
-      'Happy Hearts Fund merges with All Hands Volunteers to become All Hands and Hearts!'
-  },
-  {
-    title: 'Update',
-    body: 'Mid-cycle demos are underway.'
-  },
-  {
-    title: 'Update 2',
-    body: 'Mid-cycle demos are underway.'
-  },
-  {
-    title: 'Update 3',
-    body: 'Mid-cycle demos are underway.'
-  }
-];
-
 export const getBroacastObjs = async () => {
+  const queryEndpoint = `${BASE_URL + '/broadcasts'}`;
 
-	const queryEndpoint = `${BASE_URL + '/broadcast'}`;
+  console.log('Fetching broadcast data from Salesforce');
+  console.log(queryEndpoint);
 
-	console.log('Fetching broadcast data from Salesforce');
-	console.log(queryEndpoint);
-	
-	try {
+  try {
     const response = await fetch(queryEndpoint, {
       method: 'GET',
       headers: {
@@ -60,34 +32,8 @@ export const getBroacastObjs = async () => {
   } catch (e) {
     console.log(e);
   }
-  
 };
 
-export const getBroadcastCards = uerId => {
-  return broadCastCardsData;
-};
-title: 'HELP',
-    body: "We're looking for volunteers in Texas."
-  },
-  {
-    title: 'NEWS',
-    body:
-      'Happy Hearts Fund merges with All Hands Volunteers to become All Hands and Hearts!'
-  },
-  {
-    title: 'Update',
-    body: 'Mid-cycle demos are underway.'
-  },
-  {
-    title: 'Update 2',
-    body: 'Mid-cycle demos are underway.'
-  },
-  {
-    title: 'Update 3',
-    body: 'Mid-cycle demos are underway.'
-  }
-];
-
-export const getBroadcastCards = uerId => {
-  return broadCastCardsData;
+export const getBroadcastCards = async () => {
+  return await getBroacastObjs();
 };

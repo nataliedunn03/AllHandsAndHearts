@@ -226,7 +226,7 @@ export default class MapScreen extends React.Component {
     if (this.state.mapReady && this.mapViewRef) {
       setTimeout(() => {
         this._focusOnCoordinates();
-      }, 500);
+      }, 550);
     }
     this.setState({
       currentRegionId: card.id
@@ -247,7 +247,8 @@ export default class MapScreen extends React.Component {
         latitude: region.Coordinates__Latitude__s,
         longitude: region.Coordinates__Longitude__s,
         type: region.DisasterType__c,
-        customName: region.DisasterLocation__c
+        customName: region.DisasterLocation__c,
+        startDate: region.DisasterStart__c
       };
 
       return (
@@ -363,7 +364,7 @@ export default class MapScreen extends React.Component {
                     shadowOffset: { width: 0, height: 1 }
                   }}
                 >
-                  End: May 02, 2018
+                  {`Start: ${new Date(card.startDate).toDateString()}`}
                 </Text>
                 <Text
                   style={{
@@ -378,7 +379,7 @@ export default class MapScreen extends React.Component {
                     shadowOffset: { width: 0, height: 1 }
                   }}
                 >
-                  Start: May 02, 2018
+                  End: May 02, 2019
                 </Text>
               </View>
             </View>
