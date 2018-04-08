@@ -20,25 +20,28 @@ const wrappChildrenWithCard = children => {
  * A reusable scrollview where each element will be wrapped with Card
  */
 
-const ScrollCard = ({ style, children, onRefreshCallback, ...others }) => {
-  return (
-    <Animated.ScrollView
-      style={[styles.container, { ...style }]}
-      refreshControl={
-        <RefreshControl
-          refreshing={onRefreshCallback ? true : false}
-          onRefresh={() => (onRefreshCallback ? onRefreshCallback() : {})}
-        />
-      }
-      scrollEventThrottle={16}
-      {...others}
-    >
-      {wrappChildrenWithCard(
-        utilityFunctions.synthesizeChildren(children, others)
-      )}
-    </Animated.ScrollView>
-  );
-};
+class ScrollCard extends React.PureComponent {
+  render() {
+    let { style, children, onRefreshCallback, ...others } = this.props;
+    return (
+      <Animated.ScrollView
+        style={[styles.container, { ...style }]}
+        refreshControl={
+          <RefreshControl
+            refreshing={onRefreshCallback ? true : false}
+            onRefresh={() => (onRefreshCallback ? onRefreshCallback() : {})}
+          />
+        }
+        scrollEventThrottle={16}
+        {...others}
+      >
+        {wrappChildrenWithCard(
+          utilityFunctions.synthesizeChildren(children, others)
+        )}
+      </Animated.ScrollView>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   container: {

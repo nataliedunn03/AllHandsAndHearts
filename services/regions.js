@@ -12,12 +12,20 @@ const staticRegionData = [
   {
     Name: 'NO DATA FROM SALESFORCE1',
     Coordinates__Latitude__s: 37.785834,
-    Coordinates__Longitude__s: -122.406417
+    Coordinates__Longitude__s: -122.406417,
+    Id: 1234,
+    DisasterType__c: 'hurricane',
+    DisasterLocation__c: 'Custom location',
+    DisasterStart__c: '2018-05-9'
   },
   {
     Name: 'CHECK CONNECTION',
     Coordinates__Latitude__s: 40.7127753,
-    Coordinates__Longitude__s: -74.0059728
+    Coordinates__Longitude__s: -74.0059728,
+    Id: 1224,
+    DisasterType__c: 'hurricane',
+    DisasterLocation__c: 'Custom location',
+    DisasterStart__c: '2018-05-9'
   }
 ];
 

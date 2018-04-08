@@ -164,26 +164,22 @@ export default class MapScreen extends React.Component {
     return this.state.displayGps ? 'fadeIn' : 'fadeOut';
   };
 
-  //render the gps button if map is moved
-  _renderGPSButton() {
+  /**
+   * Render GPS button and
+   * Render SwitchRegion button
+   */
+  _renderBottomActionButtons = () => {
     return (
-      <View animation={this._getGPSButtonAnimationType()} useNativeDriver>
-        <CurrentLocationButton
-          style={{ top: -20 }}
-          locationPermission={this.state.locationPermission}
-          onPress={this._moveToUserCurrentLocation}
-          iconColor={this.state.gpsButtonColor}
-        />
-      </View>
-    );
-  }
-
-  //render the switch region button if map is moved
-  _renderSwitchRegionButton() {
-    return (
-      <View>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          margin: 20
+        }}
+      >
+        <View />
         <SwitchRegionButton
-          style={{ top: -10 }}
+          style={{ left: 20 }}
           onClick={() => {
             this.openRegionModal();
             this.props.getRegionData();
@@ -192,9 +188,17 @@ export default class MapScreen extends React.Component {
           }}
           color={Colors.defaultColor.PRIMARY_COLOR}
         />
+
+        <View animation={this._getGPSButtonAnimationType()} useNativeDriver>
+          <CurrentLocationButton
+            locationPermission={this.state.locationPermission}
+            onPress={this._moveToUserCurrentLocation}
+            iconColor={this.state.gpsButtonColor}
+          />
+        </View>
       </View>
     );
-  }
+  };
 
   closeRegionModal = () => {
     console.log('closedRegionModal');
@@ -267,6 +271,7 @@ export default class MapScreen extends React.Component {
           }}
           style={{
             flex: 1,
+            flexDirection: 'column',
             height: 190,
             overflow: 'hidden',
             margin: 8,
@@ -325,11 +330,12 @@ export default class MapScreen extends React.Component {
                   position: 'absolute',
                   padding: 20,
                   flex: 1,
-                  flexDirection: 'row'
+                  flexDirection: 'column',
+                  justifyContent: 'space-between'
                 }
               ]}
             >
-              <View style={{ alignSelf: 'flex-start' }}>
+              <View>
                 <Text
                   style={{
                     color: 'rgba(255, 255, 255, 70)',
@@ -351,7 +357,7 @@ export default class MapScreen extends React.Component {
                   {card.name}
                 </Text>
               </View>
-              <View style={{ alignSelf: 'flex-end', left: -40 }}>
+              <View style={{ justifyContent: 'flex-end' }}>
                 <Text
                   style={{
                     color: '#ffffff',
@@ -608,8 +614,7 @@ export default class MapScreen extends React.Component {
         >
           {this._renderMapMarker()}
         </MapView>
-        {this._renderSwitchRegionButton()}
-        {this._renderGPSButton()}
+        {this._renderBottomActionButtons()}
         {this._renderRegionModal()}
         {this._renderPinModal()}
       </View>

@@ -45,13 +45,13 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   switchRegionButton: {
-    width: 44,
-    height: 44,
+    width: 48,
+    height: 48,
     backgroundColor: Colors.navHeaderBackground,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: Colors.tabIconDefault,
-    borderRadius: 22,
+    borderRadius: 24,
     shadowOffset: { width: 1, height: 2 },
     shadowRadius: 2,
     shadowOpacity: 0.25
