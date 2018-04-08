@@ -2,6 +2,7 @@
 */
 export const SET_AUTH = 'SET_AUTH'; // set state when logged in/out
 
+export const INITIALIZE_APP_STATE = 'INITIALIZE_APP_STATE';
 export const LOGIN_REQUEST = 'LOGIN_REQUEST'; //when log in is requested
 export const LOGIN_REQUEST_LOADING = 'LOGIN_REQUEST_LOADING';
 export const LOGIN_REQUEST_SUCCESS = 'LOGIN_REQUEST_SUCCESS';

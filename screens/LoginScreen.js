@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  KeyboardAvoidingView,
-  UIManager,
-  Platform
-} from 'react-native';
+import { StyleSheet, KeyboardAvoidingView } from 'react-native';
 import { View, Image } from 'react-native-animatable';
 import { HideWithKeyboard } from 'react-native-hide-with-keyboard';
 import LoginForm from '../components/Login/LoginForm';
@@ -12,21 +7,21 @@ import SignupForm from '../components/Login/SignupForm';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import Slogan from '../components/Login/Slogan';
-import * as AuthService from '../services/auth';
-
-if (Platform.OS === 'android')
-  UIManager.setLayoutAnimationEnabledExperimental &&
-    UIManager.setLayoutAnimationEnabledExperimental(true);
+//import * as AuthService from '../services/auth';
 export default class Login extends React.Component {
-  state = {
-    shouldSloganAnimationDelay: true,
-    switchForm: 'login'
-  };
-  async componentWillMount() {
-    const value = await AuthService.isLoggedIn();
-    if (value) this.props.navigation.navigate('MainModalNavigator');
+  constructor(props) {
+    super(props);
+    this.isLoggedIn = false;
+    this.state = {
+      shouldSloganAnimationDelay: true,
+      switchForm: 'login'
+    };
   }
-  componentDidMount() {
+  async componentDidMount() {
+    /*this.isLoggedIn = await AuthService.isLoggedIn();
+    if (this.isLoggedIn === true) {
+      this.props.navigation.navigate('MainModalNavigator');
+    }*/
     this.setState({
       shouldSloganAnimationDelay: false
     });
@@ -37,7 +32,9 @@ export default class Login extends React.Component {
     }));
   };
   render() {
-    console.log(this.props);
+    if (this.isLoggedIn === true) {
+      return null;
+    }
     return (
       <View style={styles.container}>
         <View

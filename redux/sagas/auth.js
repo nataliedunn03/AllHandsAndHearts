@@ -9,10 +9,9 @@ import {
   SET_AUTH,
   LOGOUT_REQUEST,
   REQUEST_ERROR,
+  INITIALIZE_APP_STATE,
   RESET_TO_MAIN,
-  RESET_TO_SIGN_IN,
-  GET_BROADCAST_CARDS_ON_LOGIN,
-  GET_ACTIVITY_CARDS_ON_LOGIN
+  RESET_TO_SIGN_IN
 } from '../actions/actionTypes';
 import * as AuthService from '../../services/auth';
 
@@ -69,14 +68,16 @@ function* loginFlow(action) {
       isRegistering: false
     });
     if (auth) {
-      yield put({
+      /* yield put({
         type: GET_BROADCAST_CARDS_ON_LOGIN
       });
       yield put({
         type: GET_ACTIVITY_CARDS_ON_LOGIN
-      });
+      });*/
       yield put({ type: SET_AUTH, newAuthState: true });
-      yield AuthService.setCookie();
+      yield AuthService.setCookie({
+        isLoggedIn: true
+      });
       yield put({ type: RESET_TO_MAIN });
     } else {
       yield put({ type: LOGIN_REQUEST_FAILED, error: 'Login failed.' });
@@ -94,7 +95,6 @@ function* logoutFlow() {
 }
 
 function* registerFlow(action) {
-  console.log(action);
   const { email, password, name } = action.data;
 
   // We call the `authorize` task with the data, telling it that we are registering a user
@@ -105,18 +105,26 @@ function* registerFlow(action) {
     name,
     isRegistering: true
   });
-
-  console.log(wasSuccessful);
-
   // If we could register a user, we send the appropiate actions
   if (wasSuccessful) {
     yield put({ type: SET_AUTH, newAuthState: true });
-    yield AuthService.setCookie();
+    yield AuthService.setCookie({ isLoggedIn: true });
     yield put({ type: RESET_TO_MAIN });
-    // TODO: clear the login form
-    // yield put({ type: CHANGE_FORM, newFormState: { username: '', password: '' } });
+  }
+}
 
-    // User react-navigation to redirect back to the appropriate place
+function* initializeAppState(action) {
+  try {
+    const isLoggedIn = yield AuthService.isLoggedIn();
+    console.log('inside saga seeing if logged in', isLoggedIn);
+    if (isLoggedIn) {
+      yield put({ type: SET_AUTH, newAuthState: isLoggedIn });
+      yield put({ type: RESET_TO_MAIN });
+    } else {
+      yield put({ type: RESET_TO_SIGN_IN });
+    }
+  } catch (e) {
+    yield put({ type: RESET_TO_SIGN_IN });
   }
 }
 
@@ -124,5 +132,6 @@ function* saga() {
   yield takeEvery(LOGIN_REQUEST, loginFlow);
   yield takeEvery(REGISTER_REQUEST, registerFlow);
   yield takeEvery(LOGOUT_REQUEST, logoutFlow);
+  yield takeEvery(INITIALIZE_APP_STATE, initializeAppState);
 }
 export default saga;

@@ -6,7 +6,6 @@ import {
   ScrollView,
   RefreshControl,
   TouchableHighlight,
-  LayoutAnimation,
   Modal
 } from 'react-native';
 import { View, Text } from 'react-native-animatable';
@@ -17,7 +16,7 @@ import StyledButton from '../components/StyledButton';
 import StyledInput from '../components/StyledInput';
 import SlidingModal from '../components/Modal';
 
-export default class MarkerViewScreen extends Component {
+export default class EditPinScreen extends Component {
   state = {
     refresh: false,
     scrollY: 0,
@@ -26,8 +25,10 @@ export default class MarkerViewScreen extends Component {
   };
 
   componentDidMount() {
-    let { state: { params: { name } } } = this.props.navigation;
-    this._getLocationName(name);
+    //let { state: { params: { name } } } = this.props.navigation;
+    //this._getLocationName(name);
+
+    console.log(this.props);
   }
 
   _handleClose = () => {

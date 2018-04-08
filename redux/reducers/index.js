@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
 import { auth } from './auth';
-import { nav } from './nav';
+import nav from './nav';
 import { broadcast } from './broadcast';
 import { activity } from './activity';
 import { region } from './region';

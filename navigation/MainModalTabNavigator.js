@@ -3,7 +3,7 @@ import { Platform, StyleSheet, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { TabNavigator, TabBarBottom, StackNavigator } from 'react-navigation';
 
-import MarkerViewScreen from '../screens/MarkerViewScreen';
+import EditPinScreen from '../screens/EditPinScreen';
 import ProfileScreenContainer from '../containers/ProfileContainer';
 import HomeScreenContainer from '../containers/HomeScreenContainer';
 import MapScreenContainer from '../containers/MapScreenContainers';
@@ -115,9 +115,9 @@ const MainModalNavigator = StackNavigator(
     MainTabNavigator: {
       screen: MainTabNavigator
     },
-    EditMarker: {
-      screen: MarkerViewScreen,
-      path: '/editMarker/:name',
+    EditPin: {
+      screen: EditPinScreen,
+      path: '/editPin/:name',
       navigationOptions: ({ navigation }) => ({
         headerTitleStyle: {
           color: Colors.defaultColor.PAPER_COLOR,
@@ -132,7 +132,7 @@ const MainModalNavigator = StackNavigator(
       })
     },
     EditRegion: {
-      screen: MarkerViewScreen,
+      screen: EditPinScreen,
       path: '/editRegion/:name',
       navigationOptions: ({ navigation }) => ({
         headerTitleStyle: {

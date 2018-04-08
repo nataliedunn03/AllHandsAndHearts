@@ -5,13 +5,21 @@ import {
 } from 'react-native-dotenv';
 import { AsyncStorage } from 'react-native';
 
-export const setCookie = () =>
-  AsyncStorage.setItem(FFG_AUTH_STORAGE_KEY, 'true');
+// value is of type object, but set as string since AsyncStorage only support strings
+export const setCookie = value =>
+  AsyncStorage.setItem(FFG_AUTH_STORAGE_KEY, JSON.stringify(value));
 
 export const removeCookie = () => AsyncStorage.removeItem(FFG_AUTH_STORAGE_KEY);
 
-export const isLoggedIn = async () =>
-  await AsyncStorage.getItem(FFG_AUTH_STORAGE_KEY);
+export const isLoggedIn = async () => {
+  let loggedIn = false;
+  const savedObject = await AsyncStorage.getItem(FFG_AUTH_STORAGE_KEY);
+  if (savedObject) {
+    const { isLoggedIn } = JSON.parse(savedObject);
+    loggedIn = isLoggedIn;
+  }
+  return loggedIn;
+};
 
 export const register = async (email, passwordHash, name) => {
   const queryEndpoint = `${BASE_URL}/users`;
@@ -47,7 +55,6 @@ export const register = async (email, passwordHash, name) => {
 export const login = async (email, passwordHash) => {
   //PUT is login
   const queryEndpoint = `${BASE_URL}/users`;
-  console.log(email);
   const queryJsonString = JSON.stringify({
     email: email,
     password: passwordHash
@@ -63,7 +70,6 @@ export const login = async (email, passwordHash) => {
       body: queryJsonString
     });
     const data = await response.json();
-    console.log(data);
     if (data) {
       console.log('-User LOGIN DATA Response-\n');
       console.log(data);

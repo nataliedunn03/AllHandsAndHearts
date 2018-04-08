@@ -279,9 +279,7 @@ export default class MapScreen extends React.Component {
             <View
               style={[
                 {
-                  width: this.state.regionModalIsFull
-                    ? Layout.width - 20
-                    : Layout.width - 34,
+                  width: Layout.width - 33,
                   height: 190
                 }
               ]}
@@ -299,9 +297,7 @@ export default class MapScreen extends React.Component {
                 }
                 zoom={14}
                 size={{
-                  width: this.state.regionModalIsFull
-                    ? Layout.width - 20
-                    : Layout.width - 34,
+                  width: Layout.width - 33,
                   height: 210
                 }}
                 apiKey={''}
@@ -324,9 +320,7 @@ export default class MapScreen extends React.Component {
                 {
                   top: 0,
                   left: 0,
-                  width: this.state.regionModalIsFull
-                    ? Layout.width - 20
-                    : Layout.width - 34,
+                  width: Layout.width - 33,
                   height: 190,
                   position: 'absolute',
                   padding: 20,
@@ -444,7 +438,9 @@ export default class MapScreen extends React.Component {
   _createNewMarker = async e => {
     e.persist();
     const coord = e.nativeEvent.coordinate;
-    Location.setApiKey(GOOGLEMAPS_API_KEY);
+    console.log(' navigate to EditPin');
+    this.props.navigation.navigate('EditPin', { coord });
+    /* Location.setApiKey(GOOGLEMAPS_API_KEY);
     const decodedLocation = await Location.reverseGeocodeAsync(coord);
     console.log(decodedLocation);
     this.setState({
@@ -454,7 +450,7 @@ export default class MapScreen extends React.Component {
         latitude: coord.latitude,
         longitude: coord.longitude
       }
-    });
+    });*/
   };
 
   _closeMarkerModal = () => {

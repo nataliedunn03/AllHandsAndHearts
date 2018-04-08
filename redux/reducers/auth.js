@@ -12,9 +12,9 @@ import {
   REGISTER_REQUEST_FAILED
 } from '../actions/actionTypes';
 import * as AuthService from '../../services/auth';
-const isLoggefIn = AuthService.isLoggedIn();
+
 const INITIAL_STATE = {
-  loggedIn: isLoggefIn
+  loggedIn: false
 };
 
 export const auth = (state = INITIAL_STATE, action) => {

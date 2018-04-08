@@ -10,7 +10,7 @@ import { navMiddleware } from './utils/navigationReduxUtil';
 import AppContainer from './containers/App';
 
 const sagaMiddleware = createSagaMiddleware();
-let middleWares = [sagaMiddleware, navMiddleware];
+let middleWares = [sagaMiddleware, navMiddleware, logger];
 if (process.env.NODE_ENV !== 'production') {
   middleWares = [...middleWares];
 }

@@ -6,8 +6,27 @@ import {
   LOGOUT_REQUEST,
   LOGIN_REQUEST_LOADING,
   LOGIN_REQUEST_SUCCESS,
-  LOGIN_REQUEST_FAILED
+  LOGIN_REQUEST_FAILED,
+  INITIALIZE_APP_STATE,
+  RESET_TO_MAIN,
+  RESET_TO_SIGN_IN
 } from './actionTypes';
+
+//will check if the user is already logged in
+//if so we'll bypass login
+//if not we'll redirect to login screen
+//^ see sagas for the implementation
+export const initializeAppState = () => ({
+  type: INITIALIZE_APP_STATE
+});
+
+export const resetToMainScreen = () => ({
+  type: RESET_TO_MAIN
+});
+
+export const resetToLoginScreen = () => ({
+  type: RESET_TO_SIGN_IN
+});
 
 export const sendingRequest = sending => ({
   type: SENDING_REQUEST,
@@ -23,9 +42,9 @@ export const loginRequestLoading = loading => ({
   loading
 });
 
-export const loginRequestSuccess = newAuthState => ({
+export const loginRequestSuccess = isLoggedIn => ({
   type: LOGIN_REQUEST_SUCCESS,
-  newAuthState
+  isLoggedIn
 });
 
 export const loginRequestFailed = error => ({
@@ -33,9 +52,9 @@ export const loginRequestFailed = error => ({
   error
 });
 
-export const setAuth = newAuthState => ({
+export const setAuth = isLoggedIn => ({
   type: SET_AUTH,
-  newAuthState
+  isLoggedIn
 });
 
 export const logout = () => ({

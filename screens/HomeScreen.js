@@ -6,24 +6,19 @@ import {
   Text,
   RefreshControl,
   Animated,
-  LayoutAnimation
+  LayoutAnimation,
+  UIManager
 } from 'react-native';
 import { WebBrowser, LinearGradient } from 'expo';
 
 import Broadcasts from '../components/Home/Broadcasts';
 import Activities from '../components/Home/Activities';
 import Colors from '../constants/Colors';
-import Layout from '../constants/Layout';
-import { StyledText } from '../components/StyledText';
-import { ScrollCard } from '../components/Card';
 
 export default class HomeScreen extends React.Component {
   componentWillMount() {
     this.props.getBroadcastCards();
     this.props.getActivities();
-  }
-  componentDidMount() {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
   }
   state = {
     scrollY: 0
@@ -31,7 +26,6 @@ export default class HomeScreen extends React.Component {
   _handleRefresh = async () => {
     try {
       await this.props.getBroadcastCards();
-      //LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     } catch (e) {
       console.log(e);
     }
