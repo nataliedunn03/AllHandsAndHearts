@@ -9,19 +9,12 @@ import Layout from '../constants/Layout';
 import Slogan from '../components/Login/Slogan';
 //import * as AuthService from '../services/auth';
 export default class Login extends React.Component {
-  constructor(props) {
-    super(props);
-    this.isLoggedIn = false;
-    this.state = {
-      shouldSloganAnimationDelay: true,
-      switchForm: 'login'
-    };
-  }
+  state = {
+    shouldSloganAnimationDelay: true,
+    switchForm: 'login'
+  };
+
   async componentDidMount() {
-    /*this.isLoggedIn = await AuthService.isLoggedIn();
-    if (this.isLoggedIn === true) {
-      this.props.navigation.navigate('MainModalNavigator');
-    }*/
     this.setState({
       shouldSloganAnimationDelay: false
     });
@@ -32,8 +25,8 @@ export default class Login extends React.Component {
     }));
   };
   render() {
-    if (this.isLoggedIn === true) {
-      return null;
+    if (this.props.loggedIn === true) {
+      return;
     }
     return (
       <View style={styles.container}>

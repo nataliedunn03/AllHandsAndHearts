@@ -17,17 +17,8 @@ class AppContainer extends React.Component {
   componentDidMount() {
     this.props.initializeAppState();
   }
-  /*componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
-    if (nextProps.auth.isLoggedIn) {
-      //this.props.resetToMainScreen();
-    } else {
-      //this.props.initializeAppState();
-    }
-  }*/
 
   render() {
-    //console.log(this.props);
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
         <AppLoading

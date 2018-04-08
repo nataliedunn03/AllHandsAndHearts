@@ -97,26 +97,31 @@ function* logoutFlow() {
 function* registerFlow(action) {
   const { email, password, name } = action.data;
 
-  // We call the `authorize` task with the data, telling it that we are registering a user
-  // This returns `true` if the registering was successful, `false` if not
-  const wasSuccessful = yield call(authorize, {
-    email,
-    password,
-    name,
-    isRegistering: true
-  });
-  // If we could register a user, we send the appropiate actions
-  if (wasSuccessful) {
-    yield put({ type: SET_AUTH, newAuthState: true });
-    yield AuthService.setCookie({ isLoggedIn: true });
-    yield put({ type: RESET_TO_MAIN });
+  try {
+    // We call the `authorize` task with the data, telling it that we are registering a user
+    // This returns `true` if the registering was successful, `false` if not
+    const wasSuccessful = yield call(authorize, {
+      email,
+      password,
+      name,
+      isRegistering: true
+    });
+    // If we could register a user, we send the appropiate actions
+    if (wasSuccessful) {
+      yield put({ type: SET_AUTH, newAuthState: true });
+      yield AuthService.setCookie({ isLoggedIn: true });
+      yield put({ type: RESET_TO_MAIN });
+    } else {
+      yield put({ type: RESET_TO_SIGN_IN });
+    }
+  } catch (e) {
+    yield put({ type: RESET_TO_SIGN_IN });
   }
 }
 
 function* initializeAppState(action) {
   try {
     const isLoggedIn = yield AuthService.isLoggedIn();
-    console.log('inside saga seeing if logged in', isLoggedIn);
     if (isLoggedIn) {
       yield put({ type: SET_AUTH, newAuthState: isLoggedIn });
       yield put({ type: RESET_TO_MAIN });

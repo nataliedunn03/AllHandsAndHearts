@@ -5,11 +5,9 @@ import {
   StyleSheet,
   Text,
   RefreshControl,
-  Animated,
-  LayoutAnimation,
-  UIManager
+  Animated
 } from 'react-native';
-import { WebBrowser, LinearGradient } from 'expo';
+import { WebBrowser } from 'expo';
 
 import Broadcasts from '../components/Home/Broadcasts';
 import Activities from '../components/Home/Activities';
