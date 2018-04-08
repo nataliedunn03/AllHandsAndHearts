@@ -21,6 +21,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 const mapStateToProps = state => ({
+  auth: state.auth,
   broadcast: state.broadcast,
   activity: state.activity
 });

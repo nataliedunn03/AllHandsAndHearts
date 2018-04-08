@@ -5,7 +5,9 @@ import {
   StyleSheet,
   Text,
   RefreshControl,
-  Animated
+  Animated,
+  LayoutAnimation,
+  UIManager
 } from 'react-native';
 import { WebBrowser } from 'expo';
 
@@ -14,9 +16,21 @@ import Activities from '../components/Home/Activities';
 import Colors from '../constants/Colors';
 
 export default class HomeScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    if (Platform.OS === 'android') {
+      UIManager.setLayoutAnimationEnabledExperimental &&
+        UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+  }
   componentWillMount() {
     this.props.getBroadcastCards();
     this.props.getActivities();
+  }
+  componentDidMount() {
+    if (this.props.auth.loggedIn) {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
+    }
   }
   state = {
     scrollY: 0

@@ -42,9 +42,9 @@ export const loginRequestLoading = loading => ({
   loading
 });
 
-export const loginRequestSuccess = isLoggedIn => ({
+export const loginRequestSuccess = newAuthState => ({
   type: LOGIN_REQUEST_SUCCESS,
-  isLoggedIn
+  newAuthState
 });
 
 export const loginRequestFailed = error => ({
@@ -52,9 +52,9 @@ export const loginRequestFailed = error => ({
   error
 });
 
-export const setAuth = isLoggedIn => ({
+export const setAuth = newAuthState => ({
   type: SET_AUTH,
-  isLoggedIn
+  newAuthState
 });
 
 export const logout = () => ({
