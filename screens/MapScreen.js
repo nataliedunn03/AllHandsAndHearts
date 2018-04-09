@@ -17,7 +17,7 @@ import Layout from '../constants/Layout';
 import { getStaticRegionData } from '../services/regions';
 import { getUserCurrentLocation } from '../utils/Permissions';
 import getStaticMarker, { randomId } from './StaticMarkers';
-import { SlidingModal, SimpleModal } from '../components/Modal';
+import { SlidingModal } from '../components/Modal';
 import { ScrollCard } from '../components/Card';
 import { StyledText } from '../components/StyledText';
 import GoogleStaticMap from 'react-native-google-static-map';
@@ -71,7 +71,8 @@ export default class MapScreen extends React.Component {
     const markerIds = nextProps.pinData.map(marker => {
       return {
         latitude: marker.Coordinates__Latitude__s,
-        longitude: marker.Coordinates__Longitude__s
+        longitude: marker.Coordinates__Longitude__s,
+        ...marker
       };
     });
     this.setState({
@@ -183,8 +184,6 @@ export default class MapScreen extends React.Component {
           onClick={() => {
             this.openRegionModal();
             this.props.getRegionData();
-            //console.log(this.props);
-            //this.props.navigation.navigate('Marker');
           }}
           color={Colors.defaultColor.PRIMARY_COLOR}
         />
@@ -341,7 +340,7 @@ export default class MapScreen extends React.Component {
                     color: 'rgba(255, 255, 255, 70)',
                     fontSize: 15,
                     letterSpacing: -0.24,
-                    fontWeight: '700'
+                    fontWeight: 'bold'
                   }}
                 >
                   {card.type ? card.type.toUpperCase() : card.type}
@@ -350,7 +349,7 @@ export default class MapScreen extends React.Component {
                   style={{
                     fontSize: 28,
                     letterSpacing: 0.34,
-                    fontWeight: '700',
+                    fontWeight: 'bold',
                     color: 'hsl(0, 0%, 97%)'
                   }}
                 >
@@ -364,7 +363,7 @@ export default class MapScreen extends React.Component {
                     fontSize: 16,
                     letterSpacing: -0.32,
                     lineHeight: 21,
-                    fontWeight: '700',
+                    fontWeight: 'bold',
                     shadowOpacity: 1,
                     shadowRadius: 0,
                     shadowColor: 'rgba(0, 0, 0, 20)',
@@ -379,7 +378,7 @@ export default class MapScreen extends React.Component {
                     fontSize: 16,
                     letterSpacing: -0.32,
                     lineHeight: 21,
-                    fontWeight: '700',
+                    fontWeight: 'bold',
                     shadowOpacity: 1,
                     shadowRadius: 0,
                     shadowColor: 'rgba(0, 0, 0, 20)',

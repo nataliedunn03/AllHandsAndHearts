@@ -14,22 +14,16 @@ import { addListener } from '../utils/navigationReduxUtil';
 export const AppNavigator = StackNavigator(
   {
     LoginScreen: {
-      screen: LoginScreen,
-      navigationOptions: {
-        header: null,
-        left: null
-      }
+      screen: LoginScreen
     },
     MainModalNavigator: {
-      screen: MainModalNavigator,
-      navigationOptions: {
-        left: null,
-        headerLeft: null
-      }
+      screen: MainModalNavigator
     }
   },
   {
-    initialRouteName: LoginScreen
+    initialRouteName: LoginScreen,
+    headerMode: 'none',
+    mode: 'screen'
   }
 );
 class RootNavigator extends React.Component {

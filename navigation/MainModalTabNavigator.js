@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, StyleSheet, Animated } from 'react-native';
+import { Platform, StyleSheet, Animated, Easing } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { TabNavigator, TabBarBottom, StackNavigator } from 'react-navigation';
 
@@ -37,6 +37,7 @@ const MainTabNavigator = TabNavigator(
     }
   },
   {
+    headerMode: 'float',
     navigationOptions: ({ navigation }) => ({
       headerTitleStyle: {
         color: Colors.defaultColor.PAPER_COLOR,
@@ -118,37 +119,41 @@ const MainModalNavigator = StackNavigator(
     EditPin: {
       screen: EditPinScreen,
       path: '/editPin/:name',
-      navigationOptions: ({ navigation }) => ({
-        headerTitleStyle: {
-          color: Colors.defaultColor.PAPER_COLOR,
-          fontWeight: '600',
-          justifyContent: 'space-between',
-          textAlign: 'center'
-        },
-        headerStyle: {
-          backgroundColor: Colors.defaultColor.PRIMARY_COLOR,
-          borderBottomColor: '#F2F2F2'
-        }
-      })
+      navigationOptions: {
+        headerTitle: 'Edit Pin'
+      }
     },
     EditRegion: {
       screen: EditPinScreen,
       path: '/editRegion/:name',
-      navigationOptions: ({ navigation }) => ({
-        headerTitleStyle: {
-          color: Colors.defaultColor.PAPER_COLOR,
-          fontWeight: '600',
-          justifyContent: 'space-between',
-          textAlign: 'center'
-        },
-        headerStyle: {
-          backgroundColor: Colors.defaultColor.PRIMARY_COLOR,
-          borderBottomColor: '#F2F2F2'
-        }
-      })
+      navigationOptions: {
+        headerTitle: 'Edit Region'
+      }
     }
   },
-  { headerMode: 'none', mode: 'screen' }
+  {
+    headerMode: 'float',
+    navigationOptions: ({ navigation }) => ({
+      headerTintColor: 'white',
+      headerTitleStyle: {
+        color: Colors.defaultColor.PAPER_COLOR,
+        fontWeight: '600',
+        justifyContent: 'space-between',
+        textAlign: 'center'
+      },
+      headerStyle: {
+        backgroundColor: Colors.defaultColor.PRIMARY_COLOR,
+        borderBottomColor: '#F2F2F2'
+      }
+    }),
+    transitionConfig: () => ({
+      transitionSpec: {
+        duration: 200,
+        easing: Easing.out(Easing.poly(4)),
+        timing: Animated.timing
+      }
+    })
+  }
 );
 
 export default MainModalNavigator;

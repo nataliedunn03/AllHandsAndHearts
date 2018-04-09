@@ -6,7 +6,8 @@ import {
   ScrollView,
   RefreshControl,
   TouchableHighlight,
-  Modal
+  Modal,
+  Button
 } from 'react-native';
 import { View, Text } from 'react-native-animatable';
 
@@ -14,8 +15,7 @@ import Colors from '../constants/Colors';
 import { StyledText } from '../components/StyledText';
 import StyledButton from '../components/StyledButton';
 import StyledInput from '../components/StyledInput';
-import SlidingModal from '../components/Modal';
-
+import { Feather as Icon } from '@expo/vector-icons';
 export default class EditPinScreen extends Component {
   state = {
     refresh: false,
