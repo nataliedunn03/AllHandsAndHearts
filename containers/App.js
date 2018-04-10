@@ -1,23 +1,23 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import RootNavigator from '../navigation/RootNavigation';
 import Colors from '../constants/Colors';
-import * as AuthService from '../services/auth';
-
-export default class AppContainer extends React.Component {
+import {
+  initializeAppState,
+  resetToMainScreen,
+  resetToLoginScreen
+} from '../redux/actions/auth';
+class AppContainer extends React.Component {
   state = {
-    isLoadingComplete: false,
-    isLoggedIn: false
+    isLoadingComplete: false
   };
   componentDidMount() {
-    AuthService.isLoggedIn()
-      .then(res => {
-        this.setState({ isLoggedIn: res });
-      })
-      .catch(err => console.log('Not logged in -- app container'));
+    this.props.initializeAppState();
   }
+
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
@@ -34,7 +34,7 @@ export default class AppContainer extends React.Component {
           {Platform.OS === 'android' && (
             <View style={styles.statusBarUnderlay} />
           )}
-          <RootNavigator isLoggedIn={this.state.isLoggedIn} />
+          <RootNavigator />
         </View>
       );
     }
@@ -78,3 +78,23 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.2)'
   }
 });
+
+const mapStateToProps = ({ auth }) => {
+  return {
+    auth
+  };
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    resetToMainScreen: () => {
+      dispatch(resetToMainScreen());
+    },
+    resetToLoginScreen: () => {
+      dispatch(resetToLoginScreen());
+    },
+    initializeAppState: () => {
+      dispatch(initializeAppState());
+    }
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(AppContainer);

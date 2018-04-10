@@ -9,7 +9,6 @@ import {
   LayoutAnimation
 } from 'react-native';
 import { View } from 'react-native-animatable';
-import { GOOGLEMAPS_API_KEY } from 'react-native-dotenv';
 import { CurrentLocationButton, SwitchRegionButton } from '../components/Maps';
 
 import Colors from '../constants/Colors';
@@ -17,7 +16,7 @@ import Layout from '../constants/Layout';
 import { getStaticRegionData } from '../services/regions';
 import { getUserCurrentLocation } from '../utils/Permissions';
 import getStaticMarker, { randomId } from './StaticMarkers';
-import { SlidingModal, SimpleModal } from '../components/Modal';
+import { SlidingModal } from '../components/Modal';
 import { ScrollCard } from '../components/Card';
 import { StyledText } from '../components/StyledText';
 import GoogleStaticMap from 'react-native-google-static-map';
@@ -71,7 +70,8 @@ export default class MapScreen extends React.Component {
     const markerIds = nextProps.pinData.map(marker => {
       return {
         latitude: marker.Coordinates__Latitude__s,
-        longitude: marker.Coordinates__Longitude__s
+        longitude: marker.Coordinates__Longitude__s,
+        ...marker
       };
     });
     this.setState({
@@ -164,37 +164,39 @@ export default class MapScreen extends React.Component {
     return this.state.displayGps ? 'fadeIn' : 'fadeOut';
   };
 
-  //render the gps button if map is moved
-  _renderGPSButton() {
+  /**
+   * Render GPS button and
+   * Render SwitchRegion button
+   */
+  _renderBottomActionButtons = () => {
     return (
-      <View animation={this._getGPSButtonAnimationType()} useNativeDriver>
-        <CurrentLocationButton
-          style={{ top: -20 }}
-          locationPermission={this.state.locationPermission}
-          onPress={this._moveToUserCurrentLocation}
-          iconColor={this.state.gpsButtonColor}
-        />
-      </View>
-    );
-  }
-
-  //render the switch region button if map is moved
-  _renderSwitchRegionButton() {
-    return (
-      <View>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          margin: 20
+        }}
+      >
+        <View />
         <SwitchRegionButton
-          style={{ top: -10 }}
+          style={{ left: 20 }}
           onClick={() => {
             this.openRegionModal();
             this.props.getRegionData();
-            //console.log(this.props);
-            //this.props.navigation.navigate('Marker');
           }}
           color={Colors.defaultColor.PRIMARY_COLOR}
         />
+
+        <View animation={this._getGPSButtonAnimationType()} useNativeDriver>
+          <CurrentLocationButton
+            locationPermission={this.state.locationPermission}
+            onPress={this._moveToUserCurrentLocation}
+            iconColor={this.state.gpsButtonColor}
+          />
+        </View>
       </View>
     );
-  }
+  };
 
   closeRegionModal = () => {
     console.log('closedRegionModal');
@@ -267,6 +269,7 @@ export default class MapScreen extends React.Component {
           }}
           style={{
             flex: 1,
+            flexDirection: 'column',
             height: 190,
             overflow: 'hidden',
             margin: 8,
@@ -279,9 +282,7 @@ export default class MapScreen extends React.Component {
             <View
               style={[
                 {
-                  width: this.state.regionModalIsFull
-                    ? Layout.width - 20
-                    : Layout.width - 34,
+                  width: Layout.width - 33,
                   height: 190
                 }
               ]}
@@ -299,9 +300,7 @@ export default class MapScreen extends React.Component {
                 }
                 zoom={14}
                 size={{
-                  width: this.state.regionModalIsFull
-                    ? Layout.width - 20
-                    : Layout.width - 34,
+                  width: Layout.width - 33,
                   height: 210
                 }}
                 apiKey={''}
@@ -324,24 +323,23 @@ export default class MapScreen extends React.Component {
                 {
                   top: 0,
                   left: 0,
-                  width: this.state.regionModalIsFull
-                    ? Layout.width - 20
-                    : Layout.width - 34,
+                  width: Layout.width - 33,
                   height: 190,
                   position: 'absolute',
                   padding: 20,
                   flex: 1,
-                  flexDirection: 'row'
+                  flexDirection: 'column',
+                  justifyContent: 'space-between'
                 }
               ]}
             >
-              <View style={{ alignSelf: 'flex-start' }}>
+              <View>
                 <Text
                   style={{
                     color: 'rgba(255, 255, 255, 70)',
                     fontSize: 15,
                     letterSpacing: -0.24,
-                    fontWeight: '700'
+                    fontWeight: 'bold'
                   }}
                 >
                   {card.type ? card.type.toUpperCase() : card.type}
@@ -350,21 +348,21 @@ export default class MapScreen extends React.Component {
                   style={{
                     fontSize: 28,
                     letterSpacing: 0.34,
-                    fontWeight: '700',
+                    fontWeight: 'bold',
                     color: 'hsl(0, 0%, 97%)'
                   }}
                 >
                   {card.name}
                 </Text>
               </View>
-              <View style={{ alignSelf: 'flex-end', left: -40 }}>
+              <View style={{ justifyContent: 'flex-end' }}>
                 <Text
                   style={{
                     color: '#ffffff',
                     fontSize: 16,
                     letterSpacing: -0.32,
                     lineHeight: 21,
-                    fontWeight: '700',
+                    fontWeight: 'bold',
                     shadowOpacity: 1,
                     shadowRadius: 0,
                     shadowColor: 'rgba(0, 0, 0, 20)',
@@ -379,7 +377,7 @@ export default class MapScreen extends React.Component {
                     fontSize: 16,
                     letterSpacing: -0.32,
                     lineHeight: 21,
-                    fontWeight: '700',
+                    fontWeight: 'bold',
                     shadowOpacity: 1,
                     shadowRadius: 0,
                     shadowColor: 'rgba(0, 0, 0, 20)',
@@ -443,17 +441,12 @@ export default class MapScreen extends React.Component {
 
   _createNewMarker = async e => {
     e.persist();
-    const coord = e.nativeEvent.coordinate;
-    Location.setApiKey(GOOGLEMAPS_API_KEY);
-    const decodedLocation = await Location.reverseGeocodeAsync(coord);
-    console.log(decodedLocation);
-    this.setState({
-      showMarkerModal: true,
-      currentMarkerData: {
-        name: decodedLocation[0].name,
-        latitude: coord.latitude,
-        longitude: coord.longitude
-      }
+    const coords = e.nativeEvent.coordinate;
+    console.log(' navigate to EditPin');
+    this.props.navigation.navigate('EditPin', {
+      coords,
+      regionId: this.state.currentRegionId,
+      setPinByRegion: this.props.setPinByRegion
     });
   };
 
@@ -612,8 +605,7 @@ export default class MapScreen extends React.Component {
         >
           {this._renderMapMarker()}
         </MapView>
-        {this._renderSwitchRegionButton()}
-        {this._renderGPSButton()}
+        {this._renderBottomActionButtons()}
         {this._renderRegionModal()}
         {this._renderPinModal()}
       </View>

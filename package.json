@@ -22,7 +22,6 @@
     "react-native-animatable": "^1.2.4",
     "react-native-google-static-map": "^0.1.11",
     "react-native-hide-with-keyboard": "^1.0.0",
-    "react-native-modal": "^5.4.0",
     "react-navigation": "1.5.9",
     "react-navigation-redux-helpers": "^1.0.3",
     "react-redux": "^5.0.7",

@@ -5,33 +5,25 @@ import {
   StyleSheet,
   Text,
   RefreshControl,
-  Animated,
-  LayoutAnimation
+  Animated
 } from 'react-native';
-import { WebBrowser, LinearGradient } from 'expo';
+import { WebBrowser } from 'expo';
 
 import Broadcasts from '../components/Home/Broadcasts';
 import Activities from '../components/Home/Activities';
 import Colors from '../constants/Colors';
-import Layout from '../constants/Layout';
-import { StyledText } from '../components/StyledText';
-import { ScrollCard } from '../components/Card';
 
 export default class HomeScreen extends React.Component {
+  state = {
+    scrollY: 0
+  };
   componentWillMount() {
     this.props.getBroadcastCards();
     this.props.getActivities();
   }
-  componentDidMount() {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
-  }
-  state = {
-    scrollY: 0
-  };
   _handleRefresh = async () => {
     try {
       await this.props.getBroadcastCards();
-      //LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     } catch (e) {
       console.log(e);
     }

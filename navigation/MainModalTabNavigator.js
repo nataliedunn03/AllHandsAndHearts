@@ -1,13 +1,23 @@
 import React from 'react';
-import { Platform, StyleSheet, Animated } from 'react-native';
+import { Platform, StyleSheet, Animated, Easing } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { TabNavigator, TabBarBottom, StackNavigator } from 'react-navigation';
 
-import MarkerViewScreen from '../screens/MarkerViewScreen';
+import EditPinScreen from '../screens/EditPinScreen';
 import ProfileScreenContainer from '../containers/ProfileContainer';
 import HomeScreenContainer from '../containers/HomeScreenContainer';
 import MapScreenContainer from '../containers/MapScreenContainers';
 import Colors from '../constants/Colors';
+
+const mapNavigationStateParamsToProps = Component => {
+  return class extends React.Component {
+    render() {
+      const { navigation, ...otherProps } = this.props;
+      const { state: { params } } = navigation;
+      return <Component {...this.props} {...params} />;
+    }
+  };
+};
 
 const MainTabNavigator = TabNavigator(
   {
@@ -37,6 +47,7 @@ const MainTabNavigator = TabNavigator(
     }
   },
   {
+    headerMode: 'float',
     navigationOptions: ({ navigation }) => ({
       headerTitleStyle: {
         color: Colors.defaultColor.PAPER_COLOR,
@@ -115,40 +126,44 @@ const MainModalNavigator = StackNavigator(
     MainTabNavigator: {
       screen: MainTabNavigator
     },
-    EditMarker: {
-      screen: MarkerViewScreen,
-      path: '/editMarker/:name',
-      navigationOptions: ({ navigation }) => ({
-        headerTitleStyle: {
-          color: Colors.defaultColor.PAPER_COLOR,
-          fontWeight: '600',
-          justifyContent: 'space-between',
-          textAlign: 'center'
-        },
-        headerStyle: {
-          backgroundColor: Colors.defaultColor.PRIMARY_COLOR,
-          borderBottomColor: '#F2F2F2'
-        }
-      })
+    EditPin: {
+      screen: mapNavigationStateParamsToProps(EditPinScreen),
+      path: '/editPin/:name',
+      navigationOptions: {
+        headerTitle: 'Edit Pin'
+      }
     },
     EditRegion: {
-      screen: MarkerViewScreen,
+      screen: mapNavigationStateParamsToProps(EditPinScreen),
       path: '/editRegion/:name',
-      navigationOptions: ({ navigation }) => ({
-        headerTitleStyle: {
-          color: Colors.defaultColor.PAPER_COLOR,
-          fontWeight: '600',
-          justifyContent: 'space-between',
-          textAlign: 'center'
-        },
-        headerStyle: {
-          backgroundColor: Colors.defaultColor.PRIMARY_COLOR,
-          borderBottomColor: '#F2F2F2'
-        }
-      })
+      navigationOptions: {
+        headerTitle: 'Edit Region'
+      }
     }
   },
-  { headerMode: 'none', mode: 'screen' }
+  {
+    headerMode: 'float',
+    navigationOptions: ({ navigation }) => ({
+      headerTintColor: 'white',
+      headerTitleStyle: {
+        color: Colors.defaultColor.PAPER_COLOR,
+        fontWeight: '600',
+        justifyContent: 'space-between',
+        textAlign: 'center'
+      },
+      headerStyle: {
+        backgroundColor: Colors.defaultColor.PRIMARY_COLOR,
+        borderBottomColor: '#F2F2F2'
+      }
+    }),
+    transitionConfig: () => ({
+      transitionSpec: {
+        duration: 200,
+        easing: Easing.out(Easing.poly(4)),
+        timing: Animated.timing
+      }
+    })
+  }
 );
 
 export default MainModalNavigator;

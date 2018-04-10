@@ -14,15 +14,15 @@ export default class CurrentLocationButton extends React.Component {
     return (
       <View style={[styles.currentLocationView, this.props.style]}>
         <TouchableOpacity
-          activeOpacity={0.9}
           style={styles.currentLocationButton}
           onPress={this.onButtonPress}
+          underlayColor={`${Colors.defaultColor.PRIMARY_COLOR}4d`}
         >
           <MaterialIcons
             name={
               this.props.locationPermission ? 'my-location' : 'location-off'
             }
-            size={20}
+            size={21}
             color={this.props.iconColor}
           />
         </TouchableOpacity>
@@ -33,20 +33,18 @@ export default class CurrentLocationButton extends React.Component {
 
 const styles = StyleSheet.create({
   currentLocationView: {
-    right: 20,
-    alignItems: 'flex-end'
+    alignItems: 'center'
   },
   currentLocationButton: {
-    width: 44,
-    height: 44,
+    width: 48,
+    height: 48,
     backgroundColor: Colors.navHeaderBackground,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: Colors.tabIconDefault,
-    borderRadius: 22,
+    borderRadius: 24,
     shadowOffset: { width: 1, height: 2 },
     shadowRadius: 2,
-    shadowOpacity: 0.25,
-    opacity: 1
+    shadowOpacity: 0.25
   }
 });

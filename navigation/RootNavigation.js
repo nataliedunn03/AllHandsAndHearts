@@ -2,30 +2,32 @@ import React from 'react';
 import { Platform, BackHandler } from 'react-native';
 import { Notifications } from 'expo';
 import { connect } from 'react-redux';
-import { NavigationActions, StackNavigator } from 'react-navigation';
+import {
+  NavigationActions,
+  StackNavigator,
+  addNavigationHelpers
+} from 'react-navigation';
 import MainModalNavigator from './MainModalTabNavigator';
 import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
 import LoginScreen from '../containers/LoginScreenContainer';
 import { addListener } from '../utils/navigationReduxUtil';
-
-export const AppNavigator = StackNavigator({
-  LoginScreen: {
-    screen: LoginScreen,
-    navigationOptions: {
-      header: null,
-      left: null
+export const AppNavigator = StackNavigator(
+  {
+    LoginScreen: {
+      screen: LoginScreen
+    },
+    MainModalNavigator: {
+      screen: MainModalNavigator
     }
   },
-  MainModalNavigator: {
-    screen: MainModalNavigator,
-    navigationOptions: {
-      left: null,
-      headerLeft: null
-    }
+  {
+    initialRouteName: LoginScreen,
+    headerMode: 'none',
+    mode: 'screen'
   }
-});
+);
 class RootNavigator extends React.Component {
-  componentWillMount() {
+  async componentWillMount() {
     if (Platform.OS !== 'android') {
       return;
     }
@@ -77,24 +79,20 @@ class RootNavigator extends React.Component {
     );
   };
   render() {
-    const { dispatch, nav, isLoggedIn } = this.props;
-    console.log('is logged in ');
-    console.log(isLoggedIn);
-    return (
-      <AppNavigator
-        navigation={{
-          auth: isLoggedIn,
-          dispatch,
-          state: nav,
-          addListener
-        }}
-      />
-    );
+    const { dispatch, nav } = this.props;
+    const navigation = addNavigationHelpers({
+      dispatch,
+      state: nav,
+      addListener
+    });
+    return <AppNavigator navigation={navigation} />;
   }
 }
 
-const mapStateToProps = state => ({
-  nav: state.nav
-});
+const mapStateToProps = state => {
+  return {
+    nav: state.nav
+  };
+};
 
 export default connect(mapStateToProps)(RootNavigator);

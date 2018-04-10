@@ -3,9 +3,8 @@
  * Takes the entire screens (unless you set the styles)
  */
 import React from 'react';
-import { Animated, StyleSheet } from 'react-native';
+import { Animated, StyleSheet, Modal as MModal } from 'react-native';
 import { utilityFunctions } from '../../utils';
-import MModal from 'react-native-modal';
 
 const WithSimpleModal = Component => {
   const Wrapper = props => <Component {...props} />;
