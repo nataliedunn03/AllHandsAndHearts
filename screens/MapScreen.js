@@ -9,7 +9,6 @@ import {
   LayoutAnimation
 } from 'react-native';
 import { View } from 'react-native-animatable';
-import { GOOGLEMAPS_API_KEY } from 'react-native-dotenv';
 import { CurrentLocationButton, SwitchRegionButton } from '../components/Maps';
 
 import Colors from '../constants/Colors';
@@ -442,20 +441,13 @@ export default class MapScreen extends React.Component {
 
   _createNewMarker = async e => {
     e.persist();
-    const coord = e.nativeEvent.coordinate;
+    const coords = e.nativeEvent.coordinate;
     console.log(' navigate to EditPin');
-    this.props.navigation.navigate('EditPin', { coord });
-    /* Location.setApiKey(GOOGLEMAPS_API_KEY);
-    const decodedLocation = await Location.reverseGeocodeAsync(coord);
-    console.log(decodedLocation);
-    this.setState({
-      showMarkerModal: true,
-      currentMarkerData: {
-        name: decodedLocation[0].name,
-        latitude: coord.latitude,
-        longitude: coord.longitude
-      }
-    });*/
+    this.props.navigation.navigate('EditPin', {
+      coords,
+      regionId: this.state.currentRegionId,
+      setPinByRegion: this.props.setPinByRegion
+    });
   };
 
   _closeMarkerModal = () => {

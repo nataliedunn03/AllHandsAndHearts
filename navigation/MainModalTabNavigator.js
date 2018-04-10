@@ -9,6 +9,16 @@ import HomeScreenContainer from '../containers/HomeScreenContainer';
 import MapScreenContainer from '../containers/MapScreenContainers';
 import Colors from '../constants/Colors';
 
+const mapNavigationStateParamsToProps = Component => {
+  return class extends React.Component {
+    render() {
+      const { navigation, ...otherProps } = this.props;
+      const { state: { params } } = navigation;
+      return <Component {...this.props} {...params} />;
+    }
+  };
+};
+
 const MainTabNavigator = TabNavigator(
   {
     Home: {
@@ -117,14 +127,14 @@ const MainModalNavigator = StackNavigator(
       screen: MainTabNavigator
     },
     EditPin: {
-      screen: EditPinScreen,
+      screen: mapNavigationStateParamsToProps(EditPinScreen),
       path: '/editPin/:name',
       navigationOptions: {
         headerTitle: 'Edit Pin'
       }
     },
     EditRegion: {
-      screen: EditPinScreen,
+      screen: mapNavigationStateParamsToProps(EditPinScreen),
       path: '/editRegion/:name',
       navigationOptions: {
         headerTitle: 'Edit Region'
