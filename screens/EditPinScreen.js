@@ -80,10 +80,10 @@ export default class EditPinScreen extends PureComponent {
         >
           Enter pin details
         </StyledText>
-        <StyledText style={styles.styledText}>Enter location Name *</StyledText>
+        <StyledText style={styles.styledText}>Location Name *</StyledText>
         <StyledInput
           style={styles.input}
-          placeholder={'Location Name'}
+          placeholder={'Enter location name'}
           returnKeyType="next"
           autoCapitalize="none"
           autoCorrect={false}
