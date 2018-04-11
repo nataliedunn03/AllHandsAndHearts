@@ -130,7 +130,7 @@ const MainModalNavigator = StackNavigator(
       screen: mapNavigationStateParamsToProps(EditPinScreen),
       path: '/editPin/:name',
       navigationOptions: {
-        headerTitle: 'Edit Pin'
+        headerTitle: 'Location'
       }
     },
     EditRegion: {
@@ -154,13 +154,6 @@ const MainModalNavigator = StackNavigator(
       headerStyle: {
         backgroundColor: Colors.defaultColor.PRIMARY_COLOR,
         borderBottomColor: '#F2F2F2'
-      }
-    }),
-    transitionConfig: () => ({
-      transitionSpec: {
-        duration: 200,
-        easing: Easing.out(Easing.poly(4)),
-        timing: Animated.timing
       }
     })
   }

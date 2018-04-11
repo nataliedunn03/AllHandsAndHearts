@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { View, Image } from 'react-native-animatable';
 import { HideWithKeyboard } from 'react-native-hide-with-keyboard';
 import LoginForm from '../components/Login/LoginForm';
@@ -29,48 +29,53 @@ export default class Login extends React.Component {
       return;
     }
     return (
-      <View style={styles.container}>
-        <View
-          style={styles.logoContainer}
-          animation={'fadeInUp'}
-          duration={1200}
-          delay={200}
-          ref={ref => (this.logoRef = ref)}
-        >
-          <Image
-            style={styles.logo}
-            source={require('../assets/images/logo.png')}
-          />
-          <HideWithKeyboard>
-            <Slogan
-              animation={'fadeIn'}
-              duration={1200}
-              delay={this.state.shouldSloganAnimationDelay ? 1210 : 200}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.container}>
+          <View
+            style={styles.logoContainer}
+            animation={'fadeInUp'}
+            duration={1200}
+            delay={200}
+            ref={ref => (this.logoRef = ref)}
+          >
+            <Image
+              style={styles.logo}
+              source={require('../assets/images/logo.png')}
             />
-          </HideWithKeyboard>
-        </View>
-
-        <KeyboardAvoidingView behavior="padding" style={styles.bottomContainer}>
-          <View delay={400} animation={'fadeIn'} duration={800}>
-            {this.state.switchForm === 'login' && (
-              <LoginForm
-                animation={'fadeInUpBig'}
-                duration={350}
-                linkPress={this._handleSwitchForm}
-                {...this.props}
+            <HideWithKeyboard>
+              <Slogan
+                animation={'fadeIn'}
+                duration={1200}
+                delay={this.state.shouldSloganAnimationDelay ? 1210 : 200}
               />
-            )}
-            {this.state.switchForm === 'signup' && (
-              <SignupForm
-                animation={'fadeInUpBig'}
-                duration={350}
-                linkPress={this._handleSwitchForm}
-                {...this.props}
-              />
-            )}
+            </HideWithKeyboard>
           </View>
-        </KeyboardAvoidingView>
-      </View>
+
+          <KeyboardAvoidingView
+            behavior="padding"
+            style={styles.bottomContainer}
+          >
+            <View delay={400} animation={'fadeIn'} duration={800}>
+              {this.state.switchForm === 'login' && (
+                <LoginForm
+                  animation={'fadeInUpBig'}
+                  duration={350}
+                  linkPress={this._handleSwitchForm}
+                  {...this.props}
+                />
+              )}
+              {this.state.switchForm === 'signup' && (
+                <SignupForm
+                  animation={'fadeInUpBig'}
+                  duration={350}
+                  linkPress={this._handleSwitchForm}
+                  {...this.props}
+                />
+              )}
+            </View>
+          </KeyboardAvoidingView>
+        </View>
+      </ScrollView>
     );
   }
 }
@@ -78,7 +83,6 @@ export default class Login extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexGrow: 1,
     width: Layout.width,
     height: Layout.height,
     backgroundColor: Colors.defaultColor.PAPER_COLOR
