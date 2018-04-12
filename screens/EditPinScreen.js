@@ -1,12 +1,6 @@
 import React, { Fragment, PureComponent } from 'react';
-import {
-  TouchableHighlight,
-  StyleSheet,
-  View,
-  ScrollView,
-  KeyboardAvoidingView
-} from 'react-native';
-import MultiSelect from 'react-native-multiple-select';
+import { TouchableWithoutFeedback, StyleSheet, Keyboard } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Location } from 'expo';
 import { GOOGLE_MAPS_API_KEY } from 'react-native-dotenv';
 import Colors from '../constants/Colors';
@@ -14,30 +8,22 @@ import { StyledText } from '../components/StyledText';
 import StyledButton from '../components/StyledButton';
 import StyledInput from '../components/StyledInput';
 
-const locationType = {
-  '111': 'Affected Area',
-  '222': 'Point of Interest',
-  '333': 'Airport',
-  '444': 'Road',
-  '555': 'Health Facility',
-  '666': 'Risk Assessment',
-  '777': 'Partner Locations',
-  '888': 'IDP camp',
-  '999': 'Other (title)'
-};
-
 export default class EditPinScreen extends PureComponent {
-  state = {
-    name: '',
-    address: '',
-    description: '',
-    sourceName: '',
-    sourceLink: '',
-    pinType: '',
-    latitude: null,
-    longitude: null,
-    regionId: null
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: '',
+      address: '',
+      description: '',
+      sourceName: '',
+      sourceLink: '',
+      pinType: '',
+      latitude: null,
+      longitude: null,
+      regionId: null
+    };
+    this.locationType = ['Other (title)', 'assitent'];
+  }
 
   _handleOnChangeText = (key, value) => {
     this.setState({
@@ -45,9 +31,19 @@ export default class EditPinScreen extends PureComponent {
     });
   };
 
+  _handleEditPinSubmit = () => {
+    this.props.setPinByRegion(this.state.regionId, {
+      ...this.state
+    });
+    this.props.navigation.goBack();
+  };
+
+  _hideKeyboard = () => {
+    Keyboard.dismiss();
+  };
+
   async componentWillMount() {
-    //get coords
-    let { coords, regionId, setPinByRegion } = this.props;
+    let { coords, regionId } = this.props;
     let { latitude, longitude } = coords;
     try {
       Location.setApiKey(GOOGLE_MAPS_API_KEY);
@@ -82,122 +78,113 @@ export default class EditPinScreen extends PureComponent {
     )}, ${parseFloat(longitude).toFixed(6)}`;
 
     return (
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <KeyboardAvoidingView behavior="padding">
-          <StyledText
-            style={{
-              color: '#000000',
-              fontSize: 28,
-              marginTop: 10,
-              marginBottom: 16,
-              marginLeft: 16,
-              fontWeight: '500',
-              textAlign: 'left',
-              backgroundColor: 'transparent'
-            }}
-          >
-            Add location
-          </StyledText>
-          <StyledText style={styles.styledText}>Location Name *</StyledText>
-          <StyledInput
-            style={styles.input}
-            placeholder={'Enter location name'}
-            returnKeyType="next"
-            autoCapitalize="none"
-            autoCorrect={false}
-            enablesReturnKeyAutomatically
-            onChangeText={value => this._handleOnChangeText('name', value)}
-          />
-          <StyledText style={styles.styledText}>
-            {`Address: ${this.state.address}`}
-          </StyledText>
-          <StyledText
-            style={[
-              styles.styledText,
-              {
-                marginBottom: 10
-              }
-            ]}
-          >
-            {latitude && coordsString}
-          </StyledText>
-          <StyledText style={styles.styledText}>Description *</StyledText>
-          <StyledInput
-            style={styles.inputWide}
-            placeholder={
-              'Enter description of the area and any relevant details'
+      <KeyboardAwareScrollView
+        style={{ backgroundColor: Colors.defaultColor.PAPER_COLOR, flex: 1 }}
+        resetScrollToCoords={{ x: 0, y: 0 }}
+        showsVerticalScrollIndicator={false}
+      >
+        <StyledText
+          style={{
+            color: '#000000',
+            fontSize: 28,
+            marginTop: 10,
+            marginBottom: 16,
+            marginLeft: 16,
+            fontWeight: '500',
+            textAlign: 'left',
+            backgroundColor: 'transparent'
+          }}
+        >
+          Add location
+        </StyledText>
+        <StyledText style={styles.styledText}>Location Name *</StyledText>
+        <StyledInput
+          style={styles.input}
+          placeholder={'Enter location name'}
+          returnKeyType="next"
+          enablesReturnKeyAutomatically
+          inputRef={element => (this.locationNameRef = element)}
+          onSubmitEditing={() => this.descriptionRef.focus()}
+          onChangeText={value => this._handleOnChangeText('name', value)}
+        />
+        <StyledText style={styles.styledText}>
+          {`Address: ${this.state.address}`}
+        </StyledText>
+        <StyledText
+          style={[
+            styles.styledText,
+            {
+              marginBottom: 10
             }
-            enablesReturnKeyAutomatically
-            multiline
-            numberOfLines={4}
-            onChangeText={value =>
-              this._handleOnChangeText('description', value)
-            }
-          />
-          <StyledText style={styles.styledText}>Source Name</StyledText>
-          <StyledInput
-            style={styles.input}
-            placeholder={'Enter source name'}
-            returnKeyType="next"
-            autoCapitalize="none"
-            autoCorrect={false}
-            enablesReturnKeyAutomatically
-            onChangeText={value =>
-              this._handleOnChangeText('sourceName', value)
-            }
-          />
-          <StyledText style={styles.styledText}>Source Link</StyledText>
-          <StyledInput
-            style={styles.input}
-            returnKeyType="next"
-            autoCapitalize="none"
-            autoCorrect={false}
-            enablesReturnKeyAutomatically
-            placeholder="https://example.com"
-            onChangeText={value =>
-              this._handleOnChangeText('sourceLink', value)
-            }
-          />
+          ]}
+        >
+          {latitude && coordsString}
+        </StyledText>
+        <StyledText style={styles.styledText}>Description *</StyledText>
+        <StyledInput
+          style={styles.inputWide}
+          inputRef={element => (this.descriptionRef = element)}
+          placeholder={'Enter description of the area and any relevant details'}
+          enablesReturnKeyAutomatically
+          multiline
+          numberOfLines={4}
+          onChangeText={value => this._handleOnChangeText('description', value)}
+        />
+        <StyledText style={styles.styledText}>Source Name</StyledText>
+        <StyledInput
+          style={styles.input}
+          inputRef={element => (this.sourceNameRef = element)}
+          onSubmitEditing={() => this.sourceLinkRef.focus()}
+          placeholder={'Enter source name'}
+          returnKeyType="next"
+          enablesReturnKeyAutomatically
+          onChangeText={value => this._handleOnChangeText('sourceName', value)}
+        />
+        <StyledText style={styles.styledText}>Source Link</StyledText>
+        <StyledInput
+          style={styles.input}
+          inputRef={element => (this.sourceLinkRef = element)}
+          onSubmitEditing={() => this.locationTypeRef.focus()}
+          returnKeyType="next"
+          enablesReturnKeyAutomatically
+          placeholder="https://example.com"
+          onChangeText={value => this._handleOnChangeText('sourceLink', value)}
+        />
 
-          <StyledText style={styles.styledText}>Location Type *</StyledText>
+        <StyledText style={styles.styledText}>Location Type *</StyledText>
 
-          <StyledInput
-            style={styles.input}
-            returnKeyType="next"
-            autoCapitalize="none"
-            autoCorrect={false}
-            enablesReturnKeyAutomatically
-            placeholder="Location Type"
-            onChangeText={value => this._handleOnChangeText('pinType', value)}
-          />
-          <StyledButton
-            style={styles.addPinButton}
-            textStyle={styles.addButtonTextStyle}
-            text={'Add Pin'}
-            onPress={() => {
-              this.props.setPinByRegion(this.state.regionId, {
-                ...this.state
-              });
-              this.props.navigation.goBack();
-            }}
-          />
-        </KeyboardAvoidingView>
-      </ScrollView>
+        <StyledInput
+          style={styles.input}
+          inputRef={element => (this.locationTypeRef = element)}
+          onSubmitEditing={this._handleEditPinSubmit}
+          returnKeyType="next"
+          enablesReturnKeyAutomatically
+          placeholder="Location Type"
+          onChangeText={value => this._handleOnChangeText('pinType', value)}
+        />
+        <StyledButton
+          style={styles.addPinButton}
+          textStyle={styles.addButtonTextStyle}
+          text={'Add Pin'}
+          onPress={this._handleEditPinSubmit}
+        />
+      </KeyboardAwareScrollView>
     );
   };
 
   render() {
     return (
-      <View
-        ref={ref => {
-          this.editPinScreen = ref;
-        }}
+      <TouchableWithoutFeedback
+        pointerEvents="box-none"
         style={{
-          flex: 1
+          flex: 1,
+          flexDirection: 'column'
         }}
+        transparent
+        onPress={this._hideKeyboard}
       >
         {this.renderEditPinBody()}
-      </View>
+      </TouchableWithoutFeedback>
     );
   }
 }

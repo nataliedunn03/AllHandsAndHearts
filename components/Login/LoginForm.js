@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import propTypes from 'prop-types';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
+import TouchableNativeFeedback from '@expo/react-native-touchable-native-feedback-safe';
 import { View, Text } from 'react-native-animatable';
 import StyledInput from '../../components/StyledInput';
 import StyledButton from '../../components/StyledButton';
@@ -32,39 +33,38 @@ export default class LoginForm extends React.Component {
   render() {
     return (
       <View style={styles.container} {...this.props}>
-        <View>
-          <StyledInput
-            style={styles.input}
-            placeholder="Email"
-            keyboardType="email-address"
-            returnKeyType="next"
-            autoCapitalize="none"
-            autoCorrect={false}
-            enablesReturnKeyAutomatically
-            onSubmitEditing={() => this.passwordRef.focus()}
-            onChangeText={value => this._handleOnChangeText('email', value)}
-          />
-          <StyledInput
-            secureTextEntry
-            clearTextOnFocus
-            returnKeyType="done"
-            style={styles.input}
-            placeholder="Password"
-            enablesReturnKeyAutomatically
-            inputRef={element => (this.passwordRef = element)}
-            onChangeText={value => this._handleOnChangeText('password', value)}
-          />
-          <StyledButton
-            style={styles.loginButton}
-            textStyle={styles.textStyle}
-            text="Log in"
-            onPress={this.handleLogin}
-            isLoading={this.props.auth.loading}
-          />
-        </View>
-        <TouchableOpacity onPress={() => this.props.linkPress()}>
+        <StyledInput
+          style={styles.input}
+          placeholder="Email"
+          keyboardType="email-address"
+          returnKeyType="next"
+          autoCapitalize="none"
+          autoCorrect={false}
+          enablesReturnKeyAutomatically
+          onSubmitEditing={() => this.passwordRef.focus()}
+          onChangeText={value => this._handleOnChangeText('email', value)}
+        />
+        <StyledInput
+          secureTextEntry
+          clearTextOnFocus
+          returnKeyType="done"
+          style={styles.input}
+          placeholder="Password"
+          enablesReturnKeyAutomatically
+          inputRef={element => (this.passwordRef = element)}
+          onChangeText={value => this._handleOnChangeText('password', value)}
+          onSubmitEditing={this.handleLogin}
+        />
+        <StyledButton
+          style={styles.loginButton}
+          textStyle={styles.textStyle}
+          text="Log in"
+          onPress={this.handleLogin}
+          isLoading={this.props.auth.loading}
+        />
+        <TouchableNativeFeedback onPress={() => this.props.linkPress()}>
           <Text style={styles.link}>Don't have an account?</Text>
-        </TouchableOpacity>
+        </TouchableNativeFeedback>
       </View>
     );
   }

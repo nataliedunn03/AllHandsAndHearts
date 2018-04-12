@@ -6,6 +6,8 @@ import {
   LOGIN_REQUEST_LOADING,
   LOGIN_REQUEST_FAILED,
   REGISTER_REQUEST,
+  REGISTER_REQUEST_FAILED,
+  REGISTER_REQUEST_LOADING,
   SET_AUTH,
   LOGOUT_REQUEST,
   REQUEST_ERROR,
@@ -21,7 +23,6 @@ const authorize = function* authorize({
   name,
   isRegistering = false
 }) {
-  yield put({ type: LOGIN_REQUEST_LOADING, loading: true });
   yield call(delay, 1000, true);
   try {
     const salt = null; // TODO: genSalt(username)
@@ -96,7 +97,7 @@ function* logoutFlow() {
 
 function* registerFlow(action) {
   const { email, password, name } = action.data;
-
+  yield put({ type: REGISTER_REQUEST_LOADING, loading: true });
   try {
     // We call the `authorize` task with the data, telling it that we are registering a user
     // This returns `true` if the registering was successful, `false` if not
@@ -110,11 +111,14 @@ function* registerFlow(action) {
     if (wasSuccessful) {
       yield put({ type: SET_AUTH, newAuthState: true });
       yield AuthService.setCookie({ isLoggedIn: true });
+      yield put({ type: REGISTER_REQUEST_LOADING, loading: false });
       yield put({ type: RESET_TO_MAIN });
     } else {
+      yield put({ type: REGISTER_REQUEST_LOADING, loading: false });
       yield put({ type: RESET_TO_SIGN_IN });
     }
   } catch (e) {
+    yield put({ type: REGISTER_REQUEST_LOADING, loading: false });
     yield put({ type: RESET_TO_SIGN_IN });
   }
 }
