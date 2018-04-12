@@ -85,16 +85,16 @@ export default class Login extends React.Component {
       return;
     }
     return (
-      <TouchableWithoutFeedback
-        pointerEvents="box-none"
-        style={{
-          flex: 1,
-          flexDirection: 'column'
-        }}
-        transparent
-        onPress={this.hideKeyboard}
-      >
-        <Animated.View style={[styles.container]}>
+      <Animated.View style={[styles.container]}>
+        <TouchableWithoutFeedback
+          pointerEvents="box-none"
+          style={{
+            flex: 1,
+            flexDirection: 'column'
+          }}
+          transparent
+          onPress={this.hideKeyboard}
+        >
           <Animated.View
             style={[
               styles.logoContainer,
@@ -120,35 +120,34 @@ export default class Login extends React.Component {
               />
             </HideWithKeyboard>
           </Animated.View>
-
-          <Animated.View
-            delay={400}
-            animation={'fadeIn'}
-            duration={800}
-            style={[
-              styles.bottomContainer,
-              { paddingBottom: this.keyboardHeight }
-            ]}
-          >
-            {this.state.switchForm === 'login' && (
-              <LoginForm
-                animation={'fadeInUpBig'}
-                duration={350}
-                linkPress={this._handleSwitchForm}
-                {...this.props}
-              />
-            )}
-            {this.state.switchForm === 'signup' && (
-              <SignupForm
-                animation={'fadeInUpBig'}
-                duration={350}
-                linkPress={this._handleSwitchForm}
-                {...this.props}
-              />
-            )}
-          </Animated.View>
+        </TouchableWithoutFeedback>
+        <Animated.View
+          delay={400}
+          animation={'fadeIn'}
+          duration={800}
+          style={[
+            styles.bottomContainer,
+            { paddingBottom: this.keyboardHeight }
+          ]}
+        >
+          {this.state.switchForm === 'login' && (
+            <LoginForm
+              animation={'fadeInUpBig'}
+              duration={350}
+              linkPress={this._handleSwitchForm}
+              {...this.props}
+            />
+          )}
+          {this.state.switchForm === 'signup' && (
+            <SignupForm
+              animation={'fadeInUpBig'}
+              duration={350}
+              linkPress={this._handleSwitchForm}
+              {...this.props}
+            />
+          )}
         </Animated.View>
-      </TouchableWithoutFeedback>
+      </Animated.View>
     );
   }
 }
