@@ -1,10 +1,7 @@
 @RestResource(urlMapping='/broadcasts/*')
 global class WEBSERVICE_Broadcasts{
     @HttpGet
-    global static List<Broadcast_Object__c> getBroadcastList(){
-        RestRequest req = RestContext.request;
-        RestResponse res = RestContext.response;
-        String groupId = req.requestURI.substring(req.requestURI.lastIndexOf('/')+1)
+    global static List<Broadcast_Object__c> getBroadcastList(String groupID){
         List<Broadcast_Object__c> broadcast;
         try{
             broadcast = [SELECT Broadcast_Type__c,Summary__c FROM Broadcast_Object__c WHERE Broadcast_Object.Group_ID__c == groupID];
