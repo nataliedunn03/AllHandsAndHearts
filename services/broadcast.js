@@ -3,7 +3,7 @@ import {
   SF_BASE_URL as BASE_URL,
   SF_ACCESS_TOKEN as auth_token
 } from 'react-native-dotenv';
-userId = 'carswesp'
+groupId = 'identifier'
 // need to set state variabe for user ID here
 // const auth_token = AuthService.getAuthToken()
 
