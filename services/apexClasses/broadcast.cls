@@ -7,7 +7,7 @@ global class WEBSERVICE_Broadcasts{
         String userId = req.requestURI.substring(req.requestURI.lastIndexOf('/')+1)
         List<Broadcast_Object__c> broadcast;
         try{
-            broadcast = [SELECT Broadcast_Type__c,Summary__c FROM Broadcast_Object__c JOIN User__c ON User__C.group_ID__C = Broadcast_Object__c.group_ID__c];
+            broadcast = [SELECT Broadcast_Type__c,Summary__c FROM Broadcast_Object__c JOIN User__c ON User__C.Group_ID__C = Broadcast_Object__c.Group_ID__c];
             return broadcast;
         }catch(Exception ex){
             System.debug('Error: '+ex.getMessage());
