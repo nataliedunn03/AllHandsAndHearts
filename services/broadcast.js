@@ -3,13 +3,15 @@ import {
   SF_BASE_URL as BASE_URL,
   SF_ACCESS_TOKEN as auth_token
 } from 'react-native-dotenv';
-groupId = 'identifier'
+groupID = 'identifier'
 // need to set state variabe for user ID here
 // const auth_token = AuthService.getAuthToken()
 
 export const getBroacastObjs = async () => {
   const queryEndpoint = `${BASE_URL + '/broadcasts?userId=' + userId }`;
-
+  const queryJsonString = JSON.stringify({
+    groupID: groupID
+  });
   console.log('Fetching broadcast data from Salesforce');
   console.log(queryEndpoint);
 
@@ -19,7 +21,8 @@ export const getBroacastObjs = async () => {
       headers: {
         Authorization: `Bearer ${auth_token}`,
         'Content-Type': 'application/json'
-      }
+      },
+      body: queryJsonString
     });
 
     const data = await response.json();
