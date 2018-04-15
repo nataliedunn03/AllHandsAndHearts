@@ -25,6 +25,8 @@
     "react-native-keyboard-aware-scroll-view": "^0.5.0",
     "react-native-label-select":
       "https://github.com/nazimamin/react-native-label-select/tarball/master",
+    "react-native-sliding-modal":
+      "https://github.com/nazimamin/react-native-sliding-modal/tarball/master",
     "react-navigation": "1.5.9",
     "react-navigation-redux-helpers": "^1.0.3",
     "react-redux": "^5.0.7",

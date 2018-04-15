@@ -13,7 +13,9 @@ const mapNavigationStateParamsToProps = Component => {
   return class extends React.Component {
     render() {
       const { navigation, ...otherProps } = this.props;
-      const { state: { params } } = navigation;
+      const {
+        state: { params }
+      } = navigation;
       return <Component {...this.props} {...params} />;
     }
   };
@@ -25,7 +27,7 @@ const MainTabNavigator = TabNavigator(
       screen: HomeScreenContainer,
       path: '/',
       navigationOptions: {
-        headerTitle: 'HOME',
+        headerTitle: 'Home',
         tabBarLabel: 'Home'
       }
     },
@@ -33,7 +35,7 @@ const MainTabNavigator = TabNavigator(
       screen: MapScreenContainer,
       path: '/',
       navigationOptions: {
-        headerTitle: 'MAPS',
+        headerTitle: 'Maps',
         tabBarLabel: 'Maps'
       }
     },
@@ -41,7 +43,7 @@ const MainTabNavigator = TabNavigator(
       screen: ProfileScreenContainer,
       path: '/profile',
       navigationOptions: {
-        headerTitle: 'PROFILE',
+        headerTitle: 'Profile',
         tabBarLabel: 'Profile'
       }
     }

@@ -116,7 +116,7 @@ export default class Login extends React.Component {
               <Slogan
                 animation={'fadeIn'}
                 duration={1200}
-                delay={this.state.shouldSloganAnimationDelay ? 1210 : 200}
+                delay={this.state.shouldSloganAnimationDelay ? 600 : 200}
               />
             </HideWithKeyboard>
           </Animated.View>
