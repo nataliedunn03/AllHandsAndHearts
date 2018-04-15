@@ -1,4 +1,4 @@
-import { MapView, LinearGradient, Location } from 'expo';
+import { MapView, LinearGradient } from 'expo';
 import React from 'react';
 import {
   StyleSheet,
@@ -6,26 +6,26 @@ import {
   TouchableHighlight,
   ActivityIndicator,
   UIManager,
-  LayoutAnimation
+  LayoutAnimation,
+  ScrollView
 } from 'react-native';
 import { View } from 'react-native-animatable';
+import SlidingModal from 'react-native-sliding-modal';
+//import { SlidingModal } from '../components/Modal';
 import { CurrentLocationButton, SwitchRegionButton } from '../components/Maps';
-
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import { getStaticRegionData } from '../services/regions';
 import { getUserCurrentLocation } from '../utils/Permissions';
-import getStaticMarker, { randomId } from './StaticMarkers';
-import { SlidingModal } from '../components/Modal';
 import { ScrollCard } from '../components/Card';
 import { StyledText } from '../components/StyledText';
 import GoogleStaticMap from 'react-native-google-static-map';
 import StyledInput from '../components/StyledInput';
 import StyledButton from '../components/StyledButton';
+import FadeIn from 'react-native-fade-in-image';
+import { Feather as Icon } from '@expo/vector-icons';
 
 const DELTA = 0.0922;
-
-let markers = getStaticMarker();
 
 /**
  * 1. Be able to view details of the Map Pin on Pin click
@@ -41,7 +41,7 @@ TODO:
   - Ye
  */
 
-export default class MapScreen extends React.Component {
+export default class MapScreen extends React.PureComponent {
   constructor(props) {
     super(props);
     UIManager.setLayoutAnimationEnabledExperimental &&
@@ -50,7 +50,6 @@ export default class MapScreen extends React.Component {
       locationPermission: false,
       mapReady: false,
       displayGps: false,
-      markers: markers,
       visible: false,
       markersTouch: [],
       regionData: [],
@@ -60,7 +59,7 @@ export default class MapScreen extends React.Component {
       markerCoord: {},
       regionModalIsFull: false,
       markerIds: [], //keep track of marker Identifiers to focus
-      currentMarkerData: {}
+      showDetailsOfMarkerId: null
     };
   }
   componentDidMount() {
@@ -215,8 +214,12 @@ export default class MapScreen extends React.Component {
   _focusOnCoordinates = () => {
     console.log(this.state.markerIds);
     if (this.mapViewRef && this.state.markerIds.length > 0) {
-      // this.mapViewRef.fitToSuppliedMarkers(this.state.markerIds, true);
+      /*const markers = this.state.markerIds.map(marker => {
+        return marker.Id;
+      });
+      this.mapViewRef.fitToSuppliedMarkers(markers, true);
       //this.mapViewRef.fitToElements(true); // this will fill all the markers, not ideal when we will have all the region on the map.
+      */
       this.mapViewRef.fitToCoordinates(this.state.markerIds, {
         edgePadding: { top: 100, right: 100, bottom: 100, left: 100 },
         animated: true
@@ -287,25 +290,27 @@ export default class MapScreen extends React.Component {
                 }
               ]}
             >
-              <GoogleStaticMap
-                latitude={
-                  !isNaN(card.latitude)
-                    ? card.latitude.toString()
-                    : card.latitude
-                }
-                longitude={
-                  !isNaN(card.longitude)
-                    ? card.longitude.toString()
-                    : card.longitude
-                }
-                zoom={14}
-                size={{
-                  width: Layout.width - 33,
-                  height: 210
-                }}
-                apiKey={''}
-                hasCenterMarker={false}
-              />
+              <FadeIn>
+                <GoogleStaticMap
+                  latitude={
+                    !isNaN(card.latitude)
+                      ? card.latitude.toString()
+                      : card.latitude
+                  }
+                  longitude={
+                    !isNaN(card.longitude)
+                      ? card.longitude.toString()
+                      : card.longitude
+                  }
+                  zoom={14}
+                  size={{
+                    width: Layout.width - 33,
+                    height: 210
+                  }}
+                  apiKey={''}
+                  hasCenterMarker={false}
+                />
+              </FadeIn>
               <LinearGradient
                 colors={['#000000ff', 'rgba(0, 0, 0, 0.2)']}
                 style={{
@@ -398,20 +403,6 @@ export default class MapScreen extends React.Component {
     const { regionData } = this.props;
     return (
       <View style={styles.modalContent}>
-        <StyledText
-          style={{
-            color: '#000000',
-            fontSize: 28,
-            marginTop: 10,
-            marginBottom: 16,
-            marginLeft: 16,
-            fontWeight: '500',
-            textAlign: 'left',
-            backgroundColor: 'transparent'
-          }}
-        >
-          Disaster Sites
-        </StyledText>
         {!regionData && (
           <ActivityIndicator
             animating={true}
@@ -451,15 +442,64 @@ export default class MapScreen extends React.Component {
   };
 
   _closeMarkerModal = () => {
+    console.log('closedMarkerModal');
     this.setState({
-      showMarkerModal: false,
-      currentMarkerData: []
+      showMarkerModal: false
     });
   };
 
+  _renderPinModalContent = () => {
+    let marker = this.state.markerIds.filter(
+      m => m.Id === this.state.showDetailsOfMarkerId
+    );
+    if (!marker || (marker && marker.length < 1)) return null;
+    else if (marker) {
+      console.log(marker);
+      marker = marker[0];
+      const currentMarkerData = {
+        ...marker,
+        description: marker.Additional_Descriptors__c,
+        name: marker.Name,
+        type: marker.PinLocationType__c,
+        regionId: marker.RegionId__c
+      };
+
+      return (
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <StyledInput
+            style={styles.input}
+            placeholder={
+              currentMarkerData.name ? currentMarkerData.name : 'Name'
+            }
+            returnKeyType="next"
+            autoCapitalize="none"
+            autoCorrect={false}
+            enablesReturnKeyAutomatically
+          />
+          <StyledInput
+            style={styles.inputWide}
+            placeholder={
+              currentMarkerData.description
+                ? currentMarkerData.description
+                : 'Description'
+            }
+            enablesReturnKeyAutomatically
+            multiline
+            numberOfLines={3}
+          />
+          <StyledButton
+            style={styles.addPinButton}
+            textStyle={styles.addButtonTextStyle}
+            text={currentMarkerData.id ? 'Update Pin' : 'Add Pin'}
+          />
+        </ScrollView>
+      );
+    }
+  };
+
   _renderPinModal = () => {
-    console.log('current _rednerPinModal: ', this.state.currentMarkerData);
-    let { currentMarkerData, currentRegionId } = this.state;
+    console.log('marker modal rendered');
+    let { currentRegionId } = this.state;
     /*
      * TODO: Major stuff left to be done for writing pin data
      * 1) Add a dropdown option for pin type
@@ -473,61 +513,46 @@ export default class MapScreen extends React.Component {
         closeCallback={this._closeMarkerModal}
         top={Layout.height - 400}
       >
-        <StyledInput
-          style={styles.input}
-          placeholder={currentMarkerData.name ? currentMarkerData.name : 'Name'}
-          returnKeyType="next"
-          autoCapitalize="none"
-          autoCorrect={false}
-          enablesReturnKeyAutomatically
-          onChangeText={value => {
-            currentMarkerData.name = value;
-            this._updateCurrentMarkerData(currentMarkerData);
+        <SlidingModal.Header
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center'
           }}
-        />
-        <StyledInput
-          style={styles.inputWide}
-          placeholder={
-            currentMarkerData.description
-              ? currentMarkerData.description
-              : 'Description'
-          }
-          enablesReturnKeyAutomatically
-          multiline
-          numberOfLines={3}
-          onChangeText={value => {
-            currentMarkerData.description = value;
-            this._updateCurrentMarkerData(currentMarkerData);
-          }}
-        />
-        <StyledButton
-          style={styles.addPinButton}
-          textStyle={styles.addButtonTextStyle}
-          text={currentMarkerData.id ? 'Update Pin' : 'Add Pin'}
-          onPress={() => {
-            this.props.setPinByRegion(currentRegionId, currentMarkerData);
-            this._closeMarkerModal();
-          }}
-        />
+        >
+          <Icon
+            name="minus"
+            color="#5d0e8b8f"
+            size={32}
+            style={{
+              top: -3
+            }}
+          />
+          <StyledText
+            style={{
+              color: '#000000',
+              fontSize: 28,
+              marginBottom: 16,
+              marginLeft: 16,
+              fontWeight: '500',
+              textAlign: 'left',
+              backgroundColor: 'transparent',
+              alignSelf: 'flex-start'
+            }}
+          >
+            Location Details
+          </StyledText>
+        </SlidingModal.Header>
+        {this._renderPinModalContent()}
       </SlidingModal>
     );
   };
 
-  // What's e used for here?
-  async _onMarkerPress(e, marker) {
-    console.log('Marker pressed: ', marker);
-    const data = {
-      id: marker.Id,
-      description: marker.Additional_Descriptors__c,
-      latitude: marker.Coordinates__Latitude__s,
-      longitude: marker.Coordinates__Longitude__s,
-      name: marker.Name,
-      type: marker.PinLocationType__c,
-      regionId: marker.RegionId__c
-    };
+  _onMarkerPress(markerId) {
+    console.log('opening marker modal');
+    console.log(markerId);
     this.setState({
       showMarkerModal: true,
-      currentMarkerData: data
+      showDetailsOfMarkerId: markerId
     });
   }
 
@@ -542,7 +567,7 @@ export default class MapScreen extends React.Component {
             longitude: marker.Coordinates__Longitude__s
           }}
           pinColor={'#FF0000'}
-          onPress={() => this._onMarkerPress(null, marker)}
+          onPress={() => this._onMarkerPress(marker.Id)}
         />
       );
     });
@@ -556,11 +581,6 @@ export default class MapScreen extends React.Component {
   //callback when user stops moving the map
   _onRegionChangeComplete = region => {
     this._updateGPSButton(region);
-  };
-  showMarkerModal = () => {
-    this.setState({
-      showMarkerModal: true
-    });
   };
 
   _renderRegionModal = () => {
@@ -576,6 +596,35 @@ export default class MapScreen extends React.Component {
           })
         }
       >
+        <SlidingModal.Header
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <Icon
+            name="minus"
+            color="#5d0e8b8f"
+            size={32}
+            style={{
+              top: -3
+            }}
+          />
+          <StyledText
+            style={{
+              color: '#000000',
+              fontSize: 28,
+              marginBottom: 16,
+              marginLeft: 16,
+              fontWeight: '500',
+              textAlign: 'left',
+              backgroundColor: 'transparent',
+              alignSelf: 'flex-start'
+            }}
+          >
+            Disaster Sites
+          </StyledText>
+        </SlidingModal.Header>
         {this._renderRegionModalContent()}
       </SlidingModal>
     );

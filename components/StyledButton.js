@@ -1,13 +1,7 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
-import {
-  TextInput,
-  StyleSheet,
-  Button,
-  TouchableOpacity,
-  ActivityIndicator,
-  Text
-} from 'react-native';
+import { StyleSheet, ActivityIndicator, Text } from 'react-native';
+import TouchableNativeFeedback from '@expo/react-native-touchable-native-feedback-safe';
 import { View } from 'react-native-animatable';
 import Colors from '../constants/Colors';
 export default class StyledButton extends Component {
@@ -31,7 +25,7 @@ export default class StyledButton extends Component {
     } = this.props;
     return (
       <View {...rest}>
-        <TouchableOpacity
+        <TouchableNativeFeedback
           onPress={onPress}
           style={[styles.button, style]}
           underlayColor={underlayColor}
@@ -47,7 +41,7 @@ export default class StyledButton extends Component {
           {!isLoading && (
             <Text style={[styles.textStyle, textStyle]}>{text}</Text>
           )}
-        </TouchableOpacity>
+        </TouchableNativeFeedback>
       </View>
     );
   }

@@ -1,5 +1,10 @@
 import React from 'react';
-import { StyleSheet, KeyboardAvoidingView } from 'react-native';
+import {
+  StyleSheet,
+  Keyboard,
+  TouchableWithoutFeedback,
+  Animated
+} from 'react-native';
 import { View, Image } from 'react-native-animatable';
 import { HideWithKeyboard } from 'react-native-hide-with-keyboard';
 import LoginForm from '../components/Login/LoginForm';
@@ -9,9 +14,60 @@ import Layout from '../constants/Layout';
 import Slogan from '../components/Login/Slogan';
 //import * as AuthService from '../services/auth';
 export default class Login extends React.Component {
-  state = {
-    shouldSloganAnimationDelay: true,
-    switchForm: 'login'
+  constructor(props) {
+    super(props);
+    this.state = {
+      shouldSloganAnimationDelay: true,
+      switchForm: 'login'
+    };
+    this.keyboardHeight = new Animated.Value(0);
+    this.imageDimension = new Animated.Value(140);
+  }
+
+  componentWillMount() {
+    this.keyboardWillShowListener = Keyboard.addListener(
+      'keyboardWillShow',
+      this.keyboardWillShow
+    );
+    this.keyboardWillHideListener = Keyboard.addListener(
+      'keyboardWillHide',
+      this.keyboardWillHide
+    );
+  }
+
+  componentWillUnmount() {
+    this.keyboardWillShowListener.remove();
+    this.keyboardWillHideListener.remove();
+  }
+
+  keyboardWillShow = e => {
+    Animated.parallel([
+      Animated.timing(this.keyboardHeight, {
+        duration: e.duration,
+        toValue: e.endCoordinates.height
+      }),
+      Animated.timing(this.imageDimension, {
+        duration: e.duration,
+        toValue: 100
+      })
+    ]).start();
+  };
+
+  keyboardWillHide = e => {
+    Animated.parallel([
+      Animated.timing(this.keyboardHeight, {
+        duration: e.duration,
+        toValue: 0
+      }),
+      Animated.timing(this.imageDimension, {
+        duration: e.duration,
+        toValue: 140
+      })
+    ]).start();
+  };
+
+  hideKeyboard = () => {
+    Keyboard.dismiss();
   };
 
   async componentDidMount() {
@@ -29,48 +85,69 @@ export default class Login extends React.Component {
       return;
     }
     return (
-      <View style={styles.container}>
-        <View
-          style={styles.logoContainer}
-          animation={'fadeInUp'}
-          duration={1200}
-          delay={200}
-          ref={ref => (this.logoRef = ref)}
+      <Animated.View style={[styles.container]}>
+        <TouchableWithoutFeedback
+          pointerEvents="box-none"
+          style={{
+            flex: 1,
+            flexDirection: 'column'
+          }}
+          transparent
+          onPress={this.hideKeyboard}
         >
-          <Image
-            style={styles.logo}
-            source={require('../assets/images/logo.png')}
-          />
-          <HideWithKeyboard>
-            <Slogan
-              animation={'fadeIn'}
-              duration={1200}
-              delay={this.state.shouldSloganAnimationDelay ? 1210 : 200}
+          <Animated.View
+            style={[
+              styles.logoContainer,
+              { paddingBottom: Layout.isIPhoneX ? null : this.keyboardHeight }
+            ]}
+            animation={'fadeInUp'}
+            duration={1200}
+            delay={200}
+            ref={ref => (this.logoRef = ref)}
+          >
+            <Animated.Image
+              style={{
+                height: this.imageDimension,
+                width: this.imageDimension
+              }}
+              source={require('../assets/images/logo.png')}
             />
-          </HideWithKeyboard>
-        </View>
-
-        <KeyboardAvoidingView behavior="padding" style={styles.bottomContainer}>
-          <View delay={400} animation={'fadeIn'} duration={800}>
-            {this.state.switchForm === 'login' && (
-              <LoginForm
-                animation={'fadeInUpBig'}
-                duration={350}
-                linkPress={this._handleSwitchForm}
-                {...this.props}
+            <HideWithKeyboard>
+              <Slogan
+                animation={'fadeIn'}
+                duration={1200}
+                delay={this.state.shouldSloganAnimationDelay ? 600 : 200}
               />
-            )}
-            {this.state.switchForm === 'signup' && (
-              <SignupForm
-                animation={'fadeInUpBig'}
-                duration={350}
-                linkPress={this._handleSwitchForm}
-                {...this.props}
-              />
-            )}
-          </View>
-        </KeyboardAvoidingView>
-      </View>
+            </HideWithKeyboard>
+          </Animated.View>
+        </TouchableWithoutFeedback>
+        <Animated.View
+          delay={400}
+          animation={'fadeIn'}
+          duration={800}
+          style={[
+            styles.bottomContainer,
+            { paddingBottom: this.keyboardHeight }
+          ]}
+        >
+          {this.state.switchForm === 'login' && (
+            <LoginForm
+              animation={'fadeInUpBig'}
+              duration={350}
+              linkPress={this._handleSwitchForm}
+              {...this.props}
+            />
+          )}
+          {this.state.switchForm === 'signup' && (
+            <SignupForm
+              animation={'fadeInUpBig'}
+              duration={350}
+              linkPress={this._handleSwitchForm}
+              {...this.props}
+            />
+          )}
+        </Animated.View>
+      </Animated.View>
     );
   }
 }
@@ -78,23 +155,18 @@ export default class Login extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexGrow: 1,
     width: Layout.width,
     height: Layout.height,
-    backgroundColor: Colors.defaultColor.PAPER_COLOR
+    backgroundColor: Colors.defaultColor.PAPER_COLOR,
+    justifyContent: 'space-between'
   },
   bottomContainer: {
     flex: 1,
-    flexGrow: 1
-  },
-  logo: {
-    width: 140,
-    height: 140,
-    resizeMode: 'contain'
+    justifyContent: 'flex-end'
   },
   logoContainer: {
-    flexGrow: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    flexGrow: 1
   }
 });

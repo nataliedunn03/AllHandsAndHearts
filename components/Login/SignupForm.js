@@ -1,6 +1,7 @@
 import React from 'react';
 import propTypes from 'prop-types';
 import { StyleSheet, TouchableOpacity } from 'react-native';
+import TouchableNativeFeedback from '@expo/react-native-touchable-native-feedback-safe';
 import { View, Text } from 'react-native-animatable';
 import StyledInput from '../../components/StyledInput';
 import StyledButton from '../../components/StyledButton';
@@ -37,49 +38,48 @@ export default class SignupForm extends React.Component {
   render() {
     return (
       <View style={styles.container} {...this.props}>
-        <View>
-          <StyledInput
-            style={styles.input}
-            placeholder="Name"
-            returnKeyType="next"
-            autoCorrect={false}
-            enablesReturnKeyAutomatically
-            onSubmitEditing={() => this.emailRef.focus()}
-            onChangeText={value => this._handleOnChangeText('name', value)}
-          />
-          <StyledInput
-            style={styles.input}
-            placeholder="Email"
-            keyboardType="email-address"
-            returnKeyType="next"
-            autoCapitalize="none"
-            autoCorrect={false}
-            enablesReturnKeyAutomatically
-            inputRef={element => (this.emailRef = element)}
-            onSubmitEditing={() => this.passwordRef.focus()}
-            onChangeText={value => this._handleOnChangeText('email', value)}
-          />
-          <StyledInput
-            secureTextEntry
-            clearTextOnFocus
-            returnKeyType="done"
-            style={styles.input}
-            placeholder="Password"
-            enablesReturnKeyAutomatically
-            inputRef={element => (this.passwordRef = element)}
-            onChangeText={value => this._handleOnChangeText('password', value)}
-          />
-          <StyledButton
-            style={styles.loginButton}
-            textStyle={styles.textStyle}
-            text="Sign up"
-            onPress={this.handleRegister}
-            isLoading={this.props.auth.loading}
-          />
-        </View>
-        <TouchableOpacity onPress={() => this.props.linkPress()}>
+        <StyledInput
+          style={styles.input}
+          placeholder="Name"
+          returnKeyType="next"
+          autoCorrect={false}
+          enablesReturnKeyAutomatically
+          onSubmitEditing={() => this.emailRef.focus()}
+          onChangeText={value => this._handleOnChangeText('name', value)}
+        />
+        <StyledInput
+          style={styles.input}
+          placeholder="Email"
+          keyboardType="email-address"
+          returnKeyType="next"
+          autoCapitalize="none"
+          autoCorrect={false}
+          enablesReturnKeyAutomatically
+          inputRef={element => (this.emailRef = element)}
+          onSubmitEditing={() => this.passwordRef.focus()}
+          onChangeText={value => this._handleOnChangeText('email', value)}
+        />
+        <StyledInput
+          secureTextEntry
+          clearTextOnFocus
+          returnKeyType="done"
+          style={styles.input}
+          placeholder="Password"
+          enablesReturnKeyAutomatically
+          inputRef={element => (this.passwordRef = element)}
+          onChangeText={value => this._handleOnChangeText('password', value)}
+          onSubmitEditing={this.handleRegister}
+        />
+        <StyledButton
+          style={styles.loginButton}
+          textStyle={styles.textStyle}
+          text="Sign up"
+          onPress={this.handleRegister}
+          isLoading={this.props.auth.loading}
+        />
+        <TouchableNativeFeedback onPress={() => this.props.linkPress()}>
           <Text style={styles.link}>Already have an account?</Text>
-        </TouchableOpacity>
+        </TouchableNativeFeedback>
       </View>
     );
   }
@@ -109,6 +109,6 @@ const styles = StyleSheet.create({
   link: {
     color: '#9999a3',
     alignSelf: 'center',
-    padding: 20
+    margin: 20
   }
 });

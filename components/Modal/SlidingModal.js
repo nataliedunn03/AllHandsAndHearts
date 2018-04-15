@@ -23,10 +23,28 @@ import { Feather as Icon } from '@expo/vector-icons';
 import Colors from '../../constants/Colors';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
-const MIDDLE_OF_THE_SCREEN = SCREEN_HEIGHT * 0.5;
+const MIDDLE_OF_THE_SCREEN = 0;
 const TOP_OF_THE_SCREEN_POINT = { x: 0, y: 0 };
 const MODAL_SHOWN_HALF = 'HALF';
 const MODAL_SHOWN_FULL = 'FULL';
+
+const SlidingHeader = ({ children, ...props }) => {
+  return (
+    <Animated.View {...props}>
+      {!children && (
+        <Icon
+          name="minus"
+          color="#5d0e8b8f"
+          size={32}
+          style={{
+            top: -3
+          }}
+        />
+      )}
+      {children}
+    </Animated.View>
+  );
+};
 
 export default class SlidingModal extends PureComponent {
   static defaultProps = {
@@ -36,12 +54,13 @@ export default class SlidingModal extends PureComponent {
   };
   static propTypes = {
     show: PropTypes.bool.isRequired,
-    children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
+    children: PropTypes.node,
     closeCallback: PropTypes.func,
     fullScreenCallback: PropTypes.func, //callback fires when modal is full screen
     halfScreenCallback: PropTypes.func, //callback fires when modal if half
     top: PropTypes.number
   };
+  static Header = SlidingHeader;
 
   constructor(props) {
     super(props);
@@ -100,8 +119,7 @@ export default class SlidingModal extends PureComponent {
         }
       ]),
       onPanResponderRelease: (e, gestureState) => {
-        // vy = how fast dragged in y axis (- is up + down)
-        // so when we swipe down fast or drag half the screen close the modal
+        // close on drag when it goes below screen offset
         if (
           gestureState.vy >= 0.5 ||
           gestureState.moveY - 30 > this.MIDDLE_OF_THE_SCREEN_OFFSET
@@ -176,7 +194,8 @@ export default class SlidingModal extends PureComponent {
       duration: 300,
       easing: Easing.out(Easing.quad)
     }).start(() => {
-      this.modalAnimation.y.setOffset(SCREEN_HEIGHT);
+      this.modalAnimation.setValue({ x: 0, y: SCREEN_HEIGHT });
+      this.modalAnimation.setOffset({ x: 0, y: SCREEN_HEIGHT });
       this.handleClose();
     });
   };
@@ -232,6 +251,11 @@ export default class SlidingModal extends PureComponent {
         }
       ]
     };
+
+    let children = React.Children.toArray(this.props.children);
+    let headerChildren = children.filter(child => child.type === SlidingHeader);
+    let restChildren = children.filter(child => child.type !== SlidingHeader);
+
     return (
       <Modal
         visible={this.state.show}
@@ -259,33 +283,7 @@ export default class SlidingModal extends PureComponent {
               style={[styles.headerStyle, contentTransformedStyles]}
               {...this.modalPanResponder.panHandlers}
             >
-              <Animated.View
-                pointerEvents="box-none"
-                style={{
-                  flex: 1,
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-              >
-                <Icon
-                  name="minus"
-                  color="#5d0e8b8f"
-                  size={32}
-                  style={{
-                    top: -3
-                  }}
-                />
-                {/* <TouchableOpacity
-                  style={{
-                    alignSelf: 'flex-end',
-                    right: 5,
-                    bottom: 6
-                  }}
-                >
-                  <Icon name="x" color="#5d0e8b8f" size={22} />
-                </TouchableOpacity>*/}
-              </Animated.View>
+              {headerChildren}
             </Animated.View>
             <Animated.View
               style={[
@@ -294,7 +292,7 @@ export default class SlidingModal extends PureComponent {
                 { ...this.props.style }
               ]}
             >
-              {this.props.children}
+              {restChildren}
             </Animated.View>
           </View>
         </SafeAreaView>
@@ -312,13 +310,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.navHeaderBackground
   },
   headerStyle: {
-    flexDirection: 'row',
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
     borderWidth: 0,
-    height: 25,
-    backgroundColor: Colors.navHeaderBackground,
-    justifyContent: 'center',
-    alignItems: 'center'
+    backgroundColor: Colors.navHeaderBackground
   }
 });

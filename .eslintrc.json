@@ -1,13 +1,20 @@
 {
   "parser": "babel-eslint",
-  "extends": ["react-app", "prettier", "prettier/react"],
+  "extends": [
+    "react-app",
+    "prettier",
+    "prettier/react",
+    "plugin:react-native/all"
+  ],
   "env": {
     "node": true,
     "browser": true,
     "es6": true
   },
-  "plugins": ["react", "prettier"],
+  "plugins": ["react", "prettier", "react-native"],
   "rules": {
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    "react-native/no-inline-styles": 0,
+    "react-native/no-color-literals": 0
   }
 }
