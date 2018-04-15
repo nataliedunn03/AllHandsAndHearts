@@ -4,10 +4,10 @@ global class WEBSERVICE_Broadcasts{
     global static List<Broadcast_Object__c> getBroadcastList(){
         RestRequest req = RestContext.request;
         RestResponse res = RestContext.response;
-        String userId = req.requestURI.substring(req.requestURI.lastIndexOf('/')+1)
+        String groupId = req.requestURI.substring(req.requestURI.lastIndexOf('/')+1)
         List<Broadcast_Object__c> broadcast;
         try{
-            broadcast = [SELECT Broadcast_Type__c,Summary__c FROM Broadcast_Object__c JOIN User__c ON User__C.Group_ID__C = Broadcast_Object__c.Group_ID__c];
+            broadcast = [SELECT Broadcast_Type__c,Summary__c FROM Broadcast_Object__c WHERE Broadcast_Object.Group_ID__c == groupID];
             return broadcast;
         }catch(Exception ex){
             System.debug('Error: '+ex.getMessage());
