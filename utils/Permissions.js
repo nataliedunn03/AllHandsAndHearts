@@ -1,13 +1,12 @@
-'use strict';
-
 import { Permissions, Location } from 'expo';
 
 export async function alertIfNotificationisDisabled() {
   const { status } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
   if (status !== 'granted') {
-    alert('Notification is turned off! Chage it in settings');
+    alert('Notification is turned off! Change it in settings!');
   }
 }
+
 export const alertIfLocationisDisabled = async () => {
   const { status } = await Permissions.getAsync(Permissions.LOCATION);
   if (status !== 'granted') {

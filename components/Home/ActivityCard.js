@@ -6,7 +6,7 @@ import { Feather as Icon } from '@expo/vector-icons';
 
 const styles = StyleSheet.create({
   card: {
-    height: 130,
+    minHeight: 130,
     marginLeft: 16,
     marginRight: 16,
     marginTop: 8,
@@ -102,7 +102,7 @@ const ActivityCard = props => {
             <View style={styles.mainBody}>
               <Text
                 style={styles.body}
-                numberOfLines={2}
+                numberOfLines={5}
                 ellipsizeMode="tail"
                 selectable
                 selectionColor={Colors.PRIMARY_COLOR}

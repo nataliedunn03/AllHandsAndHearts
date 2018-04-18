@@ -1,6 +1,5 @@
 import React from 'react';
 import { Platform, BackHandler } from 'react-native';
-import { Notifications } from 'expo';
 import { connect } from 'react-redux';
 import {
   NavigationActions,
@@ -8,7 +7,6 @@ import {
   addNavigationHelpers
 } from 'react-navigation';
 import MainModalNavigator from './MainModalTabNavigator';
-import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
 import LoginScreen from '../containers/LoginScreenContainer';
 import { addListener } from '../utils/navigationReduxUtil';
 export const AppNavigator = StackNavigator(
@@ -54,30 +52,8 @@ class RootNavigator extends React.Component {
     if (Platform.OS === 'android') {
       BackHandler.removeEventListener('hardwareBackPress');
     }
-    this._notificationSubscription && this._notificationSubscription.remove();
-  }
-  componentDidMount() {
-    this._notificationSubscription = this._registerForPushNotifications();
   }
 
-  _registerForPushNotifications() {
-    // Send our push token over to our backend so we can receive notifications
-    // You can comment the following line out if you want to stop receiving
-    // a notification every time you open the app. Check out the source
-    // for this function in api/registerForPushNotificationsAsync.js
-    registerForPushNotificationsAsync();
-
-    // Watch for incoming notifications
-    this._notificationSubscription = Notifications.addListener(
-      this._handleNotification
-    );
-  }
-
-  _handleNotification = ({ origin, data }) => {
-    console.log(
-      `Push notification ${origin} with data: ${JSON.stringify(data)}`
-    );
-  };
   render() {
     const { dispatch, nav } = this.props;
     const navigation = addNavigationHelpers({

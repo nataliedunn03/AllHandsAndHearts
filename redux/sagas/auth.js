@@ -23,7 +23,6 @@ const authorize = function* authorize({
   name,
   isRegistering = false
 }) {
-  yield call(delay, 1000, true);
   try {
     const salt = null; // TODO: genSalt(username)
     const hash = password; // TODO: hashSync(password, salt)
@@ -76,7 +75,9 @@ function* loginFlow(action) {
         type: GET_ACTIVITY_CARDS_ON_LOGIN
       });*/
       yield put({ type: SET_AUTH, newAuthState: true });
+      console.log(auth);
       yield AuthService.setCookie({
+        ...auth,
         isLoggedIn: true
       });
       yield put({ type: RESET_TO_MAIN });

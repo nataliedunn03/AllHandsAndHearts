@@ -21,6 +21,16 @@ export const isLoggedIn = async () => {
   return loggedIn;
 };
 
+export const getValueFromStorage = async key => {
+  let value = null;
+  const savedObject = await AsyncStorage.getItem(FFG_AUTH_STORAGE_KEY);
+  if (savedObject) {
+    const data = JSON.parse(savedObject);
+    value = data[key];
+  }
+  return value;
+};
+
 export const register = async (email, passwordHash, name) => {
   const queryEndpoint = `${BASE_URL}/users`;
   try {

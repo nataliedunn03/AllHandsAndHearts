@@ -5,6 +5,7 @@ import {
   getBroadcastCards
 } from '../redux/actions/broadcast';
 import { getActivities } from '../redux/actions/activity';
+import { registerPushNotification } from '../redux/actions/notification';
 import HomeScreen from '../screens/HomeScreen';
 
 const mapDispatchToProps = dispatch => {
@@ -17,6 +18,9 @@ const mapDispatchToProps = dispatch => {
     },
     getActivities: () => {
       dispatch(getActivities());
+    },
+    registerPushNotification: () => {
+      dispatch(registerPushNotification());
     }
   };
 };

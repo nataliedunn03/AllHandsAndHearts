@@ -7,7 +7,8 @@ import {
   ActivityIndicator,
   UIManager,
   LayoutAnimation,
-  ScrollView
+  ScrollView,
+  TouchableOpacity
 } from 'react-native';
 import { View } from 'react-native-animatable';
 import SlidingModal from 'react-native-sliding-modal';
@@ -233,6 +234,7 @@ export default class MapScreen extends React.PureComponent {
       longitudeDelta: DELTA * (Layout.width / Layout.height),
       latitudeDelta: DELTA
     };
+    this.state.regionModalIsFull && this.closeRegionModal();
     await this.props.getPinsByRegion(card.id);
     this.mapViewRef.animateToRegion(region);
     if (this.state.mapReady && this.mapViewRef) {
@@ -312,7 +314,7 @@ export default class MapScreen extends React.PureComponent {
                 />
               </FadeIn>
               <LinearGradient
-                colors={['#000000ff', 'rgba(0, 0, 0, 0.2)']}
+                colors={['rgba(0, 0, 0, 0.8)', 'rgba(0, 0, 0, 0.1)']}
                 style={{
                   position: 'absolute',
                   opacity: 0.8,
@@ -582,7 +584,11 @@ export default class MapScreen extends React.PureComponent {
   _onRegionChangeComplete = region => {
     this._updateGPSButton(region);
   };
-
+  handleRegionModalFullScreen = () => {
+    this.setState({
+      regionModalIsFull: true
+    });
+  };
   _renderRegionModal = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     return (
@@ -590,26 +596,47 @@ export default class MapScreen extends React.PureComponent {
         show={this.state.regionModalVisible}
         closeCallback={this.closeRegionModal}
         top={Layout.height - 350}
-        fullScreenCallback={() =>
-          this.setState({
-            regionModalIsFull: true
-          })
-        }
+        fullScreenCallback={this.handleRegionModalFullScreen}
       >
         <SlidingModal.Header
           style={{
-            alignItems: 'center',
             justifyContent: 'center'
           }}
         >
-          <Icon
-            name="minus"
-            color="#5d0e8b8f"
-            size={32}
+          <View
             style={{
-              top: -3
+              justifyContent: 'space-between',
+              flexDirection: 'row'
             }}
-          />
+          >
+            <View />
+            <Icon
+              name="minus"
+              color={Colors.defaultColor.PRIMARY_COLOR}
+              size={32}
+              style={{
+                top: -3,
+                left: 14
+              }}
+            />
+            <TouchableOpacity
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                alignSelf: 'flex-end',
+                top: 8,
+                right: 8,
+                height: 30,
+                width: 30,
+                backgroundColor: Colors.defaultColor.PRIMARY_COLOR,
+                borderRadius: 15
+              }}
+              hitSlop={{ top: 16, left: 16, bottom: 16, right: 16 }}
+              onPress={this.closeRegionModal}
+            >
+              <Icon name="x" color="#ffffff" size={22} />
+            </TouchableOpacity>
+          </View>
           <StyledText
             style={{
               color: '#000000',
