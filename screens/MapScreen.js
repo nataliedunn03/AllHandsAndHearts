@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { View } from 'react-native-animatable';
 import SlidingModal from 'react-native-sliding-modal';
+import { EditPinModal } from '../components/Modal';
 //import { SlidingModal } from '../components/Modal';
 import { CurrentLocationButton, SwitchRegionButton } from '../components/Maps';
 import Colors from '../constants/Colors';
@@ -350,7 +351,7 @@ export default class MapScreen extends React.PureComponent {
                   }}
                 >
                   {card.type ? card.type.toUpperCase() : card.type}
-                </Text>,
+                </Text>
                 <Text
                   style={{
                     fontSize: 28,
@@ -501,7 +502,7 @@ export default class MapScreen extends React.PureComponent {
 
   _renderPinModal = () => {
     console.log('marker modal rendered');
-    let { currentRegionId } = this.state;
+    let { currentRegionId, showDetailsOfMarkerId, markerIds } = this.state;
     /*
      * TODO: Major stuff left to be done for writing pin data
      * 1) Add a dropdown option for pin type
@@ -509,6 +510,9 @@ export default class MapScreen extends React.PureComponent {
      * 3) Finally make the POST call to Salesforce, and update current view with the new added pin.
      *    3.1) Make different Apex endpoint for Add/Update
      */
+    const pinData = markerIds.filter(
+      marker => marker.Id === showDetailsOfMarkerId
+    )[0];
     return (
       <SlidingModal
         show={this.state.showMarkerModal}
@@ -544,7 +548,7 @@ export default class MapScreen extends React.PureComponent {
             Location Details
           </StyledText>
         </SlidingModal.Header>
-        {this._renderPinModalContent()}
+        <EditPinModal data={pinData} />
       </SlidingModal>
     );
   };
