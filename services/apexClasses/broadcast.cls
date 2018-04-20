@@ -1,10 +1,10 @@
 @RestResource(urlMapping='/broadcasts/*')
 global class WEBSERVICE_Broadcasts{
     @HttpGet
-    global static List<Broadcast_Object__c> getBroadcastList(String groupID){
+    global static List<Broadcast_Object__c> getBroadcastList(String regionID){
         List<Broadcast_Object__c> broadcast;
         try{
-            broadcast = [SELECT Broadcast_Type__c,Summary__c FROM Broadcast_Object__c WHERE Broadcast_Object.Group_ID__c == groupID];
+            broadcast = [SELECT Broadcast_Type__c,Summary__c FROM Broadcast_Object__c WHERE Broadcast_Object.Region_ID__c == regionID];
             return broadcast;
         }catch(Exception ex){
             System.debug('Error: '+ex.getMessage());
