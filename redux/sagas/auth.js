@@ -67,7 +67,9 @@ function* loginFlow(action) {
       password,
       isRegistering: false
     });
-    if (auth && !auth.errorCode) {
+    if (auth && typeof auth === 'object' && auth.Id) {
+      console.log('inside auth');
+      console.log(auth);
       /* yield put({
         type: GET_BROADCAST_CARDS_ON_LOGIN
       });
@@ -75,7 +77,6 @@ function* loginFlow(action) {
         type: GET_ACTIVITY_CARDS_ON_LOGIN
       });*/
       yield put({ type: SET_AUTH, newAuthState: true });
-      console.log(auth);
       yield AuthService.setCookie({
         ...auth,
         isLoggedIn: true
@@ -110,7 +111,11 @@ function* registerFlow(action) {
       isRegistering: true
     });
     // If we could register a user, we send the appropiate actions
-    if (wasSuccessful && !wasSuccessful.errorCode) {
+    if (
+      wasSuccessful &&
+      typeof wasSuccessful === 'object' &&
+      wasSuccessful.Id
+    ) {
       yield put({ type: SET_AUTH, newAuthState: true });
       yield AuthService.setCookie({ isLoggedIn: true });
       yield put({ type: REGISTER_REQUEST_LOADING, loading: false });

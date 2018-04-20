@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import propTypes from 'prop-types';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import TouchableNativeFeedback from '@expo/react-native-touchable-native-feedback-safe';
 import { View, Text } from 'react-native-animatable';
 import StyledInput from '../../components/StyledInput';
@@ -62,9 +62,9 @@ export default class LoginForm extends React.Component {
           onPress={this.handleLogin}
           isLoading={this.props.auth.loading}
         />
-        <TouchableNativeFeedback onPress={() => this.props.linkPress()}>
+        <TouchableOpacity onPress={() => this.props.linkPress()}>
           <Text style={styles.link}>Don't have an account?</Text>
-        </TouchableNativeFeedback>
+        </TouchableOpacity>
       </View>
     );
   }
