@@ -24,10 +24,8 @@ const authorize = function* authorize({
   isRegistering = false
 }) {
   try {
-    const salt = null; // TODO: genSalt(username)
-    const hash = password; // TODO: hashSync(password, salt)
+    const hash = AuthService.generatePasswordHash(email, password);
     let response;
-
     // For either log in or registering, we call the proper function in the `auth`
     // module, which is asynchronous. Because we're using generators, we can work
     // as if it's synchronous because we pause execution until the call is done
@@ -39,6 +37,7 @@ const authorize = function* authorize({
     }
     return response;
   } catch (error) {
+    console.log(error);
     yield put({ type: REQUEST_ERROR, error: error.message });
     return false;
   }
@@ -59,6 +58,7 @@ const logout = function* logout() {
 };
 
 function* loginFlow(action) {
+  console.log(action);
   yield put({ type: LOGIN_REQUEST_LOADING, loading: true });
   try {
     const { email, password } = action.data;
@@ -67,7 +67,7 @@ function* loginFlow(action) {
       password,
       isRegistering: false
     });
-    if (auth) {
+    if (auth && !auth.errorCode) {
       /* yield put({
         type: GET_BROADCAST_CARDS_ON_LOGIN
       });
@@ -85,6 +85,7 @@ function* loginFlow(action) {
       yield put({ type: LOGIN_REQUEST_FAILED, error: 'Login failed.' });
     }
   } catch (e) {
+    console.log(e);
     yield put({ type: LOGIN_REQUEST_FAILED, error: e });
   } finally {
     yield put({ type: LOGIN_REQUEST_LOADING, loading: false });
@@ -109,7 +110,7 @@ function* registerFlow(action) {
       isRegistering: true
     });
     // If we could register a user, we send the appropiate actions
-    if (wasSuccessful) {
+    if (wasSuccessful && !wasSuccessful.errorCode) {
       yield put({ type: SET_AUTH, newAuthState: true });
       yield AuthService.setCookie({ isLoggedIn: true });
       yield put({ type: REGISTER_REQUEST_LOADING, loading: false });

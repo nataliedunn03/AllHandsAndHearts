@@ -234,7 +234,7 @@ export default class MapScreen extends React.PureComponent {
       longitudeDelta: DELTA * (Layout.width / Layout.height),
       latitudeDelta: DELTA
     };
-    this.state.regionModalIsFull && this.closeRegionModal();
+    this.state.regionModalIsFull && this.regionModalRef.openModalHalfway();
     await this.props.getPinsByRegion(card.id);
     this.mapViewRef.animateToRegion(region);
     if (this.state.mapReady && this.mapViewRef) {
@@ -589,6 +589,19 @@ export default class MapScreen extends React.PureComponent {
       regionModalIsFull: true
     });
   };
+
+  handleRegionModalHalfScreen = () => {
+    this.setState({
+      regionModalIsFull: false
+    });
+  };
+  /*handleRegionModalStateChange = key => {
+    this.setState(prevState => {
+      return {
+        [key]: !prevState[key]
+      };
+    });
+  };*/
   _renderRegionModal = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     return (
@@ -597,6 +610,8 @@ export default class MapScreen extends React.PureComponent {
         closeCallback={this.closeRegionModal}
         top={Layout.height - 350}
         fullScreenCallback={this.handleRegionModalFullScreen}
+        halfScreenCallback={this.handleRegionModalHalfScreen}
+        ref={element => (this.regionModalRef = element)}
       >
         <SlidingModal.Header
           style={{
