@@ -8,9 +8,9 @@ groupID = 'identifier'
 // const auth_token = AuthService.getAuthToken()
 
 export const getBroacastObjs = async () => {
-  const queryEndpoint = `${BASE_URL + '/broadcasts?userId=' + userId }`;
+  const queryEndpoint = `${BASE_URL + '/broadcasts?userId=' + regoinId }`;
   const queryJsonString = JSON.stringify({
-    groupID: groupID
+    regoingID: regionID
   });
   console.log('Fetching broadcast data from Salesforce');
   console.log(queryEndpoint);
