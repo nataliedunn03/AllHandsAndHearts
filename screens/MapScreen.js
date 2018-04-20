@@ -517,7 +517,7 @@ export default class MapScreen extends React.PureComponent {
       <SlidingModal
         show={this.state.showMarkerModal}
         closeCallback={this._closeMarkerModal}
-        top={Layout.height - 400}
+        top={Layout.height - 450}
       >
         <SlidingModal.Header
           style={{
@@ -525,19 +525,38 @@ export default class MapScreen extends React.PureComponent {
             justifyContent: 'center'
           }}
         >
-          <Icon
-            name="minus"
-            color="#5d0e8b8f"
-            size={32}
-            style={{
-              top: -3
-            }}
-          />
+          <View>
+            <Icon
+              name="minus"
+              color="#5d0e8b8f"
+              size={32}
+              style={{
+                top: -3
+              }}
+            />
+            <TouchableOpacity
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                alignSelf: 'flex-end',
+                top: -25,
+                right: -165,
+                height: 30,
+                width: 30,
+                backgroundColor: Colors.defaultColor.PRIMARY_COLOR,
+                borderRadius: 15
+              }}
+              hitSlop={{ top: 16, left: 16, bottom: 16, right: 16 }}
+              onPress={() => this._onMarkerClose()}
+            >
+              <Icon name="x" color="#ffffff" size={22} />
+            </TouchableOpacity>
+          </View>
           <StyledText
             style={{
               color: '#000000',
-              fontSize: 28,
-              marginBottom: 16,
+              top: -15,
+              fontSize: 24,
               marginLeft: 16,
               fontWeight: '500',
               textAlign: 'left',
@@ -559,6 +578,13 @@ export default class MapScreen extends React.PureComponent {
     this.setState({
       showMarkerModal: true,
       showDetailsOfMarkerId: markerId
+    });
+  }
+
+  _onMarkerClose() {
+    console.log('closing marker description');
+    this.setState({
+      showMarkerModal: false
     });
   }
 

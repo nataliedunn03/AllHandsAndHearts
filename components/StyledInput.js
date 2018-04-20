@@ -30,6 +30,7 @@ export default class StyledInput extends Component {
         placeholderTextColor={placeholderTextColor}
         returnKeyType={returnKeyType}
         selectionColor={Colors.defaultColor.PRIMARY_COLOR}
+        underlineColorAndroid="transparent"
         {...rest}
       />
     );

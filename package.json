@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@expo/react-native-touchable-native-feedback-safe": "^1.1.2",
+    "babel-plugin-transform-remove-console": "^6.9.1",
     "base-64": "^0.1.0",
     "bcryptjs": "^2.4.3",
     "crypto-js": "^3.1.9-1",

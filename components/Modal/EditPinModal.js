@@ -12,19 +12,26 @@ import { StyledText } from '../../components/StyledText';
 import StyledInput from '../../components/StyledInput';
 import LabelSelect from 'react-native-label-select';
 
+const Separator = () => {
+  return (
+    <View
+      style={{
+        borderBottomColor: '#c2c2c2',
+        borderBottomWidth: 1,
+        marginTop: 10,
+        marginLeft: 20,
+        marginRight: 20
+      }}
+    />
+  );
+};
+
 export default class EditPinModal extends React.Component {
   render() {
     const { data } = this.props;
-    const coordsString = `Coordinates: ${parseFloat(data.latitude).toFixed(
-      6
-    )}, ${parseFloat(data.longitude).toFixed(6)}`;
-
-    const testitem = {
-      name: 'Affected Area',
-      isSelected: false,
-      Id: 111,
-      color: 'red'
-    };
+    const coordsString = `${parseFloat(data.latitude).toFixed(6)}, ${parseFloat(
+      data.longitude
+    ).toFixed(6)}`;
 
     //TODO: Wire up delete/edit rights after associating Userid
     //TODO: Need to add address location to Pin__c
@@ -40,36 +47,19 @@ export default class EditPinModal extends React.Component {
         resetScrollToCoords={{ x: 0, y: 0 }}
         showsVerticalScrollIndicator={false}
       >
-        <StyledText style={styles.styledText}>Location Name</StyledText>
-        <StyledInput
-          editable={false}
-          style={styles.input}
-          placeholder={data.Name}
-          returnKeyType="next"
-          enablesReturnKeyAutomatically
-        />
-        <StyledText
-          style={[
-            styles.styledText,
-            {
-              marginBottom: 10
-            }
-          ]}
-        >
-          {coordsString}
+        <StyledText style={styles.styledText}>LOCATION NAME</StyledText>
+        <StyledText style={styles.styledTextValue}>{data.Name}</StyledText>
+        <Separator />
+        <StyledText style={styles.styledText}>COORDINATES</StyledText>
+        <StyledText style={styles.styledTextValue}>{coordsString}</StyledText>
+        <Separator />
+        <StyledText style={styles.styledText}>DESCRIPTION</StyledText>
+        <StyledText style={styles.styledTextValue}>
+          {data.Additional_Descriptors__c}
         </StyledText>
-        <StyledText style={styles.styledText}>Description</StyledText>
-        <StyledInput
-          editable={false}
-          style={styles.inputWide}
-          inputRef={element => (this.descriptionRef = element)}
-          placeholder={data.Additional_Descriptors__c}
-          enablesReturnKeyAutomatically
-          multiline
-          numberOfLines={4}
-        />
-        <StyledText style={styles.styledText}>Location Type</StyledText>
-        <StyledText style={styles.styledText}>
+        <Separator />
+        <StyledText style={styles.styledText}>LOCATION TYPE</StyledText>
+        <StyledText style={styles.styledTextValue}>
           {data.PinLocationType__c}
         </StyledText>
       </KeyboardAwareScrollView>
@@ -86,6 +76,14 @@ const styles = StyleSheet.create({
     margin: 20,
     marginTop: 10,
     marginBottom: 0
+  },
+  styledTextValue: {
+    color: '#551689',
+    margin: 20,
+    marginTop: 10,
+    marginBottom: 0,
+    fontWeight: '500',
+    fontSize: 16
   },
   input: {
     height: 42,
