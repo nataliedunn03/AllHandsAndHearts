@@ -4,7 +4,7 @@ import Colors from '../../constants/Colors';
 import { MaterialIcons } from '@expo/vector-icons';
 import { alertIfLocationisDisabled } from '../../utils/Permissions';
 
-export default class CurrentLocationButton extends React.Component {
+export default class CurrentLocationButton extends React.PureComponent {
   onButtonPress = () => {
     this.props.locationPermission
       ? this.props.onPress()

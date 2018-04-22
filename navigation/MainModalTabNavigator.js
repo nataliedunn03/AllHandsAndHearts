@@ -1,8 +1,13 @@
 import React from 'react';
-import { Platform, StyleSheet, Animated, Easing } from 'react-native';
+import { Platform, StyleSheet, Animated } from 'react-native';
+import { Constants } from 'expo';
+import {
+  TabNavigator,
+  TabBarBottom,
+  StackNavigator,
+  Header
+} from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
-import { TabNavigator, TabBarBottom, StackNavigator } from 'react-navigation';
-
 import EditPinScreen from '../screens/EditPinScreen';
 import ProfileScreenContainer from '../containers/ProfileContainer';
 import HomeScreenContainer from '../containers/HomeScreenContainer';
@@ -59,7 +64,7 @@ const MainTabNavigator = TabNavigator(
       },
       headerStyle: {
         backgroundColor: Colors.defaultColor.PRIMARY_COLOR,
-        borderBottomColor: '#F2F2F2'
+        borderBottomColor: 'transparent'
       },
       tabBarIcon: ({ focused }) => {
         const { routeName } = navigation.state;
@@ -104,14 +109,10 @@ const MainTabNavigator = TabNavigator(
     ),
     tabBarPosition: 'bottom',
     tabBarOptions: {
-      activeTintColor: Colors.tabIconSelected
+      activeTintColor: Colors.tabIconSelected,
+      showLabel: false
     },
     animationEnabled: true,
-    configureTransition: () => ({
-      timing: Animated.spring,
-      tension: 1,
-      friction: 35
-    }),
     swipeEnabled: false
   }
 );
@@ -147,15 +148,17 @@ const MainModalNavigator = StackNavigator(
     headerMode: 'float',
     navigationOptions: ({ navigation }) => ({
       headerTintColor: 'white',
+      headerBackTitle: ' ',
       headerTitleStyle: {
         color: Colors.defaultColor.PAPER_COLOR,
-        fontWeight: '600',
+        fontWeight: '800',
         justifyContent: 'space-between',
         textAlign: 'center'
       },
       headerStyle: {
         backgroundColor: Colors.defaultColor.PRIMARY_COLOR,
-        borderBottomColor: '#F2F2F2'
+        borderBottomColor: 'transparent'
+        /* height: Header.HEIGHT - 30*/
       }
     })
   }

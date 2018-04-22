@@ -1,21 +1,22 @@
 import React from 'react';
 import { ScrollView, RefreshControl, Animated, View } from 'react-native';
-import DropdownAlert from 'react-native-dropdownalert';
 import { Notifications } from 'expo';
 import Broadcasts from '../components/Home/Broadcasts';
 import Activities from '../components/Home/Activities';
 import Colors from '../constants/Colors';
 
-export default class HomeScreen extends React.Component {
+export default class HomeScreen extends React.PureComponent {
   state = {
     scrollY: 0
   };
   componentWillMount() {
+    console.log(this.props);
     this.props.getBroadcastCards();
     this.props.getActivities();
   }
   _handleRefresh = async () => {
     try {
+      this.props.alertWithType('custom', 'title', 'body');
       await this.props.getBroadcastCards();
     } catch (e) {
       console.log(e);
@@ -43,15 +44,15 @@ export default class HomeScreen extends React.Component {
       notification
     });
     if (notification.data) {
-      this.itemAction(notification.data);
+      this.props.alertWithType(
+        'custom',
+        notification.data.title,
+        notification.data.body
+      );
+      Notifications.setBadgeNumberAsync(1);
     }
   };
-  itemAction(item) {
-    this.dropdown.alertWithType('custom', item.title, item.body);
-  }
-  closeAction() {
-    this.dropdown.close();
-  }
+
   render() {
     return (
       <View style={{ flex: 1 }}>
@@ -84,14 +85,6 @@ export default class HomeScreen extends React.Component {
           )}
           {this.props.activity && <Activities activity={this.props.activity} />}
         </ScrollView>
-        <DropdownAlert
-          ref={ref => (this.dropdown = ref)}
-          containerStyle={{
-            backgroundColor: Colors.defaultColor.PRIMARY_COLOR,
-            minHeight: 100
-          }}
-          showCancel={true}
-        />
       </View>
     );
   }

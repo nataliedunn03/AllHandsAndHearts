@@ -8,7 +8,7 @@ import reducers from './redux/reducers';
 import rootSaga from './redux/sagas';
 import { navMiddleware } from './utils/navigationReduxUtil';
 import AppContainer from './containers/App';
-
+import { AlertProvider } from './containers/AlertContainer';
 const sagaMiddleware = createSagaMiddleware();
 let middleWares = [sagaMiddleware, navMiddleware];
 if (process.env.NODE_ENV !== 'production') {
@@ -22,11 +22,13 @@ const store = compose(
 
 sagaMiddleware.run(rootSaga);
 
-export default class App extends React.Component {
+export default class App extends React.PureComponent {
   render() {
     return (
       <Provider store={store}>
-        <AppContainer />
+        <AlertProvider>
+          <AppContainer />
+        </AlertProvider>
       </Provider>
     );
   }

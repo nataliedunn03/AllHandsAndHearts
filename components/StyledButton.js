@@ -1,10 +1,29 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import propTypes from 'prop-types';
 import { StyleSheet, ActivityIndicator, Text } from 'react-native';
 import TouchableNativeFeedback from '@expo/react-native-touchable-native-feedback-safe';
 import { View } from 'react-native-animatable';
 import Colors from '../constants/Colors';
-export default class StyledButton extends Component {
+import Layout from '../constants/Layout';
+import StyledButtonAnimated from 'react-native-micro-animated-button';
+export const StyledButton2 = ({ label, onPress, buttonRef }) => {
+  return (
+    <StyledButtonAnimated
+      style={styles.styledButton2}
+      labelStyle={styles.textStyle}
+      foregroundColor={Colors.defaultColor.PAPER_COLOR}
+      label={label}
+      noFill
+      onPress={() => onPress()}
+      ref={buttonRef}
+      successBackgroundColor={Colors.defaultColor.PRIMARY_COLOR}
+      successIcon="check"
+      expandOnFinish
+      noRadius
+    />
+  );
+};
+export default class StyledButton extends PureComponent {
   static defaultProps = {
     enabled: true,
     isLoading: false,
@@ -73,5 +92,19 @@ const styles = StyleSheet.create({
     color: Colors.Typography.TEXT.PRIMARY_COLOR,
     fontSize: 16,
     fontWeight: 'bold'
+  },
+  styledButton2: {
+    height: 42,
+    backgroundColor: Colors.defaultColor.PRIMARY_COLOR,
+    borderColor: '#BFBFC0',
+    borderWidth: 0.3,
+    borderRadius: Colors.Input.BORDER.RADIUS,
+    marginBottom: 10,
+    marginTop: 10,
+    marginLeft: 20,
+    marginRight: 20,
+    paddingHorizontal: 10,
+    justifyContent: 'center',
+    width: Layout.width - 40
   }
 });

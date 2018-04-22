@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { View } from 'react-native-animatable';
 import { LayoutAnimation } from 'react-native';
 import ActivityCard from './ActivityCard';
 import { StyledText } from '../../components/StyledText';
 
-export default class Activities extends Component {
+export default class Activities extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -30,7 +30,10 @@ export default class Activities extends Component {
   };
 
   render() {
-    let { style, activity: { activityCards } } = this.props;
+    let {
+      style,
+      activity: { activityCards }
+    } = this.props;
     return (
       activityCards &&
       activityCards.length > 0 && (

@@ -1,18 +1,25 @@
 import React from 'react';
 import propTypes from 'prop-types';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
 import TouchableNativeFeedback from '@expo/react-native-touchable-native-feedback-safe';
 import { View, Text } from 'react-native-animatable';
 import StyledInput from '../../components/StyledInput';
-import StyledButton from '../../components/StyledButton';
+import { StyledButton2 } from '../../components/StyledButton';
 import Colors from '../../constants/Colors';
-import Layout from '../../constants/Layout';
-export default class SignupForm extends React.Component {
+import { delayExec } from '../../utils/utils';
+export default class SignupForm extends React.PureComponent {
   state = {
     name: '',
     email: '',
     password: ''
   };
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.auth.loginError && this.styledButton2) {
+      this.styledButton2.error();
+      delayExec(2000, this.styledButton2.reset);
+    }
+  }
+
   _handleOnChangeText = (key, value) => {
     this.setState({
       [key]: value
@@ -30,7 +37,12 @@ export default class SignupForm extends React.Component {
         password,
         name
       });
+      this.props.auth.loggedIn &&
+        this.styledButton2 &&
+        this.styledButton2.success();
     } else {
+      this.styledButton2 && this.styledButton2.error();
+      delayExec(2000, this.styledButton2.reset);
       console.log('\n\n You must enter all fileds to register \n\n');
     }
   };
@@ -70,12 +82,11 @@ export default class SignupForm extends React.Component {
           onChangeText={value => this._handleOnChangeText('password', value)}
           onSubmitEditing={this.handleRegister}
         />
-        <StyledButton
-          style={styles.loginButton}
-          textStyle={styles.textStyle}
-          text="Sign up"
+        <StyledButton2
+          buttonRef={ref => (this.styledButton2 = ref)}
+          label="Sign up"
           onPress={this.handleRegister}
-          isLoading={this.props.auth.loading}
+          onSecondaryPress={() => this.styledButton2.reset()}
         />
         <TouchableNativeFeedback onPress={() => this.props.linkPress()}>
           <Text style={styles.link}>Already have an account?</Text>

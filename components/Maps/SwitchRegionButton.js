@@ -4,7 +4,7 @@ import * as Animatable from 'react-native-animatable';
 import Colors from '../../constants/Colors';
 import { Feather as Icon } from '@expo/vector-icons';
 
-export default class SwitchRegionButton extends React.Component {
+export default class SwitchRegionButton extends React.PureComponent {
   onButtonPress = () => {
     console.log('Open Region Form Modal');
   };

@@ -27,7 +27,7 @@ const TOP_OF_THE_SCREEN_POINT = { x: 0, y: 0 };
 const MODAL_SHOWN_HALF = 'HALF';
 const MODAL_SHOWN_FULL = 'FULL';
 
-const SlidingHeader = ({ children, ...props }) => {
+export const SlidingHeader = ({ children, ...props }) => {
   return (
     <Animated.View {...props}>
       {!children && (
@@ -164,8 +164,8 @@ export default class SlidingModal extends PureComponent {
   openModalHalfway = () => {
     Animated.timing(this.modalAnimation.y, {
       toValue: this.MIDDLE_OF_THE_SCREEN_OFFSET,
-      duration: 300,
-      easing: Easing.in(Easing.sin)
+      duration: 450,
+      easing: Easing.elastic(1)
     }).start(() => {
       this.setState({
         modalState: MODAL_SHOWN_HALF
@@ -182,7 +182,7 @@ export default class SlidingModal extends PureComponent {
     this.modalAnimation.setOffset(TOP_OF_THE_SCREEN_POINT);
     Animated.spring(this.modalAnimation.y, {
       toValue: TOP_OF_THE_SCREEN_POINT.y,
-      bounciness: 1
+      bounciness: 5
     }).start(() => {
       this.modalAnimation.flattenOffset();
       this.setState({
@@ -197,7 +197,7 @@ export default class SlidingModal extends PureComponent {
   slideModalDown = () => {
     Animated.timing(this.modalAnimation.y, {
       toValue: SCREEN_HEIGHT,
-      duration: 300,
+      duration: 400,
       easing: Easing.out(Easing.quad)
     }).start(() => {
       this.modalAnimation.setValue({ x: 0, y: SCREEN_HEIGHT });

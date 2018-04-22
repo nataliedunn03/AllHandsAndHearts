@@ -3,7 +3,10 @@
   "retainLines": true,
   "env": {
     "development": {
-      "plugins": ["transform-react-jsx-source", "transform-remove-console"]
+      "plugins": ["transform-react-jsx-source"]
+    },
+    "production": {
+      "plugins": ["transform-remove-console"]
     }
   }
 }

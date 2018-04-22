@@ -1,5 +1,4 @@
 import { takeEvery, call, put } from 'redux-saga/effects';
-import { delay } from 'redux-saga';
 import {
   SENDING_REQUEST,
   LOGIN_REQUEST,
@@ -16,7 +15,6 @@ import {
   RESET_TO_SIGN_IN
 } from '../actions/actionTypes';
 import * as AuthService from '../../services/auth';
-
 const authorize = function* authorize({
   email,
   password,
@@ -24,12 +22,8 @@ const authorize = function* authorize({
   isRegistering = false
 }) {
   try {
-    const hash = AuthService.generatePasswordHash(email, password);
+    const hash = yield call(AuthService.generatePasswordHash, email, password);
     let response;
-    // For either log in or registering, we call the proper function in the `auth`
-    // module, which is asynchronous. Because we're using generators, we can work
-    // as if it's synchronous because we pause execution until the call is done
-    // with `yield`!
     if (isRegistering) {
       response = yield call(AuthService.register, email, hash, name);
     } else {
@@ -67,6 +61,7 @@ function* loginFlow(action) {
       password,
       isRegistering: false
     });
+    //yield delay(5000);
     if (auth && typeof auth === 'object' && auth.Id) {
       console.log('inside auth');
       console.log(auth);
@@ -111,10 +106,11 @@ function* registerFlow(action) {
       isRegistering: true
     });
     // If we could register a user, we send the appropiate actions
+    console.log(wasSuccessful);
     if (
       wasSuccessful &&
       typeof wasSuccessful === 'object' &&
-      wasSuccessful.Id
+      wasSuccessful.Email__c
     ) {
       yield put({ type: SET_AUTH, newAuthState: true });
       yield AuthService.setCookie({ isLoggedIn: true });

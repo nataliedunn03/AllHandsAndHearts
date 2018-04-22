@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text } from 'react-native';
 
-export class StyledText extends React.Component {
+export class StyledText extends React.PureComponent {
   render() {
     return (
       <Text

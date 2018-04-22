@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import propTypes from 'prop-types';
 import { TextInput, StyleSheet } from 'react-native';
-import { View } from 'react-native-animatable';
 import Colors from '../constants/Colors';
-export default class StyledInput extends Component {
+export default class StyledInput extends PureComponent {
   static defaultProps = {
     keyboardType: 'default',
     placeholder: 'Type here',

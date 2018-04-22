@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 import {
   StyleSheet,
@@ -17,7 +17,7 @@ if (Layout.android)
   UIManager.setLayoutAnimationEnabledExperimental &&
     UIManager.setLayoutAnimationEnabledExperimental(true);
 
-export default class Broadcasts extends Component {
+export default class Broadcasts extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -59,7 +59,10 @@ export default class Broadcasts extends Component {
     });
   };
   render() {
-    let { style, broadcast: { broadcastCards } } = this.props;
+    let {
+      style,
+      broadcast: { broadcastCards }
+    } = this.props;
     return (
       broadcastCards &&
       broadcastCards.length > 0 && (

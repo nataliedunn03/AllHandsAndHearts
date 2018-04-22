@@ -15,7 +15,7 @@ import Slogan from '../components/Login/Slogan';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 //import * as AuthService from '../services/auth';
-export default class Login extends React.Component {
+export default class Login extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -23,7 +23,7 @@ export default class Login extends React.Component {
       switchForm: 'login'
     };
     this.keyboardHeight = new Animated.Value(0);
-    this.imageDimension = new Animated.Value(140);
+    this.imageDimension = new Animated.Value(1);
   }
 
   componentWillMount() {
@@ -46,11 +46,11 @@ export default class Login extends React.Component {
     Animated.parallel([
       Animated.timing(this.keyboardHeight, {
         duration: e.duration,
-        toValue: e.endCoordinates.height
+        toValue: e.endCoordinates.height - 60
       }),
       Animated.timing(this.imageDimension, {
         duration: e.duration,
-        toValue: 100
+        toValue: 0.7
       })
     ]).start();
   };
@@ -63,7 +63,7 @@ export default class Login extends React.Component {
       }),
       Animated.timing(this.imageDimension, {
         duration: e.duration,
-        toValue: 140
+        toValue: 1
       })
     ]).start();
   };
@@ -87,75 +87,70 @@ export default class Login extends React.Component {
       return;
     }
     return (
-      <KeyboardAwareScrollView
-        style={{ backgroundColor: Colors.defaultColor.PAPER_COLOR, flex: 1 }}
-        resetScrollToCoords={{ x: 0, y: 0 }}
-        showsVerticalScrollIndicator={false}
-      >
-        <Animated.View style={[styles.container]}>
-          <TouchableWithoutFeedback
-            pointerEvents="box-none"
-            style={{
-              flex: 1,
-              flexDirection: 'column'
-            }}
-            transparent
-            onPress={this.hideKeyboard}
-          >
-            <Animated.View
-              style={[
-                styles.logoContainer,
-                { paddingBottom: Layout.isIPhoneX ? 10 : this.keyboardHeight }
-              ]}
-              animation={'fadeInUp'}
-              duration={1200}
-              delay={200}
-              ref={ref => (this.logoRef = ref)}
-            >
-              <Animated.Image
-                style={{
-                  height: this.imageDimension,
-                  width: this.imageDimension
-                }}
-                source={require('../assets/images/logo.png')}
-              />
-              <HideWithKeyboard>
-                <Slogan
-                  animation={'fadeIn'}
-                  duration={1200}
-                  delay={this.state.shouldSloganAnimationDelay ? 600 : 200}
-                />
-              </HideWithKeyboard>
-            </Animated.View>
-          </TouchableWithoutFeedback>
+      <Animated.View style={[styles.container]}>
+        <TouchableWithoutFeedback
+          pointerEvents="box-none"
+          style={{
+            flex: 1,
+            flexDirection: 'column'
+          }}
+          transparent
+          onPress={this.hideKeyboard}
+        >
           <Animated.View
-            delay={400}
-            animation={'fadeIn'}
-            duration={800}
             style={[
-              styles.bottomContainer,
-              { paddingBottom: this.keyboardHeight }
+              styles.logoContainer,
+              { paddingBottom: Layout.isIPhoneX ? 10 : this.keyboardHeight }
             ]}
+            animation={'fadeInUp'}
+            duration={1200}
+            delay={200}
+            ref={ref => (this.logoRef = ref)}
           >
-            {this.state.switchForm === 'login' && (
-              <LoginForm
-                animation={'fadeInUpBig'}
-                duration={350}
-                linkPress={this._handleSwitchForm}
-                {...this.props}
+            <Animated.Image
+              style={{
+                height: 140,
+                width: 140,
+                transform: [{ scale: this.imageDimension }]
+              }}
+              source={require('../assets/images/logo.png')}
+            />
+            <HideWithKeyboard>
+              <Slogan
+                animation={'fadeIn'}
+                duration={1200}
+                delay={this.state.shouldSloganAnimationDelay ? 600 : 200}
               />
-            )}
-            {this.state.switchForm === 'signup' && (
-              <SignupForm
-                animation={'fadeInUpBig'}
-                duration={350}
-                linkPress={this._handleSwitchForm}
-                {...this.props}
-              />
-            )}
+            </HideWithKeyboard>
           </Animated.View>
+        </TouchableWithoutFeedback>
+        <Animated.View
+          delay={400}
+          animation={'fadeIn'}
+          duration={800}
+          style={[
+            styles.bottomContainer,
+            { paddingBottom: this.keyboardHeight }
+          ]}
+        >
+          {this.state.switchForm === 'login' && (
+            <LoginForm
+              animation={'fadeInUpBig'}
+              duration={350}
+              linkPress={this._handleSwitchForm}
+              {...this.props}
+            />
+          )}
+          {this.state.switchForm === 'signup' && (
+            <SignupForm
+              animation={'fadeInUpBig'}
+              duration={350}
+              linkPress={this._handleSwitchForm}
+              {...this.props}
+            />
+          )}
         </Animated.View>
-      </KeyboardAwareScrollView>
+      </Animated.View>
     );
   }
 }

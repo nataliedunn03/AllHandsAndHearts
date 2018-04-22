@@ -14,7 +14,8 @@ import {
 import * as AuthService from '../../services/auth';
 
 const INITIAL_STATE = {
-  loggedIn: false
+  loggedIn: false,
+  loading: false
 };
 
 export const auth = (state = INITIAL_STATE, action) => {

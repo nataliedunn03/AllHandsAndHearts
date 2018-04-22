@@ -14,9 +14,36 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "loading": {
+      "icon": "./assets/images/icon.png",
+      "backgroundColor": "#FFFFFF",
+      "hideExponentText": true
+    },
     "assetBundlePatterns": ["assets/images/*"],
     "ios": {
-      "supportsTablet": true
-    }
+      "bundleIdentifier": "com.allheartsandhands.aah",
+      "icon": "./assets/images/icon.png",
+      "buildNumber": "1.0.2",
+      "config": {
+        "googleMapsApiKey": "AIzaSyChIWVSK41LTxJuDDYJECnBsAbMkzy13Fk"
+      },
+      "isRemoteJSEnabled": true,
+      "supportsTablet": false
+    },
+    "android": {
+      "package": "com.allheartsandhands.aah",
+      "versionCode": 1,
+      "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION"],
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyChIWVSK41LTxJuDDYJECnBsAbMkzy13Fk"
+        }
+      }
+    },
+    "androidStatusBar": {
+      "barStyle": "light-content",
+      "backgroundColor": "#5d0e8b"
+    },
+    "androidStatusBarColor": "#5d0e8b"
   }
 }

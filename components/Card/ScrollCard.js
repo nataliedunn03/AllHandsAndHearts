@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Animated, RefreshControl } from 'react-native';
+import { StyleSheet, RefreshControl, ScrollView } from 'react-native';
 import Card from './Card';
 import { utilityFunctions } from '../../utils';
 
@@ -22,9 +22,16 @@ const wrappChildrenWithCard = children => {
 
 class ScrollCard extends React.PureComponent {
   render() {
-    let { style, children, onRefreshCallback, ...others } = this.props;
+    let {
+      style,
+      children,
+      scrollCardRef,
+      onRefreshCallback,
+      ...others
+    } = this.props;
     return (
-      <Animated.ScrollView
+      <ScrollView
+        ref={scrollCardRef}
         style={[styles.container, { ...style }]}
         refreshControl={
           <RefreshControl
@@ -38,7 +45,7 @@ class ScrollCard extends React.PureComponent {
         {wrappChildrenWithCard(
           utilityFunctions.synthesizeChildren(children, others)
         )}
-      </Animated.ScrollView>
+      </ScrollView>
     );
   }
 }

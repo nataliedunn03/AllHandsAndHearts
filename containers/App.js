@@ -10,7 +10,7 @@ import {
   resetToMainScreen,
   resetToLoginScreen
 } from '../redux/actions/auth';
-class AppContainer extends React.Component {
+class AppContainer extends React.PureComponent {
   state = {
     isLoadingComplete: false
   };
