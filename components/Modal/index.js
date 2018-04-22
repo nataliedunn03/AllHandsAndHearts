@@ -1,4 +1,4 @@
 import SlidingModal from './SlidingModal';
 import SimpleModal from './SimpleModal';
-import EditPinModal from './EditPinModal';
-export { SlidingModal, SimpleModal, EditPinModal };
+import ViewPinModal from './ViewPinModal';
+export { SlidingModal, SimpleModal, ViewPinModal };

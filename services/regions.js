@@ -88,9 +88,7 @@ export const getRegionList = async () => {
 };
 
 export const getPinsListByRegion = async regionId => {
-  const queryEndpoint = `${BASE_URL +
-    '/getPinsListByRegion?regionId=' +
-    regionId}`;
+  const queryEndpoint = `${BASE_URL + '/pins/' + regionId}`;
 
   console.log('Fetching pins data from Salesforce for regionId::', regionId);
   console.log(queryEndpoint);
@@ -120,6 +118,7 @@ export const getPinsListByRegion = async regionId => {
 };
 
 export const setPinByRegion = async (regionId, pinData) => {
+  let currentUserId = await AuthService.getValueFromStorage('Id');
   const queryEndpoint = `${BASE_URL + '/pins'}`;
   console.log(
     'Writing pins data to Salesforce for regionId::',
@@ -132,8 +131,10 @@ export const setPinByRegion = async (regionId, pinData) => {
     return null;
 
   const payload = {
+    createdByUserId: currentUserId,
     name: pinData.name,
     regionId: regionId,
+    address: pinData.address,
     description: pinData.description,
     latitude: pinData.latitude,
     longitude: pinData.longitude,

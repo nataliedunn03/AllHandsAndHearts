@@ -12,8 +12,10 @@ global with sharing class WEBSERVICE_Pins{
                        Coordinates__Latitude__s,
                        Coordinates__Longitude__s,Id,
                        Name,
+                       UserId__c,
                        PinLocationType__c,
-                       RegionId__c FROM Pin__c WHERE RegionId__c =: regionId];
+                       RegionId__c,
+                       Address__c FROM Pin__c WHERE RegionId__c =: regionId];
         return pins;
     }
 
@@ -28,8 +30,10 @@ global with sharing class WEBSERVICE_Pins{
 
   @HttpPost
     global static Pin__c doPost(
+        String createdByUserId,
         String name,
         String regionId,
+        String address,
         String description,
         String pinType,
         Decimal latitude,
@@ -37,8 +41,10 @@ global with sharing class WEBSERVICE_Pins{
         String Id) {
 
         Pin__c pin = new Pin__c();
+        pin.UserId__c = createdByUserId;
         pin.Name = name;
         pin.RegionId__c = regionId;
+        pin.Address__c = address;
         pin.Additional_Descriptors__c = description;
         pin.Coordinates__Latitude__s = latitude;
         pin.Coordinates__Longitude__s = longitude;

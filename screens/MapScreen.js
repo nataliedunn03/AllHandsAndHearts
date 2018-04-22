@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { View } from 'react-native-animatable';
 import SlidingModal from 'react-native-sliding-modal';
-import { EditPinModal } from '../components/Modal';
+import { ViewPinModal } from '../components/Modal';
 //import { SlidingModal } from '../components/Modal';
 import { CurrentLocationButton, SwitchRegionButton } from '../components/Maps';
 import Colors from '../constants/Colors';
@@ -567,7 +567,7 @@ export default class MapScreen extends React.PureComponent {
             Location Details
           </StyledText>
         </SlidingModal.Header>
-        <EditPinModal data={pinData} />
+        <ViewPinModal data={pinData} />
       </SlidingModal>
     );
   };

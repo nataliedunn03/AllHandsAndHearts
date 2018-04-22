@@ -3,11 +3,11 @@ import {
   TouchableWithoutFeedback,
   StyleSheet,
   Keyboard,
+  ScrollView,
   View
 } from 'react-native';
 import Colors from '../../constants/Colors';
 import StyledButton from '../StyledButton';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { StyledText } from '../../components/StyledText';
 import StyledInput from '../../components/StyledInput';
 import LabelSelect from 'react-native-label-select';
@@ -26,7 +26,7 @@ const Separator = () => {
   );
 };
 
-export default class EditPinModal extends React.Component {
+export default class ViewPinModal extends React.Component {
   render() {
     const { data } = this.props;
     const coordsString = `${parseFloat(data.latitude).toFixed(6)}, ${parseFloat(
@@ -34,21 +34,24 @@ export default class EditPinModal extends React.Component {
     ).toFixed(6)}`;
 
     //TODO: Wire up delete/edit rights after associating Userid
-    //TODO: Need to add address location to Pin__c
     /*
      <StyledText style={styles.styledText}>
      {`Address: Test address`}
      </StyledText>
      */
-
     return (
-      <KeyboardAwareScrollView
+      <ScrollView
         style={{ backgroundColor: Colors.defaultColor.PAPER_COLOR, flex: 1 }}
         resetScrollToCoords={{ x: 0, y: 0 }}
         showsVerticalScrollIndicator={false}
       >
         <StyledText style={styles.styledText}>LOCATION NAME</StyledText>
         <StyledText style={styles.styledTextValue}>{data.Name}</StyledText>
+        <Separator />
+        <StyledText style={styles.styledText}>ADDRESS</StyledText>
+        <StyledText style={styles.styledTextValue}>
+          {data.Address__c}
+        </StyledText>
         <Separator />
         <StyledText style={styles.styledText}>COORDINATES</StyledText>
         <StyledText style={styles.styledTextValue}>{coordsString}</StyledText>
@@ -62,7 +65,7 @@ export default class EditPinModal extends React.Component {
         <StyledText style={styles.styledTextValue}>
           {data.PinLocationType__c}
         </StyledText>
-      </KeyboardAwareScrollView>
+      </ScrollView>
     );
   }
 }
