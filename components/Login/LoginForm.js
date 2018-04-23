@@ -14,7 +14,12 @@ export default class LoginForm extends React.PureComponent {
   };
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.auth.loginError && this.styledButton2) {
+    if (this.props.auth.loginError && this.styledButton2) {
+      this.props.alertWithType(
+        'error',
+        'Log in',
+        `${nextProps.auth.loginError} Check Email and Password`
+      );
       this.styledButton2.error();
       delayExec(2000, this.styledButton2.reset);
     }
@@ -27,6 +32,7 @@ export default class LoginForm extends React.PureComponent {
   };
 
   handleLogin = async () => {
+    this.styledButton2.load();
     let { email, password } = this.state;
     email = email.trim();
     password = password.trim();
@@ -40,8 +46,12 @@ export default class LoginForm extends React.PureComponent {
         this.styledButton2.success();
     } else {
       this.styledButton2 && this.styledButton2.error();
+      this.props.alertWithType(
+        'error',
+        'Log in',
+        'Both Email and Password are required'
+      );
       delayExec(2000, this.styledButton2.reset);
-      console.log('\n\n You must enter creds to login \n\n');
     }
   };
   render() {
@@ -101,12 +111,5 @@ const styles = StyleSheet.create({
     color: '#9999a3',
     alignSelf: 'center',
     padding: 20
-  },
-  row: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignSelf: 'stretch'
-  },
-  rightText: { color: Colors.defaultColor.PRIMARY_COLOR, marginLeft: 10 }
+  }
 });

@@ -43,8 +43,7 @@ class AppContainer extends React.PureComponent {
   _loadResourcesAsync = async () => {
     return Promise.all([
       Asset.loadAsync([
-        require('../assets/images/robot-dev.png'),
-        require('../assets/images/robot-prod.png'),
+        require('../assets/images/bell.png'),
         require('../assets/images/logo.png')
       ]),
       Font.loadAsync({

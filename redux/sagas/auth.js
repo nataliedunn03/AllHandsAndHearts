@@ -61,7 +61,6 @@ function* loginFlow(action) {
       password,
       isRegistering: false
     });
-    //yield delay(5000);
     if (auth && typeof auth === 'object' && auth.Id) {
       console.log('inside auth');
       console.log(auth);
@@ -85,6 +84,7 @@ function* loginFlow(action) {
     yield put({ type: LOGIN_REQUEST_FAILED, error: e });
   } finally {
     yield put({ type: LOGIN_REQUEST_LOADING, loading: false });
+    yield put({ type: LOGIN_REQUEST_FAILED, error: null });
   }
 }
 
@@ -122,6 +122,7 @@ function* registerFlow(action) {
     }
   } catch (e) {
     yield put({ type: REGISTER_REQUEST_LOADING, loading: false });
+    yield put({ type: LOGIN_REQUEST_FAILED, error: null });
     yield put({ type: RESET_TO_SIGN_IN });
   }
 }

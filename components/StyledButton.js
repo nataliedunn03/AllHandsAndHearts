@@ -78,7 +78,6 @@ const styles = StyleSheet.create({
   button: {
     borderColor: Colors.Input.BORDER.COLOR,
     borderRadius: Colors.Input.BORDER.RADIUS,
-    borderRadius: 4,
     marginBottom: 10,
     marginTop: 10,
     marginLeft: 20,

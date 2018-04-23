@@ -1,23 +1,15 @@
-import { MapView, LinearGradient } from 'expo';
+import { MapView } from 'expo';
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-  ActivityIndicator,
-  UIManager,
-  LayoutAnimation,
-  Animated
-} from 'react-native';
+import { StyleSheet, UIManager, LayoutAnimation } from 'react-native';
 import { View } from 'react-native-animatable';
 import SlidingModal from 'react-native-sliding-modal';
-import { ViewPinModal } from '../components/Modal';
 //import { SlidingModal } from '../components/Modal';
 import {
   CurrentLocationButton,
   SwitchRegionButton,
   MapsModalHeader,
-  ViewRegionModal
+  ViewRegionModal,
+  ViewPinModal
 } from '../components/Maps';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
@@ -291,6 +283,9 @@ export default class MapScreen extends React.PureComponent {
           <MapsModalHeader
             title="Location Details"
             onPressClose={this._onMarkerClose}
+            style={{
+              fontSize: 24
+            }}
           />
         </SlidingModal.Header>
         <ViewPinModal data={pinData} />

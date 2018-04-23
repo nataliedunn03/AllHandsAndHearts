@@ -15,6 +15,11 @@ export default class SignupForm extends React.PureComponent {
   };
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.loginError && this.styledButton2) {
+      this.props.alertWithType(
+        'error',
+        'Sign up',
+        `${nextProps.auth.loginError} Check Name, Email, and Password`
+      );
       this.styledButton2.error();
       delayExec(2000, this.styledButton2.reset);
     }
@@ -27,6 +32,7 @@ export default class SignupForm extends React.PureComponent {
   };
 
   handleRegister = () => {
+    this.styledButton2.load();
     let { email, password, name } = this.state;
     email = email.trim();
     password = password.trim();
@@ -41,9 +47,13 @@ export default class SignupForm extends React.PureComponent {
         this.styledButton2 &&
         this.styledButton2.success();
     } else {
+      this.props.alertWithType(
+        'error',
+        'Sign up',
+        'Name, Email, and Password are all required'
+      );
       this.styledButton2 && this.styledButton2.error();
       delayExec(2000, this.styledButton2.reset);
-      console.log('\n\n You must enter all fileds to register \n\n');
     }
   };
 
