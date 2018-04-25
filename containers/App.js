@@ -31,9 +31,9 @@ class AppContainer extends React.PureComponent {
       return (
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="light-content" />}
-          {Platform.OS === 'android' && (
+          {/*Platform.OS === 'android' && (
             <View style={styles.statusBarUnderlay} />
-          )}
+          )*/}
           <RootNavigator />
         </View>
       );
