@@ -1,23 +1,15 @@
-import { MapView, LinearGradient } from 'expo';
+import { MapView } from 'expo';
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-  ActivityIndicator,
-  UIManager,
-  LayoutAnimation,
-  Animated
-} from 'react-native';
+import { StyleSheet, UIManager, LayoutAnimation } from 'react-native';
 import { View } from 'react-native-animatable';
 import SlidingModal from 'react-native-sliding-modal';
-import { ViewPinModal } from '../components/Modal';
 //import { SlidingModal } from '../components/Modal';
 import {
   CurrentLocationButton,
   SwitchRegionButton,
   MapsModalHeader,
-  ViewRegionModal
+  ViewRegionModal,
+  ViewPinModal
 } from '../components/Maps';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
@@ -65,16 +57,18 @@ export default class MapScreen extends React.PureComponent {
     this._getUserCurrentLocation();
   }
   componentWillReceiveProps(nextProps) {
-    const markerIds = nextProps.pinData.map(marker => {
-      return {
-        latitude: marker.Coordinates__Latitude__s,
-        longitude: marker.Coordinates__Longitude__s,
-        ...marker
-      };
-    });
-    this.setState({
-      markerIds
-    });
+    if (nextProps['pinData']) {
+      const markerIds = nextProps.pinData.map(marker => {
+        return {
+          latitude: marker.Coordinates__Latitude__s,
+          longitude: marker.Coordinates__Longitude__s,
+          ...marker
+        };
+      });
+      this.setState({
+        markerIds
+      });
+    }
   }
 
   _handleOnChangeText = (key, value) => {
@@ -233,10 +227,7 @@ export default class MapScreen extends React.PureComponent {
       longitudeDelta: DELTA * (Layout.width / Layout.height),
       latitudeDelta: DELTA
     };
-    debugger;
-
     this.state.regionModalIsFull && this.regionModalRef.openModalHalfway();
-    debugger;
     //this.scrollCardRef && this.scrollCardRef.scrollTo({ x: -9 });
     this.mapViewRef.animateToRegion(region);
     await runAfterInteractions();
@@ -291,6 +282,9 @@ export default class MapScreen extends React.PureComponent {
           <MapsModalHeader
             title="Location Details"
             onPressClose={this._onMarkerClose}
+            style={{
+              fontSize: 24
+            }}
           />
         </SlidingModal.Header>
         <ViewPinModal data={pinData} />
@@ -429,21 +423,5 @@ const styles = StyleSheet.create({
   slidingHeader: {
     alignItems: 'center',
     justifyContent: 'center'
-  },
-  rmcContainer: {
-    flex: 1,
-    flexDirection: 'column',
-    height: 190,
-    overflow: 'hidden',
-    margin: 8,
-    marginTop: 0,
-    padding: 0,
-    borderRadius: 8,
-    justifyContent: 'space-between'
-  },
-  rmcImageContainer: {
-    width: Layout.width - 70,
-    height: 190,
-    transform: [{ scale: 1 }]
   }
 });

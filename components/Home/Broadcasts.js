@@ -11,7 +11,7 @@ import { View } from 'react-native-animatable';
 import Layout from '../../constants/Layout';
 import BroadcastCard from './BroadcastCard';
 import { StyledText } from '../StyledText';
-
+import { human } from 'react-native-typography';
 //enable in android
 if (Layout.android)
   UIManager.setLayoutAnimationEnabledExperimental &&
@@ -72,7 +72,9 @@ export default class Broadcasts extends PureComponent {
           }}
           style={[styles.broadcastContainer]}
         >
-          <StyledText style={styles.monoText}>Alerts</StyledText>
+          <StyledText style={[styles.monoText, human.title1]}>
+            Alerts
+          </StyledText>
           <ScrollView
             ref={scrollView => {
               this.scrollViewRef = scrollView;

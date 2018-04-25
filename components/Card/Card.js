@@ -19,12 +19,11 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#fff',
     borderColor: '#EDEDED',
-    borderRadius: 3,
+    borderRadius: 10,
     shadowOpacity: 0.8,
     shadowRadius: 5,
     shadowColor: 'hsla(0, 0%, 0%, 0.2)',
     shadowOffset: { width: 1, height: 1 },
-    margin: 10,
     height: 150
   }
 });

@@ -13,7 +13,10 @@ export default class ProfileScreen extends React.PureComponent {
      * content, we just wanted to give you a quick view of your config */
     return (
       <KeyboardAwareScrollView
-        style={{ backgroundColor: Colors.defaultColor.PAPER_COLOR, flex: 1 }}
+        style={{
+          backgroundColor: Colors.defaultColor.PAGE_BACKGROUND,
+          flex: 1
+        }}
         resetScrollToCoords={{ x: 0, y: 0 }}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{

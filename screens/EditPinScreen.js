@@ -175,66 +175,68 @@ export default class EditPinScreen extends PureComponent {
 
   renderLocationType = () => {
     return (
-      <LabelSelect
-        title="Choose a type"
-        ref={element => (this.select = element)}
-        style={styles.labelSelect}
-        onConfirm={this.selectConfirm}
-        addButtonText={this.state.showToAddLocationQ}
-        customStyle={{
-          addButtonText: {
-            color: '#5d0e8b',
-            padding: 6,
-            fontSize: 14,
-            lineHeight: 20,
-            maxWidth: 300
-          },
-          addButton: {
-            padding: 9
-          }
-        }}
-        enableAddBtn={this.state.enableLocationTypeButton}
-      >
-        {this.state.pinType
-          .filter(item => item.isSelected)
-          .map((item, index) => (
-            <LabelSelect.Label
-              key={'label-' + index}
-              data={item}
-              onCancel={() => {
-                this.deleteItem(item);
-              }}
-              customStyle={{
-                text: {
-                  color: '#5d0e8b',
-                  padding: 6,
-                  fontSize: 14,
-                  lineHeight: 20,
-                  maxWidth: 300
-                }
-              }}
-            >
-              {item.name}
-            </LabelSelect.Label>
-          ))}
-        {this.state.pinType
-          .filter(item => !item.isSelected)
-          .map((item, index) => {
-            return (
-              <LabelSelect.ModalItem
-                key={'modal-item-' + index}
+      <View>
+        <LabelSelect
+          title="Choose a type"
+          ref={element => (this.select = element)}
+          style={styles.labelSelect}
+          onConfirm={this.selectConfirm}
+          addButtonText={this.state.showToAddLocationQ}
+          customStyle={{
+            addButtonText: {
+              color: '#5d0e8b',
+              padding: 6,
+              fontSize: 14,
+              lineHeight: 20,
+              maxWidth: 300
+            },
+            addButton: {
+              padding: 9
+            }
+          }}
+          enableAddBtn={this.state.enableLocationTypeButton}
+        >
+          {this.state.pinType
+            .filter(item => item.isSelected)
+            .map((item, index) => (
+              <LabelSelect.Label
+                key={'label-' + index}
                 data={item}
+                onCancel={() => {
+                  this.deleteItem(item);
+                }}
                 customStyle={{
-                  innerCircle: {
-                    backgroundColor: Colors.defaultColor.PRIMARY_COLOR
+                  text: {
+                    color: '#5d0e8b',
+                    padding: 6,
+                    fontSize: 14,
+                    lineHeight: 20,
+                    maxWidth: 300
                   }
                 }}
               >
                 {item.name}
-              </LabelSelect.ModalItem>
-            );
-          })}
-      </LabelSelect>
+              </LabelSelect.Label>
+            ))}
+          {this.state.pinType
+            .filter(item => !item.isSelected)
+            .map((item, index) => {
+              return (
+                <LabelSelect.ModalItem
+                  key={'modal-item-' + index}
+                  data={item}
+                  customStyle={{
+                    innerCircle: {
+                      backgroundColor: Colors.defaultColor.PRIMARY_COLOR
+                    }
+                  }}
+                >
+                  {item.name}
+                </LabelSelect.ModalItem>
+              );
+            })}
+        </LabelSelect>
+      </View>
     );
   };
 

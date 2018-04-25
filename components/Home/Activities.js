@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react';
 import { View } from 'react-native-animatable';
-import { LayoutAnimation } from 'react-native';
+import { LayoutAnimation, Text } from 'react-native';
 import ActivityCard from './ActivityCard';
 import { StyledText } from '../../components/StyledText';
+import { human } from 'react-native-typography';
 
 export default class Activities extends PureComponent {
   constructor(props) {
@@ -46,16 +47,19 @@ export default class Activities extends PureComponent {
           }}
         >
           <StyledText
-            style={{
-              color: '#000000',
-              fontSize: 28,
-              marginTop: 10,
-              marginBottom: 16,
-              marginLeft: 16,
-              fontWeight: '500',
-              textAlign: 'left',
-              backgroundColor: 'transparent'
-            }}
+            style={[
+              {
+                color: '#000000',
+                fontSize: 28,
+                marginTop: 10,
+                marginBottom: 16,
+                marginLeft: 16,
+                fontWeight: '500',
+                textAlign: 'left',
+                backgroundColor: 'transparent'
+              },
+              human.title1
+            ]}
           >
             Activities
           </StyledText>

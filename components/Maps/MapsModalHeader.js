@@ -3,6 +3,7 @@ import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { Feather as Icon } from '@expo/vector-icons';
 import { StyledText } from '../StyledText';
 import Colors from '../../constants/Colors';
+import { human } from 'react-native-typography';
 const MapsModalHeader = ({ style, title, onPressClose }) => {
   return (
     <React.Fragment>
@@ -21,7 +22,9 @@ const MapsModalHeader = ({ style, title, onPressClose }) => {
           <Icon name="x" color="#ffffff" size={22} />
         </TouchableOpacity>
       </View>
-      <StyledText style={styles.title}>{title}</StyledText>
+      <StyledText style={[styles.title, human.title1, style]}>
+        {title}
+      </StyledText>
     </React.Fragment>
   );
 };
@@ -50,7 +53,9 @@ const styles = StyleSheet.create({
     height: 24,
     width: 24,
     backgroundColor: Colors.defaultColor.PRIMARY_COLOR,
-    borderRadius: 12
+    borderRadius: 12,
+    marginTop: 5,
+    marginRight: 5
   },
   bar: {
     top: -3

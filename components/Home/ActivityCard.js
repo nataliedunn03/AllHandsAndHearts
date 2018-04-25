@@ -11,16 +11,15 @@ const styles = StyleSheet.create({
     marginRight: 16,
     marginTop: 8,
     marginBottom: 8,
-    flexDirection: 'row',
+    flexDirection: 'column',
     position: 'relative',
     backgroundColor: Colors.defaultColor.PAPER_COLOR,
     borderColor: '#EDEDED',
-    borderRadius: 3,
+    borderRadius: 10,
     shadowOpacity: 0.8,
     shadowRadius: 5,
     shadowColor: 'rgba(0, 0, 0, 0.1)',
-    shadowOffset: { width: 1, height: 1 },
-    flexDirection: 'column'
+    shadowOffset: { width: 1, height: 1 }
   },
   userLogo: {
     marginTop: 12,
@@ -45,10 +44,12 @@ const styles = StyleSheet.create({
   },
   mainBody: {
     flexDirection: 'column',
-    height: '100%'
+    height: '100%',
+    top: -15
   },
   body: {
-    overflow: 'hidden'
+    overflow: 'hidden',
+    fontSize: 14
   },
   name: {
     backgroundColor: 'transparent',
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
   },
   task: {
     backgroundColor: 'transparent',
-    color: '#999999',
+    color: '#8E8E93',
     fontSize: 13,
     letterSpacing: -0.08,
     lineHeight: 18
@@ -105,7 +106,7 @@ const ActivityCard = props => {
                 numberOfLines={5}
                 ellipsizeMode="tail"
                 selectable
-                selectionColor={Colors.PRIMARY_COLOR}
+                selectionColor={Colors.defaultColor.PRIMARY_COLOR}
               >
                 {taskDetail}
               </Text>

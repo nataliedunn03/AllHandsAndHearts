@@ -14,6 +14,8 @@ import {
   getPinsListByRegion,
   setPinByRegion
 } from '../../services/regions';
+import ApiWrapper from '../../services/api';
+const Api = new ApiWrapper();
 
 /**
  * Region saga
@@ -34,11 +36,10 @@ const getRegionDataHelper = function* getRegionDataHelper() {
 };
 
 const getPinsDataHelper = function* getPinsDataHelper(regionId) {
-  let response;
   try {
-    response = yield call(getPinsListByRegion, regionId);
-    return response;
+    return yield call(Api.getPinsListByRegion, regionId);
   } catch (error) {
+    console.log(error);
     yield put({ type: GET_REGION_DATA_ERROR, pinError: error.message });
     return false;
   }

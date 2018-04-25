@@ -31,9 +31,9 @@ class AppContainer extends React.PureComponent {
       return (
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="light-content" />}
-          {Platform.OS === 'android' && (
+          {/*Platform.OS === 'android' && (
             <View style={styles.statusBarUnderlay} />
-          )}
+          )*/}
           <RootNavigator />
         </View>
       );
@@ -43,8 +43,7 @@ class AppContainer extends React.PureComponent {
   _loadResourcesAsync = async () => {
     return Promise.all([
       Asset.loadAsync([
-        require('../assets/images/robot-dev.png'),
-        require('../assets/images/robot-prod.png'),
+        require('../assets/images/bell.png'),
         require('../assets/images/logo.png')
       ]),
       Font.loadAsync({

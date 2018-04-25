@@ -7,7 +7,7 @@ import {
 import { getActivities } from '../redux/actions/activity';
 import { registerPushNotification } from '../redux/actions/notification';
 import HomeScreen from '../screens/HomeScreen';
-import { AlertProvider, AlertConsumer } from '../containers/AlertContainer';
+import { AlertConsumer } from '../containers/AlertContainer';
 const mapDispatchToProps = dispatch => {
   return {
     removeBroadcastCard: key => {
@@ -32,6 +32,6 @@ const mapStateToProps = state => ({
 const Home = connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
 export default props => {
   return (
-    <AlertConsumer>{context => <Home {...context} {...props} />}</AlertConsumer>
+    <AlertConsumer>{value => <Home {...value} {...props} />}</AlertConsumer>
   );
 };

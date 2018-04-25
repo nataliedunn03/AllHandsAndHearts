@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, TouchableHighlight } from 'react-native';
 import { View, Text } from 'react-native-animatable';
-import { Ionicons as Icon } from '@expo/vector-icons';
+import { Feather as Icon } from '@expo/vector-icons';
 
 const RemoveComponent = ({ cardKey, onClosePress }) => (
   <View style={styles.remove}>
@@ -11,7 +11,7 @@ const RemoveComponent = ({ cardKey, onClosePress }) => (
       underlayColor="transparent"
     >
       <View style={{ flex: 1 }}>
-        <Icon name="ios-close-circle-outline" size={20} color="#9B9B9B" />
+        <Icon name="x-circle" size={22} color="#b2b2b2" />
       </View>
     </TouchableHighlight>
   </View>
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#fff',
     borderColor: '#EDEDED',
-    borderRadius: 3,
+    borderRadius: 10,
     shadowOpacity: 0.8,
     shadowRadius: 5,
     shadowColor: 'rgba(0, 0, 0, 0.1)',
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     color: '#383539'
   },
   subText: {
-    color: '#9B9B9B',
+    color: '#8E8E93',
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 5

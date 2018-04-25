@@ -10,13 +10,16 @@ export default class HomeScreen extends React.PureComponent {
     scrollY: 0
   };
   componentWillMount() {
-    console.log(this.props);
     this.props.getBroadcastCards();
     this.props.getActivities();
   }
   _handleRefresh = async () => {
     try {
-      this.props.alertWithType('custom', 'title', 'body');
+      this.props.alertWithType(
+        'custom',
+        'REFRESH',
+        'Fetching newest alerts ...'
+      );
       await this.props.getBroadcastCards();
     } catch (e) {
       console.log(e);
@@ -49,7 +52,9 @@ export default class HomeScreen extends React.PureComponent {
         notification.data.title,
         notification.data.body
       );
-      Notifications.setBadgeNumberAsync(1);
+      Notifications.getBadgeNumberAsync.then(count =>
+        Notifications.setBadgeNumberAsync(count + 1)
+      );
     }
   };
 
@@ -72,9 +77,6 @@ export default class HomeScreen extends React.PureComponent {
           }
           scrollEventThrottle={16}
           showsVerticalScrollIndicator={false}
-          onScroll={Animated.event([
-            { nativeEvent: { contentOffset: { y: this.state.scrollY } } }
-          ])}
           alwaysBounceVertical
         >
           {this.props.broadcast && (

@@ -6,7 +6,7 @@ export default class StyledInput extends PureComponent {
   static defaultProps = {
     keyboardType: 'default',
     placeholder: 'Type here',
-    placeholderTextColor: '#666665',
+    placeholderTextColor: '#8E8E93',
     returnKeyType: 'done',
     inputRef: null
   };
