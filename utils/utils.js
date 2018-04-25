@@ -64,7 +64,7 @@ export class SalesforceApiWrapper {
   put = async (url, payload) => {
     const requestUrl = `${SF_BASE_URL}${url}`;
     const init = {
-      method: 'DELETE',
+      method: 'PUT',
       headers: this.HEADERS,
       body: JSON.stringify(payload)
     };
