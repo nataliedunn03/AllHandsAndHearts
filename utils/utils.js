@@ -42,21 +42,41 @@ export class SalesforceApiWrapper {
       .catch(error => error);
   };
 
-  post = async (url, payload, type = 'POST') => {
+  get = async url => {
     const requestUrl = `${SF_BASE_URL}${url}`;
     const init = {
-      method: type,
+      method: 'GET',
+      headers: this.HEADERS
+    };
+    return await this.fetchWrapper(requestUrl, init);
+  };
+
+  post = async (url, payload) => {
+    const requestUrl = `${SF_BASE_URL}${url}`;
+    const init = {
+      method: 'POST',
       headers: this.HEADERS,
       body: JSON.stringify(payload)
     };
     return await this.fetchWrapper(requestUrl, init);
   };
 
-  get = async url => {
+  put = async (url, payload) => {
     const requestUrl = `${SF_BASE_URL}${url}`;
     const init = {
-      method: 'GET',
-      headers: this.HEADERS
+      method: 'DELETE',
+      headers: this.HEADERS,
+      body: JSON.stringify(payload)
+    };
+    return await this.fetchWrapper(requestUrl, init);
+  };
+
+  delete = async (url, payload) => {
+    const requestUrl = `${SF_BASE_URL}${url}`;
+    const init = {
+      method: 'DELETE',
+      headers: this.HEADERS,
+      body: JSON.stringify(payload)
     };
     return await this.fetchWrapper(requestUrl, init);
   };
