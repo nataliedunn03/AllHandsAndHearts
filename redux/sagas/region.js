@@ -7,7 +7,8 @@ import {
   GET_PINS_BY_REGION,
   GET_PINS_BY_REGION_RECEIVED,
   GET_PINS_BY_REGION_ERROR,
-  SET_PINS_BY_REGION
+  SET_PINS_BY_REGION,
+  DELETE_PIN_BY_ID
 } from '../actions/actionTypes';
 import {
   getRegionList,
@@ -74,9 +75,23 @@ function* setPinDataByRegion(action) {
   });
 }
 
+function* deletePinDataById(action) {
+  yield call(Api.deletePinById, action.pinId);
+  let regionMarkerList = action.regionMarkerList;
+  console.log('Removing from marker list:', regionMarkerList);
+  regionMarkerList = regionMarkerList.filter(
+    marker => marker.Id != action.pinId
+  );
+  yield put({
+    type: GET_PINS_BY_REGION_RECEIVED,
+    pinData: regionMarkerList
+  });
+}
+
 function* saga() {
   yield takeEvery(GET_REGION_DATA, getRegion);
   yield takeEvery(GET_PINS_BY_REGION, getPinsByRegion);
   yield takeEvery(SET_PINS_BY_REGION, setPinDataByRegion);
+  yield takeEvery(DELETE_PIN_BY_ID, deletePinDataById);
 }
 export default saga;

@@ -21,7 +21,11 @@ const INITIAL_STATE = {
 export const auth = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case SET_AUTH:
-      return { ...state, loggedIn: action.newAuthState };
+      return {
+        ...state,
+        loggedIn: action.newAuthState,
+        currentUserId: action.currentUserId
+      };
     case LOGIN_REQUEST_LOADING:
       return { ...state, loading: action.loading };
     case LOGIN_REQUEST_SUCCESS:

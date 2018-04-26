@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, ScrollView, View } from 'react-native';
 import Colors from '../../constants/Colors';
 import { StyledText } from '../../components/StyledText';
+import StyledButton from '../StyledButton';
 
 const Separator = () => {
   return (
@@ -17,7 +18,10 @@ const Separator = () => {
 
 export default class ViewPinModal extends React.Component {
   render() {
-    const { data } = this.props;
+    const { data, currentUserId, onDelete, onEdit } = this.props;
+
+    if (!data) return '';
+
     const coordsString = `${parseFloat(data.latitude).toFixed(6)}, ${parseFloat(
       data.longitude
     ).toFixed(6)}`;
@@ -28,6 +32,26 @@ export default class ViewPinModal extends React.Component {
      {`Address: Test address`}
      </StyledText>
      */
+    const isOwner = data.UserId__c === currentUserId;
+    const showButton = (
+      <View>
+        <StyledButton
+          style={styles.editPinButton}
+          textStyle={styles.buttonTextStyle}
+          text={'Edit Location'}
+          onPress={() => onEdit()}
+        />
+        <StyledButton
+          style={styles.deletePinButton}
+          textStyle={styles.buttonTextStyle}
+          text={'Delete Location'}
+          onPress={() => {
+            onDelete(data.Id);
+          }}
+        />
+      </View>
+    );
+
     return (
       <ScrollView
         style={{
@@ -57,6 +81,7 @@ export default class ViewPinModal extends React.Component {
         <StyledText style={styles.styledTextValue}>
           {data.PinLocationType__c}
         </StyledText>
+        {isOwner ? showButton : ''}
       </ScrollView>
     );
   }
@@ -76,5 +101,17 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     fontWeight: '500',
     fontSize: 16
+  },
+  buttonTextStyle: {
+    color: Colors.defaultColor.PAPER_COLOR
+  },
+  editPinButton: {
+    top: 10,
+    height: 42,
+    backgroundColor: Colors.defaultColor.PRIMARY_COLOR
+  },
+  deletePinButton: {
+    height: 42,
+    backgroundColor: Colors.defaultColor.WARNING_COLOR
   }
 });

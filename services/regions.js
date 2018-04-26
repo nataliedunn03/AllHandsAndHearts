@@ -138,7 +138,7 @@ export const setPinByRegion = async (regionId, pinData) => {
     description: pinData.description,
     latitude: pinData.latitude,
     longitude: pinData.longitude,
-    pinType: pinData.type ? pinData.type : 'Point of Interest',
+    pinType: pinData.pinType ? pinData.pinType.name : 'Other',
     Id: pinData.id ? pinData.id : ''
   };
 

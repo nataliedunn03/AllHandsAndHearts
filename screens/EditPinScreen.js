@@ -64,13 +64,13 @@ export default class EditPinScreen extends PureComponent {
           color: 'orange'
         },
         {
-          name: 'Road/Transport',
+          name: 'Partner Locations',
           isSelected: false,
           Id: 622,
           color: 'brown'
         },
         {
-          name: 'Other(title)',
+          name: 'Other',
           isSelected: false,
           Id: 76661,
           color: 'grey'
@@ -82,12 +82,14 @@ export default class EditPinScreen extends PureComponent {
   }
 
   _generatePayload = () => {
+    const { Id } = this.props;
     const selectedPinType = this.state.pinType.filter(
       item => item.isSelected === true
     )[0];
     const payload = {
       ...this.state,
-      pinType: selectedPinType
+      pinType: selectedPinType,
+      id: Id ? Id : ''
     };
     return payload;
   };
@@ -103,7 +105,14 @@ export default class EditPinScreen extends PureComponent {
   }
 
   async componentWillMount() {
-    let { coords, regionId } = this.props;
+    let {
+      coords,
+      regionId,
+      PinLocationType__c,
+      Name,
+      Additional_Descriptors__c
+    } = this.props;
+    let { pinType } = this.state;
     let { latitude, longitude } = coords;
     try {
       Location.setApiKey(GOOGLE_MAPS_API_KEY);
@@ -118,13 +127,24 @@ export default class EditPinScreen extends PureComponent {
         postalCode
       } = decodedLocation[0];
 
+      if (PinLocationType__c) {
+        var newPinList = pinType.map(pin => {
+          return pin.name === PinLocationType__c
+            ? { ...pin, isSelected: true }
+            : pin;
+        });
+      }
+
       this.setState({
+        name: Name ? Name : this.state.name,
         address: `${name ? name : street}, ${city ? city : ''} ${region}, ${
           postalCode ? postalCode : ''
         } ${country}`,
         latitude,
         longitude,
-        regionId
+        regionId,
+        pinType: newPinList,
+        description: Additional_Descriptors__c ? Additional_Descriptors__c : ''
       });
     } catch (e) {
       console.log(e);
@@ -240,7 +260,7 @@ export default class EditPinScreen extends PureComponent {
     );
   };
 
-  renderEditPinBody = () => {
+  renderNewPinBody = () => {
     const { latitude, longitude, selectedItems } = this.state;
     const coordsString = `Coordinates: ${parseFloat(latitude).toFixed(
       6
@@ -334,7 +354,105 @@ export default class EditPinScreen extends PureComponent {
     );
   };
 
+  renderEditPinBody = () => {
+    const { latitude, longitude, Address__c } = this.props;
+    const { name, description } = this.state;
+    const coordsString = `Coordinates: ${parseFloat(latitude).toFixed(
+      6
+    )}, ${parseFloat(longitude).toFixed(6)}`;
+
+    return (
+      <KeyboardAwareScrollView
+        style={{ backgroundColor: Colors.defaultColor.PAPER_COLOR, flex: 1 }}
+        resetScrollToCoords={{ x: 0, y: 0 }}
+        showsVerticalScrollIndicator={false}
+      >
+        <StyledText
+          style={{
+            color: '#000000',
+            fontSize: 28,
+            marginTop: 10,
+            marginBottom: 10,
+            marginLeft: 16,
+            fontWeight: '500',
+            textAlign: 'left',
+            backgroundColor: 'transparent'
+          }}
+        >
+          Edit Location
+        </StyledText>
+        <StyledText style={styles.styledText}>Location Name *</StyledText>
+        <StyledInput
+          style={styles.input}
+          value={name ? name : 'Enter location name'}
+          returnKeyType="next"
+          enablesReturnKeyAutomatically
+          inputRef={element => (this.locationNameRef = element)}
+          onSubmitEditing={() => this.descriptionRef.focus()}
+          onChangeText={value => this._handleOnChangeText('name', value)}
+        />
+        <StyledText style={styles.styledText}>
+          {`Address: ${Address__c}`}
+        </StyledText>
+        <StyledText
+          style={[
+            styles.styledText,
+            {
+              marginBottom: 10
+            }
+          ]}
+        >
+          {latitude && coordsString}
+        </StyledText>
+        <StyledText style={styles.styledText}>Description *</StyledText>
+        <StyledInput
+          style={styles.inputWide}
+          inputRef={element => (this.descriptionRef = element)}
+          value={
+            description
+              ? description
+              : 'Enter description and any relevant details of the area'
+          }
+          enablesReturnKeyAutomatically
+          multiline
+          numberOfLines={4}
+          onChangeText={value => this._handleOnChangeText('description', value)}
+        />
+
+        <StyledText style={styles.styledText}>Location Type *</StyledText>
+        {this.renderLocationType()}
+        <StyledText style={styles.styledText}>Source Name</StyledText>
+        <StyledInput
+          style={styles.input}
+          inputRef={element => (this.sourceNameRef = element)}
+          onSubmitEditing={() => this.sourceLinkRef.focus()}
+          placeholder={'Enter source name'}
+          returnKeyType="next"
+          enablesReturnKeyAutomatically
+          onChangeText={value => this._handleOnChangeText('sourceName', value)}
+        />
+        <StyledText style={styles.styledText}>Source Link</StyledText>
+        <StyledInput
+          style={styles.input}
+          inputRef={element => (this.sourceLinkRef = element)}
+          returnKeyType="next"
+          enablesReturnKeyAutomatically
+          placeholder="https://example.com"
+          onChangeText={value => this._handleOnChangeText('sourceLink', value)}
+        />
+
+        <StyledButton
+          style={styles.addPinButton}
+          textStyle={styles.addButtonTextStyle}
+          text={'Update location'}
+          onPress={this._handleEditPinSubmit}
+        />
+      </KeyboardAwareScrollView>
+    );
+  };
+
   render() {
+    const { hasPinData } = this.props;
     return (
       <View style={styles.container}>
         <TouchableWithoutFeedback
@@ -345,7 +463,7 @@ export default class EditPinScreen extends PureComponent {
           transparent
           onPress={this._hideKeyboard}
         >
-          {this.renderEditPinBody()}
+          {hasPinData ? this.renderEditPinBody() : this.renderNewPinBody()}
         </TouchableWithoutFeedback>
       </View>
     );

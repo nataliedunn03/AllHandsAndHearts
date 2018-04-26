@@ -253,6 +253,21 @@ export default class MapScreen extends React.PureComponent {
     });
   };
 
+  _editCurrentMarker = async pinData => {
+    console.log(' editing to EditPin:', pinData);
+    this._closeMarkerModal();
+    this.props.navigation.navigate('EditPin', {
+      hasPinData: true,
+      setPinByRegion: this.props.setPinByRegion,
+      coords: {
+        longitude: pinData.longitude,
+        latitude: pinData.latitude
+      },
+      regionId: this.state.currentRegionId,
+      ...pinData
+    });
+  };
+
   _closeMarkerModal = () => {
     console.log('closedMarkerModal');
     this.setState({
@@ -260,8 +275,15 @@ export default class MapScreen extends React.PureComponent {
     });
   };
 
+  _onPinDelete = pinId => {
+    const { markerIds } = this.state;
+    this.props.deletePinById(pinId, markerIds);
+    this._closeMarkerModal();
+  };
+
   _renderPinModal = () => {
     let { currentRegionId, showDetailsOfMarkerId, markerIds } = this.state;
+    const { currentUserId } = this.props;
     /*
      * TODO: Major stuff left to be done for writing pin data
      * 1) Add a dropdown option for pin type
@@ -287,7 +309,14 @@ export default class MapScreen extends React.PureComponent {
             }}
           />
         </SlidingModal.Header>
-        <ViewPinModal data={pinData} />
+        <ViewPinModal
+          data={pinData}
+          currentUserId={currentUserId}
+          onDelete={this._onPinDelete}
+          onEdit={() => {
+            this._editCurrentMarker(pinData);
+          }}
+        />
       </SlidingModal>
     );
   };

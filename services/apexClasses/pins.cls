@@ -19,16 +19,16 @@ global with sharing class WEBSERVICE_Pins{
         return pins;
     }
 
-   @HttpDelete
+    @HttpDelete
     global static void doDelete() {
         RestRequest req = RestContext.request;
         RestResponse res = RestContext.response;
-        String regionId= req.requestURI.substring(req.requestURI.lastIndexOf('/')+1);
-        Pin__c pin = [SELECT Id FROM Pin__c WHERE RegionId__c  = :regionId];
+        String pinId= req.requestURI.substring(req.requestURI.lastIndexOf('/')+1);
+        Pin__c pin = [SELECT Id FROM Pin__c WHERE Id  = :pinId];
         delete pin;
     }
 
-  @HttpPost
+    @HttpPost
     global static Pin__c doPost(
         String createdByUserId,
         String name,

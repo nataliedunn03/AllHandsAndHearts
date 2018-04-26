@@ -76,12 +76,14 @@ export class SalesforceApiWrapper {
     );
   };
 
-  delete = async (url, payload) => {
+  doDelete = async url => {
     const requestUrl = `${SF_BASE_URL}${url}`;
-    return await this.fetchWrapper(
-      requestUrl,
-      this.payloadHelper('DELETE', payload)
-    );
+    const init = {
+      method: 'DELETE',
+      headers: this.HEADERS
+    };
+    console.log('Deleting Pin: ', requestUrl);
+    this.fetchWrapper(requestUrl, init);
   };
 }
 

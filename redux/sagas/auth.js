@@ -130,8 +130,9 @@ function* registerFlow(action) {
 function* initializeAppState(action) {
   try {
     const isLoggedIn = yield AuthService.isLoggedIn();
+    const currentUserId = yield AuthService.getValueFromStorage('Id');
     if (isLoggedIn) {
-      yield put({ type: SET_AUTH, newAuthState: isLoggedIn });
+      yield put({ type: SET_AUTH, newAuthState: isLoggedIn, currentUserId });
       yield put({ type: RESET_TO_MAIN });
     } else {
       yield put({ type: RESET_TO_SIGN_IN });
