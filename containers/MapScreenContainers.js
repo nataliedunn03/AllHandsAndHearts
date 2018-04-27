@@ -15,8 +15,8 @@ const mapDispatchToProps = dispatch => {
     getPinsByRegion: regionId => {
       dispatch(getPinsByRegion(regionId));
     },
-    setPinByRegion: (regionId, pinData) => {
-      dispatch(setPinByRegion(regionId, pinData));
+    setPinByRegion: (regionId, pinData, regionMarkerList) => {
+      dispatch(setPinByRegion(regionId, pinData, regionMarkerList));
     },
     deletePinById: (pinId, regionMarkerList) => {
       dispatch(deletePinById(pinId, regionMarkerList));

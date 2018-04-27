@@ -9,11 +9,12 @@ export const getPinsByRegion = regionId => ({
   regionId
 });
 
-export const setPinByRegion = (regionId, pinData) => ({
+export const setPinByRegion = (regionId, pinData, regionMarkerList) => ({
   type: SET_PINS_BY_REGION,
   isUpdate: !!pinData.id,
   regionId,
-  pinData
+  pinData,
+  regionMarkerList
 });
 
 export const deletePinById = (pinId, regionMarkerList) => ({

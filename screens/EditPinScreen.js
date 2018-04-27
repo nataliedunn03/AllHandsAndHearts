@@ -134,7 +134,6 @@ export default class EditPinScreen extends PureComponent {
             : pin;
         });
       }
-
       this.setState({
         name: Name ? Name : this.state.name,
         address: `${name ? name : street}, ${city ? city : ''} ${region}, ${
@@ -143,7 +142,7 @@ export default class EditPinScreen extends PureComponent {
         latitude,
         longitude,
         regionId,
-        pinType: newPinList,
+        pinType: newPinList || pinType,
         description: Additional_Descriptors__c ? Additional_Descriptors__c : ''
       });
     } catch (e) {
@@ -177,15 +176,19 @@ export default class EditPinScreen extends PureComponent {
     });
   };
 
-  _handleEditPinSubmit = () => {
+  _handleEditPinSubmit = currentMarkerList => {
     const payload = this._generatePayload();
     if (!payload || !payload.name || !payload.description || !payload.pinType) {
       alert('All * marked inputs are required');
       return;
     }
-    this.props.setPinByRegion(this.state.regionId, {
-      ...payload
-    });
+    this.props.setPinByRegion(
+      this.state.regionId,
+      {
+        ...payload
+      },
+      currentMarkerList
+    );
     this.props.navigation.goBack();
   };
 
@@ -260,11 +263,17 @@ export default class EditPinScreen extends PureComponent {
     );
   };
 
-  renderNewPinBody = () => {
-    const { latitude, longitude, selectedItems } = this.state;
-    const coordsString = `Coordinates: ${parseFloat(latitude).toFixed(
-      6
-    )}, ${parseFloat(longitude).toFixed(6)}`;
+  renderEditPinBody = hasPinData => {
+    const { markerIds } = this.props;
+    if (hasPinData) {
+      var { latitude, longitude, Address__c } = this.props;
+    } else {
+      var { latitude, longitude } = this.state;
+    }
+    const { name, description } = this.state;
+    const coordsString = `${parseFloat(latitude).toFixed(6)}, ${parseFloat(
+      longitude
+    ).toFixed(6)}`;
 
     return (
       <KeyboardAwareScrollView
@@ -284,11 +293,12 @@ export default class EditPinScreen extends PureComponent {
             backgroundColor: 'transparent'
           }}
         >
-          Add Location
+          {hasPinData ? 'Edit Location' : 'Add Location'}
         </StyledText>
         <StyledText style={styles.styledText}>Location Name *</StyledText>
         <StyledInput
           style={styles.input}
+          value={name ? name : null}
           placeholder={'Enter location name'}
           returnKeyType="next"
           enablesReturnKeyAutomatically
@@ -296,122 +306,28 @@ export default class EditPinScreen extends PureComponent {
           onSubmitEditing={() => this.descriptionRef.focus()}
           onChangeText={value => this._handleOnChangeText('name', value)}
         />
-        <StyledText style={styles.styledText}>
-          {`Address: ${this.state.address}`}
-        </StyledText>
-        <StyledText
+        <StyledText style={styles.styledText}>Address</StyledText>
+        <StyledInput
+          style={styles.input}
+          value={`${hasPinData ? Address__c : this.state.address}`}
+        />
+        <StyledText style={styles.styledText}>Coordinates</StyledText>
+        <StyledInput
           style={[
-            styles.styledText,
+            styles.input,
             {
               marginBottom: 10
             }
           ]}
-        >
-          {latitude && coordsString}
-        </StyledText>
+          value={latitude && coordsString}
+        />
         <StyledText style={styles.styledText}>Description *</StyledText>
         <StyledInput
           style={styles.inputWide}
           inputRef={element => (this.descriptionRef = element)}
-          placeholder={'Enter description and any relevant details of the area'}
-          enablesReturnKeyAutomatically
-          multiline
-          numberOfLines={4}
-          onChangeText={value => this._handleOnChangeText('description', value)}
-        />
-
-        <StyledText style={styles.styledText}>Location Type *</StyledText>
-
-        {this.renderLocationType()}
-
-        <StyledText style={styles.styledText}>Source Name</StyledText>
-        <StyledInput
-          style={styles.input}
-          inputRef={element => (this.sourceNameRef = element)}
-          onSubmitEditing={() => this.sourceLinkRef.focus()}
-          placeholder={'Enter source name'}
-          returnKeyType="next"
-          enablesReturnKeyAutomatically
-          onChangeText={value => this._handleOnChangeText('sourceName', value)}
-        />
-        <StyledText style={styles.styledText}>Source Link</StyledText>
-        <StyledInput
-          style={styles.input}
-          inputRef={element => (this.sourceLinkRef = element)}
-          returnKeyType="next"
-          enablesReturnKeyAutomatically
-          placeholder="https://example.com"
-          onChangeText={value => this._handleOnChangeText('sourceLink', value)}
-        />
-
-        <StyledButton
-          style={styles.addPinButton}
-          textStyle={styles.addButtonTextStyle}
-          text={'Save location'}
-          onPress={this._handleEditPinSubmit}
-        />
-      </KeyboardAwareScrollView>
-    );
-  };
-
-  renderEditPinBody = () => {
-    const { latitude, longitude, Address__c } = this.props;
-    const { name, description } = this.state;
-    const coordsString = `Coordinates: ${parseFloat(latitude).toFixed(
-      6
-    )}, ${parseFloat(longitude).toFixed(6)}`;
-
-    return (
-      <KeyboardAwareScrollView
-        style={{ backgroundColor: Colors.defaultColor.PAPER_COLOR, flex: 1 }}
-        resetScrollToCoords={{ x: 0, y: 0 }}
-        showsVerticalScrollIndicator={false}
-      >
-        <StyledText
-          style={{
-            color: '#000000',
-            fontSize: 28,
-            marginTop: 10,
-            marginBottom: 10,
-            marginLeft: 16,
-            fontWeight: '500',
-            textAlign: 'left',
-            backgroundColor: 'transparent'
-          }}
-        >
-          Edit Location
-        </StyledText>
-        <StyledText style={styles.styledText}>Location Name *</StyledText>
-        <StyledInput
-          style={styles.input}
-          value={name ? name : 'Enter location name'}
-          returnKeyType="next"
-          enablesReturnKeyAutomatically
-          inputRef={element => (this.locationNameRef = element)}
-          onSubmitEditing={() => this.descriptionRef.focus()}
-          onChangeText={value => this._handleOnChangeText('name', value)}
-        />
-        <StyledText style={styles.styledText}>
-          {`Address: ${Address__c}`}
-        </StyledText>
-        <StyledText
-          style={[
-            styles.styledText,
-            {
-              marginBottom: 10
-            }
-          ]}
-        >
-          {latitude && coordsString}
-        </StyledText>
-        <StyledText style={styles.styledText}>Description *</StyledText>
-        <StyledInput
-          style={styles.inputWide}
-          inputRef={element => (this.descriptionRef = element)}
-          value={
-            description
-              ? description
-              : 'Enter description and any relevant details of the area'
+          value={description ? description : null}
+          placeholder={
+            'Enter description and any relevant details of the area.'
           }
           enablesReturnKeyAutomatically
           multiline
@@ -421,7 +337,7 @@ export default class EditPinScreen extends PureComponent {
 
         <StyledText style={styles.styledText}>Location Type *</StyledText>
         {this.renderLocationType()}
-        <StyledText style={styles.styledText}>Source Name</StyledText>
+        {/*<StyledText style={styles.styledText}>Source Name</StyledText>
         <StyledInput
           style={styles.input}
           inputRef={element => (this.sourceNameRef = element)}
@@ -439,13 +355,13 @@ export default class EditPinScreen extends PureComponent {
           enablesReturnKeyAutomatically
           placeholder="https://example.com"
           onChangeText={value => this._handleOnChangeText('sourceLink', value)}
-        />
+        />*/}
 
         <StyledButton
           style={styles.addPinButton}
           textStyle={styles.addButtonTextStyle}
-          text={'Update location'}
-          onPress={this._handleEditPinSubmit}
+          text={hasPinData ? 'Update Location' : 'Add Location'}
+          onPress={() => this._handleEditPinSubmit(markerIds)}
         />
       </KeyboardAwareScrollView>
     );
@@ -463,7 +379,7 @@ export default class EditPinScreen extends PureComponent {
           transparent
           onPress={this._hideKeyboard}
         >
-          {hasPinData ? this.renderEditPinBody() : this.renderNewPinBody()}
+          {this.renderEditPinBody(hasPinData)}
         </TouchableWithoutFeedback>
       </View>
     );

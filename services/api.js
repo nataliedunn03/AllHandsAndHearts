@@ -9,6 +9,6 @@ export default class Api {
 
   deletePinById = async pinId => {
     const queryEndPoint = `/pins/${pinId}`;
-    SalesforceApi.doDelete(queryEndPoint);
+    SalesforceApi.delete(queryEndPoint);
   };
 }

@@ -77,15 +77,6 @@ function* setPinDataByRegion(action) {
 
 function* deletePinDataById(action) {
   yield call(Api.deletePinById, action.pinId);
-  let regionMarkerList = action.regionMarkerList;
-  console.log('Removing from marker list:', regionMarkerList);
-  regionMarkerList = regionMarkerList.filter(
-    marker => marker.Id != action.pinId
-  );
-  yield put({
-    type: GET_PINS_BY_REGION_RECEIVED,
-    pinData: regionMarkerList
-  });
 }
 
 function* saga() {

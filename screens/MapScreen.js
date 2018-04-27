@@ -249,6 +249,7 @@ export default class MapScreen extends React.PureComponent {
     this.props.navigation.navigate('EditPin', {
       coords,
       regionId: this.state.currentRegionId,
+      markerIds: this.state.markerIds,
       setPinByRegion: this.props.setPinByRegion
     });
   };

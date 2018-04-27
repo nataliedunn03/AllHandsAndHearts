@@ -76,7 +76,7 @@ export class SalesforceApiWrapper {
     );
   };
 
-  doDelete = async url => {
+  delete = async url => {
     const requestUrl = `${SF_BASE_URL}${url}`;
     const init = {
       method: 'DELETE',

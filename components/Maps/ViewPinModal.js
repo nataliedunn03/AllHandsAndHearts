@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { StyleSheet, ScrollView, View } from 'react-native';
 import Colors from '../../constants/Colors';
 import { StyledText } from '../../components/StyledText';
@@ -20,7 +20,7 @@ export default class ViewPinModal extends React.Component {
   render() {
     const { data, currentUserId, onDelete, onEdit } = this.props;
 
-    if (!data) return '';
+    if (!data) return null;
 
     const coordsString = `${parseFloat(data.latitude).toFixed(6)}, ${parseFloat(
       data.longitude
@@ -34,7 +34,7 @@ export default class ViewPinModal extends React.Component {
      */
     const isOwner = data.UserId__c === currentUserId;
     const showButton = (
-      <View>
+      <Fragment>
         <StyledButton
           style={styles.editPinButton}
           textStyle={styles.buttonTextStyle}
@@ -49,7 +49,7 @@ export default class ViewPinModal extends React.Component {
             onDelete(data.Id);
           }}
         />
-      </View>
+      </Fragment>
     );
 
     return (
@@ -66,7 +66,7 @@ export default class ViewPinModal extends React.Component {
         <Separator />
         <StyledText style={styles.styledText}>ADDRESS</StyledText>
         <StyledText style={styles.styledTextValue}>
-          {data.Address__c}
+          {data.Address__c || 'No postal address available for this location.'}
         </StyledText>
         <Separator />
         <StyledText style={styles.styledText}>COORDINATES</StyledText>
