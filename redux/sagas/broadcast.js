@@ -1,5 +1,4 @@
 import { takeEvery, call, put } from 'redux-saga/effects';
-import { delay } from 'redux-saga';
 import {
   GET_BROADCAST_CARDS,
   REMOVE_BROADCAST_CARD,
@@ -9,7 +8,9 @@ import {
   GET_BROADCAST_CARDS_ON_LOGIN,
   REQUEST_ERROR
 } from '../actions/actionTypes';
-import { getBroadcastCards } from '../../services/broadcast';
+
+import ApiWrapper from '../../services/api';
+const Api = new ApiWrapper();
 
 function* removeBroadcast(action) {
   // get action.cardKey and then make a server call
@@ -26,10 +27,7 @@ function* removeBroadcast(action) {
 const getBroadcastsHelper = function* getBroadcastsHelper() {
   yield put({ type: SENDING_REQUEST, sending: true });
   try {
-    //pass a username to get the cards
-    const broadcastCards = yield call(getBroadcastCards);
-    //yield call(delay, 1000, true); // simulate network events
-    return broadcastCards;
+    return yield call(Api.getBroadcastCards);
   } catch (error) {
     yield put({ type: REQUEST_ERROR, error: error.message });
     return false;
