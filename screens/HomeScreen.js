@@ -15,11 +15,6 @@ export default class HomeScreen extends React.PureComponent {
   }
   _handleRefresh = async () => {
     try {
-      this.props.alertWithType(
-        'custom',
-        'REFRESH',
-        'Fetching newest alerts ...'
-      );
       await this.props.getBroadcastCards();
     } catch (e) {
       console.log(e);
