@@ -3,8 +3,10 @@ import {
   TouchableWithoutFeedback,
   StyleSheet,
   Keyboard,
-  View
+  View,
+  Picker
 } from 'react-native';
+import { Constants } from 'expo';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import LabelSelect from 'react-native-label-select';
 import { Location } from 'expo';
@@ -18,6 +20,7 @@ export default class EditPinScreen extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
+      pinTypeSelected: '',
       name: '',
       address: '',
       description: '',
@@ -87,7 +90,7 @@ export default class EditPinScreen extends PureComponent {
     )[0];
     const payload = {
       ...this.state,
-      pinType: selectedPinType
+      pinType: selectedPinType ? selectedPinType : this.state.pinTypeSelected
     };
     return payload;
   };
@@ -173,69 +176,107 @@ export default class EditPinScreen extends PureComponent {
     Keyboard.dismiss();
   };
 
+  renderLocationTypeAndroid = () => {
+    return (
+      <View
+        style={{
+          marginBottom: 10,
+          marginTop: 10,
+          marginLeft: 20,
+          marginRight: 20,
+          paddingHorizontal: 10,
+          height: 42,
+          backgroundColor: Colors.defaultColor.PAPER_COLOR,
+          borderColor: '#BFBFC0',
+          borderWidth: 0.3,
+          borderRadius: Colors.Input.BORDER.RADIUS,
+          justifyContent: 'center'
+        }}
+      >
+        <Picker
+          selectedValue={this.state.pinTypeSelected}
+          onValueChange={itemValue => {
+            this.setState({ pinTypeSelected: itemValue });
+          }}
+          enabled={true}
+        >
+          {this.state.pinType.map((item, index) => (
+            <Picker.Item
+              key={`${item.name}${index}`}
+              label={item.name}
+              value={item.name}
+            />
+          ))}
+        </Picker>
+      </View>
+    );
+  };
   renderLocationType = () => {
     return (
       <View>
-        <LabelSelect
-          title="Choose a type"
-          ref={element => (this.select = element)}
-          style={styles.labelSelect}
-          onConfirm={this.selectConfirm}
-          addButtonText={this.state.showToAddLocationQ}
-          customStyle={{
-            addButtonText: {
-              color: '#5d0e8b',
-              padding: 6,
-              fontSize: 14,
-              lineHeight: 20,
-              maxWidth: 300
-            },
-            addButton: {
-              padding: 9
-            }
-          }}
-          enableAddBtn={this.state.enableLocationTypeButton}
-        >
-          {this.state.pinType
-            .filter(item => item.isSelected)
-            .map((item, index) => (
-              <LabelSelect.Label
-                key={'label-' + index}
-                data={item}
-                onCancel={() => {
-                  this.deleteItem(item);
-                }}
-                customStyle={{
-                  text: {
-                    color: '#5d0e8b',
-                    padding: 6,
-                    fontSize: 14,
-                    lineHeight: 20,
-                    maxWidth: 300
-                  }
-                }}
-              >
-                {item.name}
-              </LabelSelect.Label>
-            ))}
-          {this.state.pinType
-            .filter(item => !item.isSelected)
-            .map((item, index) => {
-              return (
-                <LabelSelect.ModalItem
-                  key={'modal-item-' + index}
+        {Constants.platform.android && this.renderLocationTypeAndroid()}
+        {Constants.platform.ios && (
+          <LabelSelect
+            title="Choose a type"
+            ref={element => (this.select = element)}
+            style={styles.labelSelect}
+            onConfirm={this.selectConfirm}
+            addButtonText={this.state.showToAddLocationQ}
+            customStyle={{
+              addButtonText: {
+                color: '#5d0e8b',
+                padding: 6,
+                fontSize: 14,
+                lineHeight: 20,
+                maxWidth: 300
+              },
+              addButton: {
+                padding: 9
+              }
+            }}
+            enableAddBtn={this.state.enableLocationTypeButton}
+          >
+            {this.state.pinType
+              .filter(item => item.isSelected)
+              .map((item, index) => (
+                <LabelSelect.Label
+                  key={'label-' + index}
                   data={item}
+                  onCancel={() => {
+                    this.deleteItem(item);
+                  }}
                   customStyle={{
-                    innerCircle: {
-                      backgroundColor: Colors.defaultColor.PRIMARY_COLOR
+                    text: {
+                      color: '#5d0e8b',
+                      padding: 6,
+                      fontSize: 14,
+                      lineHeight: 20,
+                      maxWidth: 300
                     }
                   }}
                 >
                   {item.name}
-                </LabelSelect.ModalItem>
-              );
-            })}
-        </LabelSelect>
+                </LabelSelect.Label>
+              ))}
+            {this.state.pinType
+              .filter(item => !item.isSelected)
+              .map((item, index) => {
+                return (
+                  <LabelSelect.ModalItem
+                    key={'modal-item-' + index}
+                    data={item}
+                    customStyle={{
+                      innerCircle: {
+                        backgroundColor: Colors.defaultColor.PRIMARY_COLOR
+                      }
+                    }}
+                  >
+                    {item.name}
+                  </LabelSelect.ModalItem>
+                );
+              })}
+          </LabelSelect>
+        )}
       </View>
     );
   };
