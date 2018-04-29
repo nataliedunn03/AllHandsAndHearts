@@ -59,7 +59,7 @@ export default class ViewPinModal extends React.Component {
         }}
         showsVerticalScrollIndicator={false}
       >
-        <StyledText style={styles.styledText}>LOCATION NAME</StyledText>
+        <StyledText style={styles.styledText}>NAME</StyledText>
         <StyledText style={styles.styledTextValue}>{data.Name}</StyledText>
         <Separator />
         {data &&
@@ -80,7 +80,7 @@ export default class ViewPinModal extends React.Component {
           {data.Additional_Descriptors__c}
         </StyledText>
         <Separator />
-        <StyledText style={styles.styledText}>LOCATION TYPE</StyledText>
+        <StyledText style={styles.styledText}>TYPE</StyledText>
         <StyledText style={styles.styledTextValue}>
           {data.PinLocationType__c}
         </StyledText>
@@ -99,11 +99,10 @@ const styles = StyleSheet.create({
     fontSize: 14
   },
   styledTextValue: {
-    color: '#646E7A',
+    color: '#1D2C3C',
     margin: 20,
     marginTop: 10,
     marginBottom: 0,
-    fontWeight: '400',
     fontSize: 14
   },
   buttonTextStyle: {

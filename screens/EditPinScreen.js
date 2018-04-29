@@ -471,11 +471,12 @@ const styles = StyleSheet.create({
     color: '#1D2C3C',
     margin: 20,
     marginTop: 10,
-    marginBottom: 2
+    marginBottom: 2,
+    fontSize: 14
   },
   input: {
     height: 42,
-    color: '#646E7A',
+    color: '#1D2C3C',
     backgroundColor: '#EDEFF2',
     borderRadius: 10,
     margin: 0,
@@ -484,7 +485,7 @@ const styles = StyleSheet.create({
   },
   inputWide: {
     height: 110,
-    color: '#646E7A',
+    color: '#1D2C3C',
     backgroundColor: '#EDEFF2',
     borderRadius: 10,
     margin: 0,

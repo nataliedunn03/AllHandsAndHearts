@@ -46,6 +46,8 @@ export default class HomeScreen extends React.PureComponent {
         notification.data.title,
         notification.data.body
       );
+      //refresh alerts
+      this.props.getBroadcastCards();
       //const badgeNumber = await Notifications.getBadgeNumberAsync();
       //Notifications.setBadgeNumberAsync(badgeNumber + 1);
     }
