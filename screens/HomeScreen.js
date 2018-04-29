@@ -29,27 +29,25 @@ export default class HomeScreen extends React.PureComponent {
   }
 
   _registerForPushNotifications() {
-    this.props.registerPushNotification();
+    //this.props.registerPushNotification();
     // Watch for incoming notifications
     this._notificationSubscription = Notifications.addListener(
       this._handleNotification
     );
   }
 
-  _handleNotification = notification => {
-    //let's do something with this data
-    this.setState({
-      notification
-    });
-    if (notification.data) {
+  _handleNotification = async notification => {
+    if (notification && notification.data.body) {
+      this.setState({
+        notification
+      });
       this.props.alertWithType(
         'custom',
         notification.data.title,
         notification.data.body
       );
-      Notifications.getBadgeNumberAsync.then(count =>
-        Notifications.setBadgeNumberAsync(count + 1)
-      );
+      //const badgeNumber = await Notifications.getBadgeNumberAsync();
+      //Notifications.setBadgeNumberAsync(badgeNumber + 1);
     }
   };
 

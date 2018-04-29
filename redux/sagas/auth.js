@@ -12,7 +12,8 @@ import {
   REQUEST_ERROR,
   INITIALIZE_APP_STATE,
   RESET_TO_MAIN,
-  RESET_TO_SIGN_IN
+  RESET_TO_SIGN_IN,
+  REGISTER_PUSH_NOTIFICATION
 } from '../actions/actionTypes';
 import * as AuthService from '../../services/auth';
 import ApiWrapper from '../../services/api';
@@ -26,6 +27,9 @@ const authorize = function* authorize({
 }) {
   try {
     const hash = yield call(AuthService.generatePasswordHash, email, password);
+    yield put({
+      type: REGISTER_PUSH_NOTIFICATION
+    });
     let response;
     if (isRegistering) {
       response = yield call(Api.register, email, hash, name);

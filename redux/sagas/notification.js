@@ -10,18 +10,18 @@ function* registerPushNotification() {
   //salesforce will then publish to expo server
   //expo server will push to GCM or APN
   const token = yield call(registerForPushNotification);
-  if (token) {
-    const data = yield token.json();
-    if (data.status === 'ok') {
-      yield put({ type: REGISTER_PUSH_NOTIFICATION_SUCCESS, payload: data });
+  try {
+    if (token) {
+      yield put({ type: REGISTER_PUSH_NOTIFICATION_SUCCESS, payload: token });
     } else {
       yield put({
         type: REGISTER_PUSH_NOTIFICATION_ERROR,
-        error: data.message
+        error: `Failed tok get token: ${token}`
       });
+      console.log('Failed to get token', token);
     }
-  } else {
-    console.log('failed to get token', token);
+  } catch (e) {
+    console.log(e);
   }
 }
 

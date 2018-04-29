@@ -65,4 +65,12 @@ export default class Api {
     };
     return await SalesforceApi.post(queryEndpoint, payload);
   };
+
+  /**
+   * Push notification specific api
+   */
+  registerPushNotificationToken = async payload => {
+    const queryEndpoint = '/notification';
+    return await SalesforceApi.put(queryEndpoint, payload);
+  };
 }
