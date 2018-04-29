@@ -4,14 +4,17 @@ import Colors from '../../constants/Colors';
 import { StyledText } from '../../components/StyledText';
 import StyledButton from '../StyledButton';
 
-const Separator = () => {
+const Separator = ({ style }) => {
   return (
     <View
-      style={{
-        borderBottomColor: '#c2c2c2',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        marginTop: 10
-      }}
+      style={[
+        {
+          borderBottomColor: '#f5f7fa',
+          borderBottomWidth: 2,
+          marginTop: 10
+        },
+        style
+      ]}
     />
   );
 };
@@ -26,17 +29,12 @@ export default class ViewPinModal extends React.Component {
       data.longitude
     ).toFixed(6)}`;
 
-    //TODO: Wire up delete/edit rights after associating Userid
-    /*
-     <StyledText style={styles.styledText}>
-     {`Address: Test address`}
-     </StyledText>
-     */
     const isOwner = data.UserId__c === currentUserId;
     const showButton = (
       <Fragment>
+        <Separator />
         <StyledButton
-          style={styles.editPinButton}
+          style={[styles.editPinButton, { marginTop: 40 }]}
           textStyle={styles.buttonTextStyle}
           text={'Edit Location'}
           onPress={() => onEdit()}
@@ -64,11 +62,16 @@ export default class ViewPinModal extends React.Component {
         <StyledText style={styles.styledText}>LOCATION NAME</StyledText>
         <StyledText style={styles.styledTextValue}>{data.Name}</StyledText>
         <Separator />
-        <StyledText style={styles.styledText}>ADDRESS</StyledText>
-        <StyledText style={styles.styledTextValue}>
-          {data.Address__c || 'No postal address available for this location.'}
-        </StyledText>
-        <Separator />
+        {data &&
+          data.Address__c && (
+            <Fragment>
+              <StyledText style={styles.styledText}>ADDRESS</StyledText>
+              <StyledText style={styles.styledTextValue}>
+                {data.Address__c}
+              </StyledText>
+              <Separator />
+            </Fragment>
+          )}
         <StyledText style={styles.styledText}>COORDINATES</StyledText>
         <StyledText style={styles.styledTextValue}>{coordsString}</StyledText>
         <Separator />
@@ -89,29 +92,30 @@ export default class ViewPinModal extends React.Component {
 
 const styles = StyleSheet.create({
   styledText: {
-    color: '#5a5b59',
+    color: '#1D2C3C',
     margin: 20,
     marginTop: 10,
-    marginBottom: 0
+    marginBottom: 2,
+    fontSize: 14
   },
   styledTextValue: {
-    color: '#551689',
+    color: '#646E7A',
     margin: 20,
     marginTop: 10,
     marginBottom: 0,
-    fontWeight: '500',
-    fontSize: 16
+    fontWeight: '400',
+    fontSize: 14
   },
   buttonTextStyle: {
     color: Colors.defaultColor.PAPER_COLOR
   },
   editPinButton: {
     top: 10,
-    height: 42,
+    height: 38,
     backgroundColor: Colors.defaultColor.PRIMARY_COLOR
   },
   deletePinButton: {
-    height: 42,
+    height: 38,
     backgroundColor: Colors.defaultColor.WARNING_COLOR
   }
 });

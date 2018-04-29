@@ -10,11 +10,7 @@ import {
   SET_PINS_BY_REGION,
   DELETE_PIN_BY_ID
 } from '../actions/actionTypes';
-import {
-  getRegionList,
-  getPinsListByRegion,
-  setPinByRegion
-} from '../../services/regions';
+
 import ApiWrapper from '../../services/api';
 const Api = new ApiWrapper();
 
@@ -26,7 +22,7 @@ const getRegionDataHelper = function* getRegionDataHelper() {
   yield put({ type: GET_REGION_DATA_LOADING, loading: true });
   let response;
   try {
-    response = yield call(getRegionList);
+    response = yield call(Api.getRegionList);
     return response;
   } catch (error) {
     yield put({ type: GET_REGION_DATA_ERROR, error: error.message });
@@ -66,7 +62,11 @@ function* getPinsByRegion(action) {
 }
 
 function* setPinDataByRegion(action) {
-  const newPin = yield call(setPinByRegion, action.regionId, action.pinData);
+  const newPin = yield call(
+    Api.setPinByRegion,
+    action.regionId,
+    action.pinData
+  );
   console.log('New Pin Added::');
   console.log(newPin);
   yield put({

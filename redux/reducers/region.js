@@ -45,9 +45,8 @@ export const region = (state = INITIAL_STATE, action) => {
       };
     }
     case SET_PINS_BY_REGION: {
-      const currentPins = action.regionMarkerList;
       const addedPin = action.pinData;
-      currentPins.concat(addedPin);
+      const currentPins = [...state.pinData, addedPin];
       console.log('Updated pin list:', currentPins);
       return {
         ...state,
@@ -55,10 +54,10 @@ export const region = (state = INITIAL_STATE, action) => {
       };
     }
     case DELETE_PIN_BY_ID: {
-      let regionMarkerList = action.regionMarkerList;
+      let regionMarkerList = state.pinData;
       console.log('Removing from marker list:', regionMarkerList);
       regionMarkerList = regionMarkerList.filter(
-        marker => marker.Id != action.pinId
+        marker => marker.Id !== action.pinId
       );
       return {
         ...state,

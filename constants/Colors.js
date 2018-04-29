@@ -9,7 +9,7 @@ const defaultColor = {
   ACCENT: '#08ce94',
   LIST_BORDER_COLOR: '#E0E0E0',
   PAGE_BACKGROUND: '#F2F3F3',
-  WARNING_COLOR: '#FF0000'
+  WARNING_COLOR: '#ee0000'
 };
 
 const Typography = {

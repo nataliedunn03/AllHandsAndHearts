@@ -82,7 +82,6 @@ export class SalesforceApiWrapper {
       method: 'DELETE',
       headers: this.HEADERS
     };
-    console.log('Deleting Pin: ', requestUrl);
     this.fetchWrapper(requestUrl, init);
   };
 }

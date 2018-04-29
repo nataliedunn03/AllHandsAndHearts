@@ -131,10 +131,14 @@ const MainModalNavigator = StackNavigator(
     },
     EditPin: {
       screen: mapNavigationStateParamsToProps(EditPinScreen),
-      path: '/editPin/:name',
-      navigationOptions: {
-        headerTitle: 'Location'
-      }
+      path: '/editPin/:routeName',
+      navigationOptions: ({ navigation }) => ({
+        headerTitle: `${
+          navigation.state.params.routeName
+            ? navigation.state.params.routeName
+            : 'Location'
+        }`
+      })
     },
     EditRegion: {
       screen: mapNavigationStateParamsToProps(EditPinScreen),

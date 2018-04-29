@@ -47,9 +47,8 @@ export default class MapScreen extends React.PureComponent {
       currentRegionId: '',
       regionModalVisible: false,
       showMarkerModal: false, //open model onLongPress on map
-      markerCoord: {},
       regionModalIsFull: false,
-      markerIds: [], //keep track of marker Identifiers to focus
+      markersData: [], //keep track of marker Identifiers to focus
       showDetailsOfMarkerId: null
     };
   }
@@ -58,7 +57,7 @@ export default class MapScreen extends React.PureComponent {
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps['pinData']) {
-      const markerIds = nextProps.pinData.map(marker => {
+      const markersData = nextProps.pinData.map(marker => {
         return {
           latitude: marker.Coordinates__Latitude__s,
           longitude: marker.Coordinates__Longitude__s,
@@ -66,7 +65,7 @@ export default class MapScreen extends React.PureComponent {
         };
       });
       this.setState({
-        markerIds
+        markersData
       });
     }
   }
@@ -207,14 +206,14 @@ export default class MapScreen extends React.PureComponent {
   };
 
   _focusOnCoordinates = () => {
-    if (this.mapViewRef && this.state.markerIds.length > 0) {
-      /*const markers = this.state.markerIds.map(marker => {
+    if (this.mapViewRef && this.state.markersData.length > 0) {
+      /*const markers = this.state.markersData.map(marker => {
         return marker.Id;
       });
       this.mapViewRef.fitToSuppliedMarkers(markers, true);
       //this.mapViewRef.fitToElements(true); // this will fill all the markers, not ideal when we will have all the region on the map.
       */
-      this.mapViewRef.fitToCoordinates(this.state.markerIds, {
+      this.mapViewRef.fitToCoordinates(this.state.markersData, {
         edgePadding: { top: 100, right: 100, bottom: 100, left: 100 },
         animated: true
       });
@@ -246,11 +245,13 @@ export default class MapScreen extends React.PureComponent {
     e.persist();
     const coords = e.nativeEvent.coordinate;
     console.log(' navigate to EditPin');
+
     this.props.navigation.navigate('EditPin', {
-      coords,
+      latitude: coords.latitude,
+      longitude: coords.longitude,
       regionId: this.state.currentRegionId,
-      markerIds: this.state.markerIds,
-      setPinByRegion: this.props.setPinByRegion
+      setPinByRegion: this.props.setPinByRegion,
+      routeName: 'Add Location'
     });
   };
 
@@ -260,12 +261,11 @@ export default class MapScreen extends React.PureComponent {
     this.props.navigation.navigate('EditPin', {
       hasPinData: true,
       setPinByRegion: this.props.setPinByRegion,
-      coords: {
-        longitude: pinData.longitude,
-        latitude: pinData.latitude
-      },
+      longitude: pinData.longitude,
+      latitude: pinData.latitude,
       regionId: this.state.currentRegionId,
-      ...pinData
+      ...pinData,
+      routeName: 'Edit Location'
     });
   };
 
@@ -277,13 +277,12 @@ export default class MapScreen extends React.PureComponent {
   };
 
   _onPinDelete = pinId => {
-    const { markerIds } = this.state;
-    this.props.deletePinById(pinId, markerIds);
+    this.props.deletePinById(pinId);
     this._closeMarkerModal();
   };
 
   _renderPinModal = () => {
-    let { currentRegionId, showDetailsOfMarkerId, markerIds } = this.state;
+    let { currentRegionId, showDetailsOfMarkerId, markersData } = this.state;
     const { currentUserId } = this.props;
     /*
      * TODO: Major stuff left to be done for writing pin data
@@ -292,9 +291,10 @@ export default class MapScreen extends React.PureComponent {
      * 3) Finally make the POST call to Salesforce, and update current view with the new added pin.
      *    3.1) Make different Apex endpoint for Add/Update
      */
-    const pinData = markerIds.filter(
+    const pinData = markersData.filter(
       marker => marker.Id === showDetailsOfMarkerId
     )[0];
+
     return (
       <SlidingModal
         show={this.state.showMarkerModal}

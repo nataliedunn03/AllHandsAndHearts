@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import DropdownAlert from 'react-native-dropdownalert';
-import { Constants } from 'expo';
+import { Constants, Haptic } from 'expo';
 import { Feather as Icon } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 const { Provider, Consumer } = React.createContext({});
@@ -8,6 +8,7 @@ export const AlertConsumer = Consumer;
 
 export class AlertProvider extends PureComponent {
   alertWithType = (...args) => {
+    this.hapticFeedback(args[0]);
     this.dropdown.alertWithType(...args);
   };
   cancelAlert = () => this.dropdown.close();
@@ -20,13 +21,41 @@ export class AlertProvider extends PureComponent {
         name="bell"
       />
     );
+  hapticFeedback = type => {
+    if (Constants.platform.ios && Constants.platform.ios.systemVersion >= 10) {
+      switch (type) {
+        case 'error': {
+          Haptic.notification(Haptic.NotificationTypes.Error);
+          break;
+        }
+        case 'warn': {
+          Haptic.notification(Haptic.NotificationTypes.Warning);
+          break;
+        }
+        case 'success': {
+          Haptic.notification(Haptic.NotificationTypes.Success);
+          break;
+        }
+        case 'info': {
+          Haptic.impact(Haptic.ImpactStyles.Medium);
+          break;
+        }
+        case 'custom': {
+          Haptic.impact(Haptic.ImpactStyles.Light);
+          break;
+        }
+        default:
+      }
+    }
+  };
   render() {
     return (
       <Provider
         value={{
           alertWithType: this.alertWithType,
           cancelAlert: this.cancelAlert,
-          renderIcon: this.renderIcon
+          renderIcon: this.renderIcon,
+          hapticFeedback: this.hapticFeedback
         }}
       >
         {this.props.children}
