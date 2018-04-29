@@ -93,21 +93,28 @@ function* registerFlow(action) {
   try {
     // We call the `authorize` task with the data, telling it that we are registering a user
     // This returns `true` if the registering was successful, `false` if not
-    const wasSuccessful = yield call(authorize, {
+    const registerSuccess = yield call(authorize, {
       email,
       password,
       name,
       isRegistering: true
     });
     // If we could register a user, we send the appropiate actions
-    console.log(wasSuccessful);
+    console.log(registerSuccess);
     if (
-      wasSuccessful &&
-      typeof wasSuccessful === 'object' &&
-      wasSuccessful.Email__c
+      registerSuccess &&
+      typeof registerSuccess === 'object' &&
+      registerSuccess.Email__c
     ) {
-      yield put({ type: SET_AUTH, newAuthState: true });
-      yield AuthService.setCookie({ isLoggedIn: true });
+      yield put({
+        type: SET_AUTH,
+        newAuthState: true,
+        currentUserId: registerSuccess.Id
+      });
+      yield AuthService.setCookie({
+        ...registerSuccess,
+        isLoggedIn: true
+      });
       yield put({ type: REGISTER_REQUEST_LOADING, loading: false });
       yield put({ type: RESET_TO_MAIN });
     } else {
