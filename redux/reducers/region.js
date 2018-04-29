@@ -54,9 +54,7 @@ export const region = (state = INITIAL_STATE, action) => {
       };
     }
     case DELETE_PIN_BY_ID: {
-      let regionMarkerList = state.pinData;
-      console.log('Removing from marker list:', regionMarkerList);
-      regionMarkerList = regionMarkerList.filter(
+      let regionMarkerList = state.pinData.filter(
         marker => marker.Id !== action.pinId
       );
       return {

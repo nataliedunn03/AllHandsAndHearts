@@ -261,8 +261,6 @@ export default class MapScreen extends React.PureComponent {
     this.props.navigation.navigate('EditPin', {
       hasPinData: true,
       setPinByRegion: this.props.setPinByRegion,
-      longitude: pinData.longitude,
-      latitude: pinData.latitude,
       regionId: this.state.currentRegionId,
       ...pinData,
       routeName: 'Edit Location'
