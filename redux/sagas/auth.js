@@ -15,6 +15,9 @@ import {
   RESET_TO_SIGN_IN
 } from '../actions/actionTypes';
 import * as AuthService from '../../services/auth';
+import ApiWrapper from '../../services/api';
+const Api = new ApiWrapper();
+
 const authorize = function* authorize({
   email,
   password,
@@ -25,9 +28,9 @@ const authorize = function* authorize({
     const hash = yield call(AuthService.generatePasswordHash, email, password);
     let response;
     if (isRegistering) {
-      response = yield call(AuthService.register, email, hash, name);
+      response = yield call(Api.register, email, hash, name);
     } else {
-      response = yield call(AuthService.login, email, hash);
+      response = yield call(Api.login, email, hash);
     }
     return response;
   } catch (error) {
@@ -52,7 +55,6 @@ const logout = function* logout() {
 };
 
 function* loginFlow(action) {
-  console.log(action);
   yield put({ type: LOGIN_REQUEST_LOADING, loading: true });
   try {
     const { email, password } = action.data;
@@ -62,15 +64,7 @@ function* loginFlow(action) {
       isRegistering: false
     });
     if (auth && typeof auth === 'object' && auth.Id) {
-      console.log('inside auth');
-      console.log(auth);
-      /* yield put({
-        type: GET_BROADCAST_CARDS_ON_LOGIN
-      });
-      yield put({
-        type: GET_ACTIVITY_CARDS_ON_LOGIN
-      });*/
-      yield put({ type: SET_AUTH, newAuthState: true });
+      yield put({ type: SET_AUTH, newAuthState: true, currentUserId: auth.Id });
       yield AuthService.setCookie({
         ...auth,
         isLoggedIn: true
@@ -129,10 +123,13 @@ function* registerFlow(action) {
 
 function* initializeAppState(action) {
   try {
-    const isLoggedIn = yield AuthService.isLoggedIn();
-    const currentUserId = yield AuthService.getValueFromStorage('Id');
-    if (isLoggedIn) {
-      yield put({ type: SET_AUTH, newAuthState: isLoggedIn, currentUserId });
+    const ffgCookies = yield AuthService.getFFGCookies();
+    if (ffgCookies) {
+      yield put({
+        type: SET_AUTH,
+        newAuthState: ffgCookies.isLoggedIn,
+        currentUserId: ffgCookies.Id
+      });
       yield put({ type: RESET_TO_MAIN });
     } else {
       yield put({ type: RESET_TO_SIGN_IN });

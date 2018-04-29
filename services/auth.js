@@ -1,9 +1,4 @@
-import {
-  SF_BASE_URL as BASE_URL,
-  SF_ACCESS_TOKEN as auth_token,
-  FFG_AUTH_STORAGE_KEY,
-  SF_AES_256_KEY
-} from 'react-native-dotenv';
+import { FFG_AUTH_STORAGE_KEY } from 'react-native-dotenv';
 import { AsyncStorage } from 'react-native';
 import base64 from 'base-64';
 import bcrypt from 'react-native-bcrypt';
@@ -89,69 +84,11 @@ export const getValueFromStorage = async key => {
   return value;
 };
 
-export const register = async (email, passwordHash, name) => {
-  const queryEndpoint = `${BASE_URL}/users`;
-  try {
-    //post is register
-    const response = await fetch(queryEndpoint, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${auth_token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        email: email,
-        password: passwordHash,
-        name: name
-      })
-    });
-    const data = await response.json();
-    if (data) {
-      console.log('-User LOGIN DATA Response-\n');
-      console.log(data);
-      return data;
-    } else {
-      console.log('-User LOGIN NO DATA Response-\n');
-      console.log('Check auth_token and API call.-\n');
-      return undefined;
-    }
-  } catch (e) {
-    console.log(e);
+export const getFFGCookies = async () => {
+  const savedObject = await AsyncStorage.getItem(FFG_AUTH_STORAGE_KEY);
+  let value = null;
+  if (savedObject) {
+    value = JSON.parse(savedObject);
   }
+  return value;
 };
-
-export const login = async (email, passwordHash) => {
-  //PUT is login
-  const queryEndpoint = `${BASE_URL}/users`;
-  const queryJsonString = JSON.stringify({
-    email: email,
-    password: passwordHash
-  });
-  console.log(queryJsonString);
-  try {
-    const response = await fetch(queryEndpoint, {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${auth_token}`,
-        'Content-Type': 'application/json'
-      },
-      body: queryJsonString
-    });
-    const data = await response.json();
-    if (data) {
-      console.log('-User LOGIN DATA Response-\n');
-      console.log(data);
-      return data;
-    } else {
-      console.log('-User LOGIN NO DATA Response-\n');
-      console.log('Check auth_token and API call.-\n');
-      return undefined;
-    }
-  } catch (e) {
-    console.log(e);
-  }
-};
-
-export const logout = () => removeCookie();
-
-export const loggedIn = () => false;

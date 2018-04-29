@@ -16,7 +16,6 @@ export default class Api {
 
   setPinByRegion = async (regionId, pinData) => {
     let currentUserId = await AuthService.getValueFromStorage('Id');
-
     const payload = {
       createdByUserId: currentUserId,
       name: pinData.name,
@@ -42,5 +41,28 @@ export default class Api {
    */
   getBroadcastCards = async () => {
     return await SalesforceApi.get('/broadcasts');
+  };
+
+  /**
+   * Auth specific Apis
+   */
+  login = async (email, passwordHash) => {
+    //PUT is login
+    const queryEndpoint = '/users';
+    const payload = {
+      email: email,
+      password: passwordHash
+    };
+    return await SalesforceApi.put(queryEndpoint, payload);
+  };
+
+  register = async (email, hash, name) => {
+    const queryEndpoint = '/users';
+    const payload = {
+      email,
+      name,
+      password: hash
+    };
+    return await SalesforceApi.post(queryEndpoint, payload);
   };
 }

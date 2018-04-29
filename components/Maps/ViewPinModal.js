@@ -111,11 +111,11 @@ const styles = StyleSheet.create({
   },
   editPinButton: {
     top: 10,
-    height: 38,
+    height: 42,
     backgroundColor: Colors.defaultColor.PRIMARY_COLOR
   },
   deletePinButton: {
-    height: 38,
+    height: 42,
     backgroundColor: Colors.defaultColor.WARNING_COLOR
   }
 });
