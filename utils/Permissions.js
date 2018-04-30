@@ -22,3 +22,12 @@ export const getCurrentLocation = async () => {
     enableHighAccuracy: true
   });
 };
+
+export const getCameraPermission = async () => {
+  const { status } = Permissions.askAsync(Permissions.CAMERA);
+  const cameraRollPermission = Permissions.askAsync(Permissions.CAMERA_ROLL);
+  if (status !== 'granted' || cameraRollPermission.status !== 'granted') {
+    return null;
+  }
+  return cameraRollPermission;
+};

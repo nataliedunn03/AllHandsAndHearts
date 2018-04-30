@@ -34,7 +34,22 @@ const getRegionDataHelper = function* getRegionDataHelper() {
 
 const getPinsDataHelper = function* getPinsDataHelper(regionId) {
   try {
-    return yield call(Api.getPinsListByRegion, regionId);
+    let pinData = yield call(Api.getPinsListByRegion, regionId);
+    pinData = pinData.map(pin => {
+      const newPin = {
+        ...pin,
+        photos: [
+          'https://www.yayomg.com/wp-content/uploads/2014/04/yayomg-pig-wearing-party-hat.jpg',
+          'https://www.yayomg.com/wp-content/uploads/2014/04/yayomg-pig-wearing-party-hat.jpg',
+          'https://www.yayomg.com/wp-content/uploads/2014/04/yayomg-pig-wearing-party-hat.jpg',
+          'https://www.yayomg.com/wp-content/uploads/2014/04/yayomg-pig-wearing-party-hat.jpg',
+          'https://www.yayomg.com/wp-content/uploads/2014/04/yayomg-pig-wearing-party-hat.jpg',
+          'https://www.yayomg.com/wp-content/uploads/2014/04/yayomg-pig-wearing-party-hat.jpg'
+        ]
+      };
+      return newPin;
+    });
+    return pinData;
   } catch (error) {
     console.log(error);
     yield put({ type: GET_REGION_DATA_ERROR, pinError: error.message });

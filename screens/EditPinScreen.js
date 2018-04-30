@@ -16,6 +16,7 @@ import { StyledText } from '../components/StyledText';
 import StyledButton from '../components/StyledButton';
 import StyledInput from '../components/StyledInput';
 import Layout from '../constants/Layout';
+import PinImagePicker from '../components/Maps/PinImagePicker';
 
 const Separator = ({ style }) => {
   return (
@@ -110,6 +111,7 @@ export default class EditPinScreen extends PureComponent {
       id: Id ? Id : '',
       pinType: selectedPinType ? selectedPinType : this.state.pinTypeSelected
     };
+    console.log(payload);
     return payload;
   };
   componentDidUpdate() {
@@ -393,6 +395,23 @@ export default class EditPinScreen extends PureComponent {
 
           {this.renderLocationType()}
           <Separator />
+        </View>
+        <View>
+          <StyledText
+            style={{
+              color: '#1D2C3C',
+              fontSize: 18,
+              marginTop: 10,
+              marginBottom: 10,
+              marginLeft: 16,
+              fontWeight: '500',
+              textAlign: 'left',
+              backgroundColor: 'transparent'
+            }}
+          >
+            PHOTOS
+          </StyledText>
+          <PinImagePicker />
         </View>
         <View>
           <StyledText

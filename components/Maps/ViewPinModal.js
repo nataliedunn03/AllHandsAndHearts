@@ -3,7 +3,7 @@ import { StyleSheet, ScrollView, View } from 'react-native';
 import Colors from '../../constants/Colors';
 import { StyledText } from '../../components/StyledText';
 import StyledButton from '../StyledButton';
-
+import Gallary from '../Maps/PinImageGallery';
 const Separator = ({ style }) => {
   return (
     <View
@@ -32,9 +32,9 @@ export default class ViewPinModal extends React.Component {
     const isOwner = data.UserId__c === currentUserId;
     const showButton = (
       <Fragment>
-        <Separator />
+        <Separator style={{ marginTop: 30 }} />
         <StyledButton
-          style={[styles.editPinButton, { marginTop: 40 }]}
+          style={[styles.editPinButton]}
           textStyle={styles.buttonTextStyle}
           text={'Edit Location'}
           onPress={() => onEdit()}
@@ -84,6 +84,17 @@ export default class ViewPinModal extends React.Component {
         <StyledText style={styles.styledTextValue}>
           {data.PinLocationType__c}
         </StyledText>
+        <Separator
+          style={{
+            marginTop: 30
+          }}
+        />
+        <StyledText
+          style={[styles.styledTextValue, { fontSize: 18, marginBottom: 10 }]}
+        >
+          PHOTOS
+        </StyledText>
+        <Gallary photos={data.photos} />
         {isOwner ? showButton : ''}
       </ScrollView>
     );
