@@ -15,8 +15,9 @@ import Colors from '../constants/Colors';
 import { StyledText } from '../components/StyledText';
 import StyledButton from '../components/StyledButton';
 import StyledInput from '../components/StyledInput';
+import { Feather as Icon } from '@expo/vector-icons';
 import Layout from '../constants/Layout';
-import PinImagePicker from '../components/Maps/PinImagePicker';
+import TouchableNativeFeedback from '@expo/react-native-touchable-native-feedback-safe';
 
 const Separator = ({ style }) => {
   return (
@@ -401,7 +402,6 @@ export default class EditPinScreen extends PureComponent {
             style={{
               color: '#1D2C3C',
               fontSize: 18,
-              marginTop: 10,
               marginBottom: 10,
               marginLeft: 16,
               fontWeight: '500',
@@ -411,7 +411,75 @@ export default class EditPinScreen extends PureComponent {
           >
             PHOTOS
           </StyledText>
-          <PinImagePicker />
+          <View
+            style={{
+              flexDirection: 'row',
+              marginLeft: 16,
+              marginRight: 16,
+              marginBottom: 10,
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <View
+              style={{
+                backgroundColor: 'transparent',
+                borderRightColor: '#f5f7fa',
+                borderRightWidth: 2
+              }}
+            >
+              <TouchableNativeFeedback
+                onPress={() => {
+                  this.props.navigation.navigate('Camera', {});
+                }}
+              >
+                <View
+                  style={{
+                    backgroundColor: 'transparent'
+                  }}
+                >
+                  <Icon
+                    name="camera"
+                    color="#1D2C3C"
+                    size={34}
+                    style={{
+                      backgroundColor: 'transparent',
+                      alignSelf: 'center',
+                      marginTop: 6
+                    }}
+                  />
+                  <StyledText style={styles.styledText}>
+                    Capture a photo
+                  </StyledText>
+                </View>
+              </TouchableNativeFeedback>
+            </View>
+
+            <View>
+              <TouchableNativeFeedback>
+                <View
+                  style={{
+                    backgroundColor: 'transparent'
+                  }}
+                >
+                  <Icon
+                    name="upload"
+                    color="#1D2C3C"
+                    size={34}
+                    style={{
+                      backgroundColor: 'transparent',
+                      alignSelf: 'center',
+                      marginTop: 6
+                    }}
+                  />
+                  <StyledText style={styles.styledText}>
+                    Choose a photo
+                  </StyledText>
+                </View>
+              </TouchableNativeFeedback>
+            </View>
+          </View>
+          <Separator />
         </View>
         <View>
           <StyledText
@@ -525,8 +593,6 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 20,
     padding: 2.5,
-    borderColor: '#BFBFC0',
-    borderWidth: 0.3,
     borderRadius: Colors.Input.BORDER.RADIUS,
     backgroundColor: '#EDEFF2'
   },
