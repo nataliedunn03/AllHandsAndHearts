@@ -22,7 +22,6 @@ const Separator = ({ style }) => {
 export default class ViewPinModal extends React.Component {
   render() {
     const { data, currentUserId, onDelete, onEdit } = this.props;
-
     if (!data) return null;
 
     const coordsString = `${parseFloat(data.latitude).toFixed(6)}, ${parseFloat(
@@ -83,6 +82,16 @@ export default class ViewPinModal extends React.Component {
         <StyledText style={styles.styledText}>TYPE</StyledText>
         <StyledText style={styles.styledTextValue}>
           {data.PinLocationType__c}
+        </StyledText>
+        <Separator />
+        <StyledText style={styles.styledText}>SOURCE NAME</StyledText>
+        <StyledText style={styles.styledTextValue}>
+          {data.SourceName__c}
+        </StyledText>
+        <Separator />
+        <StyledText style={styles.styledText}>SOURCE LINK</StyledText>
+        <StyledText style={styles.styledTextValue}>
+          {data.LinkUrl__c}
         </StyledText>
         {isOwner ? showButton : ''}
       </ScrollView>

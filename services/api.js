@@ -16,9 +16,13 @@ export default class Api {
 
   setPinByRegion = async (regionId, pinData) => {
     let currentUserId = await AuthService.getValueFromStorage('Id');
+    console.log('Writing/Updating pinData:', pinData);
     const payload = {
       createdByUserId: currentUserId,
       name: pinData.name,
+      pinColor: pinData.pinType ? pinData.pinType.color : 'grey',
+      sourceName: pinData.sourceName,
+      linkUrl: pinData.sourceLink,
       regionId: regionId,
       address: pinData.address,
       description: pinData.description,
