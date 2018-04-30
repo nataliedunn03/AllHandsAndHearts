@@ -16,6 +16,22 @@ import { StyledText } from '../components/StyledText';
 import StyledButton from '../components/StyledButton';
 import StyledInput from '../components/StyledInput';
 import Layout from '../constants/Layout';
+
+const Separator = ({ style }) => {
+  return (
+    <View
+      style={[
+        {
+          borderBottomColor: '#f5f7fa',
+          borderBottomWidth: 2,
+          marginTop: 30,
+          marginBottom: 30
+        },
+        style
+      ]}
+    />
+  );
+};
 export default class EditPinScreen extends PureComponent {
   constructor(props) {
     super(props);
@@ -67,13 +83,13 @@ export default class EditPinScreen extends PureComponent {
           color: 'orange'
         },
         {
-          name: 'Road/Transport',
+          name: 'Partner Locations',
           isSelected: false,
           Id: 622,
           color: 'brown'
         },
         {
-          name: 'Other(title)',
+          name: 'Other',
           isSelected: false,
           Id: 76661,
           color: 'grey'
@@ -85,11 +101,13 @@ export default class EditPinScreen extends PureComponent {
   }
 
   _generatePayload = () => {
+    const { Id } = this.props;
     const selectedPinType = this.state.pinType.filter(
       item => item.isSelected === true
     )[0];
     const payload = {
       ...this.state,
+      id: Id ? Id : '',
       pinType: selectedPinType ? selectedPinType : this.state.pinTypeSelected
     };
     return payload;
@@ -106,11 +124,20 @@ export default class EditPinScreen extends PureComponent {
   }
 
   async componentWillMount() {
-    let { coords, regionId } = this.props;
-    let { latitude, longitude } = coords;
+    let {
+      latitude,
+      longitude,
+      regionId,
+      PinLocationType__c,
+      Name,
+      Additional_Descriptors__c
+    } = this.props;
     try {
       Location.setApiKey(GOOGLE_MAPS_API_KEY);
-      const decodedLocation = await Location.reverseGeocodeAsync(coords);
+      const decodedLocation = await Location.reverseGeocodeAsync({
+        latitude,
+        longitude
+      });
       //get the current location info
       let {
         street,
@@ -121,13 +148,22 @@ export default class EditPinScreen extends PureComponent {
         postalCode
       } = decodedLocation[0];
 
+      let pinType = this.state.pinType.map(pin => {
+        return pin.name === PinLocationType__c
+          ? { ...pin, isSelected: true }
+          : pin;
+      });
+
       this.setState({
+        name: Name,
         address: `${name ? name : street}, ${city ? city : ''} ${region}, ${
           postalCode ? postalCode : ''
         } ${country}`,
         latitude,
         longitude,
-        regionId
+        regionId,
+        pinType: pinType,
+        description: Additional_Descriptors__c
       });
     } catch (e) {
       console.log(e);
@@ -160,7 +196,7 @@ export default class EditPinScreen extends PureComponent {
     });
   };
 
-  _handleEditPinSubmit = () => {
+  _handleEditPinSubmit = currentMarkerList => {
     const payload = this._generatePayload();
     if (!payload || !payload.name || !payload.description || !payload.pinType) {
       alert('All * marked inputs are required');
@@ -178,21 +214,7 @@ export default class EditPinScreen extends PureComponent {
 
   renderLocationTypeAndroid = () => {
     return (
-      <View
-        style={{
-          marginBottom: 10,
-          marginTop: 10,
-          marginLeft: 20,
-          marginRight: 20,
-          paddingHorizontal: 10,
-          height: 42,
-          backgroundColor: Colors.defaultColor.PAPER_COLOR,
-          borderColor: '#BFBFC0',
-          borderWidth: 0.3,
-          borderRadius: Colors.Input.BORDER.RADIUS,
-          justifyContent: 'center'
-        }}
-      >
+      <View style={styles.androidLocationType}>
         <Picker
           selectedValue={this.state.pinTypeSelected}
           onValueChange={itemValue => {
@@ -213,7 +235,7 @@ export default class EditPinScreen extends PureComponent {
   };
   renderLocationType = () => {
     return (
-      <View>
+      <View style={{ marginBottom: 10 }}>
         {Constants.platform.android && this.renderLocationTypeAndroid()}
         {Constants.platform.ios && (
           <LabelSelect
@@ -224,7 +246,7 @@ export default class EditPinScreen extends PureComponent {
             addButtonText={this.state.showToAddLocationQ}
             customStyle={{
               addButtonText: {
-                color: '#5d0e8b',
+                color: '#1D2C3C',
                 padding: 6,
                 fontSize: 14,
                 lineHeight: 20,
@@ -247,7 +269,7 @@ export default class EditPinScreen extends PureComponent {
                   }}
                   customStyle={{
                     text: {
-                      color: '#5d0e8b',
+                      color: '#1D2C3C',
                       padding: 6,
                       fontSize: 14,
                       lineHeight: 20,
@@ -282,10 +304,15 @@ export default class EditPinScreen extends PureComponent {
   };
 
   renderEditPinBody = () => {
-    const { latitude, longitude, selectedItems } = this.state;
-    const coordsString = `Coordinates: ${parseFloat(latitude).toFixed(
-      6
-    )}, ${parseFloat(longitude).toFixed(6)}`;
+    const { hasPinData, markerIds } = this.props;
+    console.log(hasPinData);
+    const latitude = hasPinData ? this.props.latitude : this.state.latitude;
+    const longitude = hasPinData ? this.props.longitude : this.state.longitude;
+    const { name, description } = this.state;
+
+    const coordsString = `${parseFloat(latitude).toFixed(6)}, ${parseFloat(
+      longitude
+    ).toFixed(6)}`;
 
     return (
       <KeyboardAwareScrollView
@@ -293,83 +320,126 @@ export default class EditPinScreen extends PureComponent {
         resetScrollToCoords={{ x: 0, y: 0 }}
         showsVerticalScrollIndicator={false}
       >
-        <StyledText
-          style={{
-            color: '#000000',
-            fontSize: 28,
-            marginTop: 10,
-            marginBottom: 10,
-            marginLeft: 16,
-            fontWeight: '500',
-            textAlign: 'left',
-            backgroundColor: 'transparent'
-          }}
-        >
-          Add Location
-        </StyledText>
-        <StyledText style={styles.styledText}>Location Name *</StyledText>
-        <StyledInput
-          style={styles.input}
-          placeholder={'Enter location name'}
-          returnKeyType="next"
-          enablesReturnKeyAutomatically
-          inputRef={element => (this.locationNameRef = element)}
-          onSubmitEditing={() => this.descriptionRef.focus()}
-          onChangeText={value => this._handleOnChangeText('name', value)}
-        />
-        <StyledText style={styles.styledText}>
-          {`Address: ${this.state.address}`}
-        </StyledText>
-        <StyledText
-          style={[
-            styles.styledText,
-            {
-              marginBottom: 10
+        <View style={{ marginTop: 30 }}>
+          <StyledText
+            style={{
+              color: '#1D2C3C',
+              fontSize: 18,
+              marginTop: 10,
+              marginBottom: 10,
+              marginLeft: 16,
+              fontWeight: '500',
+              textAlign: 'left',
+              backgroundColor: 'transparent'
+            }}
+          >
+            LOCATION
+          </StyledText>
+
+          <StyledText style={styles.styledText}>NAME *</StyledText>
+          <StyledInput
+            style={styles.input}
+            value={name ? name : null}
+            placeholder={'Enter location name'}
+            returnKeyType="next"
+            enablesReturnKeyAutomatically
+            inputRef={element => (this.locationNameRef = element)}
+            onSubmitEditing={() => this.descriptionRef.focus()}
+            onChangeText={value => this._handleOnChangeText('name', value)}
+          />
+          <StyledText style={styles.styledText}>ADDRESS</StyledText>
+          <StyledInput
+            style={styles.input}
+            value={`${hasPinData ? this.props.Address__c : this.state.address}`}
+            placeholder={'Enter address if any'}
+            returnKeyType="next"
+            enablesReturnKeyAutomatically
+            inputRef={element => (this.addressRef = element)}
+            onSubmitEditing={() => this.descriptionRef.focus()}
+            onChangeText={value => this._handleOnChangeText('address', value)}
+          />
+          <StyledText style={styles.styledText}>COORDINATES *</StyledText>
+          <StyledInput
+            style={[
+              styles.input,
+              {
+                marginBottom: 10
+              }
+            ]}
+            value={latitude && coordsString}
+            placeholder={'Enter latitude and longitude separated by comma'}
+            returnKeyType="next"
+            enablesReturnKeyAutomatically
+            inputRef={element => (this.coordinatesRef = element)}
+            onSubmitEditing={() => this.descriptionRef.focus()}
+          />
+          <StyledText style={styles.styledText}>DESCRIPTION *</StyledText>
+          <StyledInput
+            style={styles.inputWide}
+            inputRef={element => (this.descriptionRef = element)}
+            value={description ? description : null}
+            placeholder={
+              'Enter description and any relevant details of the area.'
             }
-          ]}
-        >
-          {latitude && coordsString}
-        </StyledText>
-        <StyledText style={styles.styledText}>Description *</StyledText>
-        <StyledInput
-          style={styles.inputWide}
-          inputRef={element => (this.descriptionRef = element)}
-          placeholder={'Enter description and any relevant details of the area'}
-          enablesReturnKeyAutomatically
-          multiline
-          numberOfLines={4}
-          onChangeText={value => this._handleOnChangeText('description', value)}
-        />
+            enablesReturnKeyAutomatically
+            multiline
+            numberOfLines={4}
+            onChangeText={value =>
+              this._handleOnChangeText('description', value)
+            }
+          />
 
-        <StyledText style={styles.styledText}>Location Type *</StyledText>
+          <StyledText style={styles.styledText}>TYPE *</StyledText>
 
-        {this.renderLocationType()}
+          {this.renderLocationType()}
+          <Separator />
+        </View>
+        <View>
+          <StyledText
+            style={{
+              color: '#1D2C3C',
+              fontSize: 18,
+              marginTop: 10,
+              marginBottom: 10,
+              marginLeft: 16,
+              fontWeight: '500',
+              textAlign: 'left',
+              backgroundColor: 'transparent'
+            }}
+          >
+            SOURCE
+          </StyledText>
 
-        <StyledText style={styles.styledText}>Source Name</StyledText>
-        <StyledInput
-          style={styles.input}
-          inputRef={element => (this.sourceNameRef = element)}
-          onSubmitEditing={() => this.sourceLinkRef.focus()}
-          placeholder={'Enter source name'}
-          returnKeyType="next"
-          enablesReturnKeyAutomatically
-          onChangeText={value => this._handleOnChangeText('sourceName', value)}
-        />
-        <StyledText style={styles.styledText}>Source Link</StyledText>
-        <StyledInput
-          style={styles.input}
-          inputRef={element => (this.sourceLinkRef = element)}
-          returnKeyType="next"
-          enablesReturnKeyAutomatically
-          placeholder="https://example.com"
-          onChangeText={value => this._handleOnChangeText('sourceLink', value)}
-        />
-
+          <StyledText style={styles.styledText}>NAME</StyledText>
+          <StyledInput
+            style={styles.input}
+            inputRef={element => (this.sourceNameRef = element)}
+            onSubmitEditing={() => this.sourceLinkRef.focus()}
+            placeholder={'Enter source name'}
+            returnKeyType="next"
+            enablesReturnKeyAutomatically
+            onChangeText={value =>
+              this._handleOnChangeText('sourceName', value)
+            }
+          />
+          <StyledText style={styles.styledText}>LINK</StyledText>
+          <StyledInput
+            style={styles.input}
+            inputRef={element => (this.sourceLinkRef = element)}
+            returnKeyType="next"
+            enablesReturnKeyAutomatically
+            placeholder="https://example.com"
+            onChangeText={value =>
+              this._handleOnChangeText('sourceLink', value)
+            }
+          />
+          <Separator />
+        </View>
         <StyledButton
           style={styles.addPinButton}
           textStyle={styles.addButtonTextStyle}
-          text={'Save location'}
-          onPress={this._handleEditPinSubmit}
+          text={hasPinData ? 'Update Location' : 'Add Location'}
+          onPress={() => this._handleEditPinSubmit(markerIds)}
         />
       </KeyboardAwareScrollView>
     );
@@ -398,29 +468,30 @@ const styles = StyleSheet.create({
     flex: 1
   },
   styledText: {
-    color: '#5a5b59',
+    color: '#1D2C3C',
     margin: 20,
     marginTop: 10,
-    marginBottom: 0
+    marginBottom: 2,
+    fontSize: 14
   },
   input: {
     height: 42,
-    color: Colors.defaultColor.PRIMARY_COLOR,
-    backgroundColor: Colors.defaultColor.PAPER_COLOR,
-    borderColor: '#BFBFC0',
-    borderWidth: 0.3,
-    borderRadius: Colors.Input.BORDER.RADIUS,
+    color: '#1D2C3C',
+    backgroundColor: '#EDEFF2',
+    borderRadius: 10,
     margin: 0,
-    marginTop: 4
+    marginTop: 4,
+    fontSize: 14
   },
   inputWide: {
-    margin: 0,
     height: 110,
-    color: Colors.defaultColor.PRIMARY_COLOR,
-    backgroundColor: Colors.defaultColor.PAPER_COLOR,
-    borderColor: '#BFBFC0',
-    borderWidth: 0.3,
-    borderRadius: Colors.Input.BORDER.RADIUS
+    color: '#1D2C3C',
+    backgroundColor: '#EDEFF2',
+    borderRadius: 10,
+    margin: 0,
+    marginTop: 4,
+    fontSize: 14,
+    paddingVertical: 10
   },
   addPinButton: {
     height: 42,
@@ -437,6 +508,20 @@ const styles = StyleSheet.create({
     padding: 2.5,
     borderColor: '#BFBFC0',
     borderWidth: 0.3,
-    borderRadius: Colors.Input.BORDER.RADIUS
+    borderRadius: Colors.Input.BORDER.RADIUS,
+    backgroundColor: '#EDEFF2'
+  },
+  androidLocationType: {
+    marginBottom: 10,
+    marginTop: 10,
+    marginLeft: 20,
+    marginRight: 20,
+    paddingHorizontal: 10,
+    height: 42,
+    backgroundColor: Colors.defaultColor.PAPER_COLOR,
+    borderColor: '#BFBFC0',
+    borderWidth: 0.3,
+    borderRadius: Colors.Input.BORDER.RADIUS,
+    justifyContent: 'center'
   }
 });

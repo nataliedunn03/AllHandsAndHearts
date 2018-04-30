@@ -54,7 +54,8 @@ export const loginRequestFailed = error => ({
 
 export const setAuth = newAuthState => ({
   type: SET_AUTH,
-  newAuthState
+  newAuthState,
+  currentUserId
 });
 
 export const logout = () => ({

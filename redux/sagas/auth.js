@@ -12,9 +12,13 @@ import {
   REQUEST_ERROR,
   INITIALIZE_APP_STATE,
   RESET_TO_MAIN,
-  RESET_TO_SIGN_IN
+  RESET_TO_SIGN_IN,
+  REGISTER_PUSH_NOTIFICATION
 } from '../actions/actionTypes';
 import * as AuthService from '../../services/auth';
+import ApiWrapper from '../../services/api';
+const Api = new ApiWrapper();
+
 const authorize = function* authorize({
   email,
   password,
@@ -23,11 +27,14 @@ const authorize = function* authorize({
 }) {
   try {
     const hash = yield call(AuthService.generatePasswordHash, email, password);
+    yield put({
+      type: REGISTER_PUSH_NOTIFICATION
+    });
     let response;
     if (isRegistering) {
-      response = yield call(AuthService.register, email, hash, name);
+      response = yield call(Api.register, email, hash, name);
     } else {
-      response = yield call(AuthService.login, email, hash);
+      response = yield call(Api.login, email, hash);
     }
     return response;
   } catch (error) {
@@ -52,7 +59,6 @@ const logout = function* logout() {
 };
 
 function* loginFlow(action) {
-  console.log(action);
   yield put({ type: LOGIN_REQUEST_LOADING, loading: true });
   try {
     const { email, password } = action.data;
@@ -62,15 +68,7 @@ function* loginFlow(action) {
       isRegistering: false
     });
     if (auth && typeof auth === 'object' && auth.Id) {
-      console.log('inside auth');
-      console.log(auth);
-      /* yield put({
-        type: GET_BROADCAST_CARDS_ON_LOGIN
-      });
-      yield put({
-        type: GET_ACTIVITY_CARDS_ON_LOGIN
-      });*/
-      yield put({ type: SET_AUTH, newAuthState: true });
+      yield put({ type: SET_AUTH, newAuthState: true, currentUserId: auth.Id });
       yield AuthService.setCookie({
         ...auth,
         isLoggedIn: true
@@ -99,21 +97,28 @@ function* registerFlow(action) {
   try {
     // We call the `authorize` task with the data, telling it that we are registering a user
     // This returns `true` if the registering was successful, `false` if not
-    const wasSuccessful = yield call(authorize, {
+    const registerSuccess = yield call(authorize, {
       email,
       password,
       name,
       isRegistering: true
     });
     // If we could register a user, we send the appropiate actions
-    console.log(wasSuccessful);
+    console.log(registerSuccess);
     if (
-      wasSuccessful &&
-      typeof wasSuccessful === 'object' &&
-      wasSuccessful.Email__c
+      registerSuccess &&
+      typeof registerSuccess === 'object' &&
+      registerSuccess.Email__c
     ) {
-      yield put({ type: SET_AUTH, newAuthState: true });
-      yield AuthService.setCookie({ isLoggedIn: true });
+      yield put({
+        type: SET_AUTH,
+        newAuthState: true,
+        currentUserId: registerSuccess.Id
+      });
+      yield AuthService.setCookie({
+        ...registerSuccess,
+        isLoggedIn: true
+      });
       yield put({ type: REGISTER_REQUEST_LOADING, loading: false });
       yield put({ type: RESET_TO_MAIN });
     } else {
@@ -129,9 +134,13 @@ function* registerFlow(action) {
 
 function* initializeAppState(action) {
   try {
-    const isLoggedIn = yield AuthService.isLoggedIn();
-    if (isLoggedIn) {
-      yield put({ type: SET_AUTH, newAuthState: isLoggedIn });
+    const ffgCookies = yield AuthService.getFFGCookies();
+    if (ffgCookies) {
+      yield put({
+        type: SET_AUTH,
+        newAuthState: ffgCookies.isLoggedIn,
+        currentUserId: ffgCookies.Id
+      });
       yield put({ type: RESET_TO_MAIN });
     } else {
       yield put({ type: RESET_TO_SIGN_IN });

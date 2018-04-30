@@ -1,48 +1,57 @@
 @RestResource(urlMapping='/pins/*')
 global with sharing class WEBSERVICE_Pins{
 
-   @HttpGet
+    @HttpGet
     global static List<Pin__c> doGet() {
         List<Pin__c> pins;
         RestRequest req = RestContext.request;
         RestResponse res = RestContext.response;
         String regionId= req.requestURI.substring(req.requestURI.lastIndexOf('/')+1);
         pins = [SELECT
-                       Additional_Descriptors__c,
-                       Coordinates__Latitude__s,
-                       Coordinates__Longitude__s,Id,
-                       Name,
-                       UserId__c,
-                       PinLocationType__c,
-                       RegionId__c,
-                       Address__c FROM Pin__c WHERE RegionId__c =: regionId];
+                Additional_Descriptors__c,
+                Coordinates__Latitude__s,
+                Coordinates__Longitude__s,Id,
+                Name,
+                LinkUrl__c,
+                SourceName__c,
+                PinColor__c,
+                UserId__c,
+                PinLocationType__c,
+                RegionId__c,
+                Address__c FROM Pin__c WHERE RegionId__c =: regionId];
         return pins;
     }
 
-   @HttpDelete
+    @HttpDelete
     global static void doDelete() {
         RestRequest req = RestContext.request;
         RestResponse res = RestContext.response;
-        String regionId= req.requestURI.substring(req.requestURI.lastIndexOf('/')+1);
-        Pin__c pin = [SELECT Id FROM Pin__c WHERE RegionId__c  = :regionId];
+        String pinId= req.requestURI.substring(req.requestURI.lastIndexOf('/')+1);
+        Pin__c pin = [SELECT Id FROM Pin__c WHERE Id  = :pinId];
         delete pin;
     }
 
-  @HttpPost
+    @HttpPost
     global static Pin__c doPost(
-        String createdByUserId,
-        String name,
-        String regionId,
-        String address,
-        String description,
-        String pinType,
-        Decimal latitude,
-        Decimal longitude,
-        String Id) {
+            String createdByUserId,
+            String name,
+            String linkUrl,
+            String sourceName,
+            String pinColor,
+            String regionId,
+            String address,
+            String description,
+            String pinType,
+            Decimal latitude,
+            Decimal longitude,
+            String Id) {
 
         Pin__c pin = new Pin__c();
         pin.UserId__c = createdByUserId;
         pin.Name = name;
+        pin.LinkUrl__c = linkUrl;
+        pin.SourceName__c = sourceName;
+        pin.PinColor__c = pinColor;
         pin.RegionId__c = regionId;
         pin.Address__c = address;
         pin.Additional_Descriptors__c = description;

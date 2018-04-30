@@ -76,12 +76,13 @@ export class SalesforceApiWrapper {
     );
   };
 
-  delete = async (url, payload) => {
+  delete = async url => {
     const requestUrl = `${SF_BASE_URL}${url}`;
-    return await this.fetchWrapper(
-      requestUrl,
-      this.payloadHelper('DELETE', payload)
-    );
+    const init = {
+      method: 'DELETE',
+      headers: this.HEADERS
+    };
+    this.fetchWrapper(requestUrl, init);
   };
 }
 

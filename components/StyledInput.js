@@ -6,7 +6,7 @@ export default class StyledInput extends PureComponent {
   static defaultProps = {
     keyboardType: 'default',
     placeholder: 'Type here',
-    placeholderTextColor: '#8E8E93',
+    placeholderTextColor: '#646E7A',
     returnKeyType: 'done',
     inputRef: null
   };
@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginLeft: 20,
     marginRight: 20,
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
+    paddingVertical: 10
   }
 });

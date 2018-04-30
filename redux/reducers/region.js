@@ -6,7 +6,9 @@ import {
   GET_PINS_BY_REGION,
   GET_PINS_BY_REGION_RECEIVED,
   GET_PINS_BY_REGION_LOADING,
-  GET_PINS_BY_REGION_ERROR
+  GET_PINS_BY_REGION_ERROR,
+  SET_PINS_BY_REGION,
+  DELETE_PIN_BY_ID
 } from '../actions/actionTypes';
 
 const INITIAL_STATE = {
@@ -40,6 +42,24 @@ export const region = (state = INITIAL_STATE, action) => {
         ...state,
         pinError: action.pinError,
         pinData: []
+      };
+    }
+    case SET_PINS_BY_REGION: {
+      const addedPin = action.pinData;
+      const currentPins = [...state.pinData, addedPin];
+      console.log('Updated pin list:', currentPins);
+      return {
+        ...state,
+        pinData: currentPins
+      };
+    }
+    case DELETE_PIN_BY_ID: {
+      let regionMarkerList = state.pinData.filter(
+        marker => marker.Id !== action.pinId
+      );
+      return {
+        ...state,
+        pinData: regionMarkerList
       };
     }
     default:

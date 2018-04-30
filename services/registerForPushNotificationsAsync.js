@@ -1,6 +1,7 @@
 import { Constants, Permissions, Notifications } from 'expo';
-import { SF_BASE_URL, SF_ACCESS_TOKEN } from 'react-native-dotenv';
 import * as AuthService from './auth';
+import ApiWrapper from '../services/api';
+const Api = new ApiWrapper();
 
 export default (async function registerForPushNotificationsAsync() {
   // Remote notifications do not work in simulators, only on device
@@ -31,20 +32,14 @@ export default (async function registerForPushNotificationsAsync() {
   }
 
   // Get the token that uniquely identifies this device
-  let token = await Notifications.getExpoPushTokenAsync();
-  let Id = await AuthService.getValueFromStorage('Id');
-  const queryEndpoint = `${SF_BASE_URL}/notification`;
-  return fetch(queryEndpoint, {
-    method: 'PUT',
-    headers: {
-      Authorization: `Bearer ${SF_ACCESS_TOKEN}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      deviceId: Constants.deviceId,
-      deviceName: Constants.deviceName,
-      userId: Id,
-      notificationToken: token
-    })
-  });
+  const token = await Notifications.getExpoPushTokenAsync();
+  if (!token) return null;
+  const Id = await AuthService.getValueFromStorage('Id');
+  const payload = {
+    deviceId: Constants.deviceId,
+    deviceName: Constants.deviceName,
+    userId: Id,
+    notificationToken: token
+  };
+  return await Api.registerPushNotificationToken(payload);
 });
