@@ -18,6 +18,7 @@ import StyledInput from '../components/StyledInput';
 import { Feather as Icon } from '@expo/vector-icons';
 import Layout from '../constants/Layout';
 import TouchableNativeFeedback from '@expo/react-native-touchable-native-feedback-safe';
+import Gallery from '../components/Maps/PinImageGallery';
 
 const Separator = ({ style }) => {
   return (
@@ -98,9 +99,16 @@ export default class EditPinScreen extends PureComponent {
         }
       ],
       showToAddLocationQ: 'Press to choose a location type',
-      enableLocationTypeButton: true
+      enableLocationTypeButton: true,
+      photos: []
     };
   }
+
+  _updatePhotoState = recievedPhotos => {
+    this.setState(({ photos }) => ({
+      photos: [...recievedPhotos, ...photos]
+    }));
+  };
 
   _generatePayload = () => {
     const { Id } = this.props;
@@ -430,7 +438,9 @@ export default class EditPinScreen extends PureComponent {
             >
               <TouchableNativeFeedback
                 onPress={() => {
-                  this.props.navigation.navigate('Camera', {});
+                  this.props.navigation.navigate('Camera', {
+                    savePhoto: this._updatePhotoState
+                  });
                 }}
               >
                 <View
@@ -479,6 +489,7 @@ export default class EditPinScreen extends PureComponent {
               </TouchableNativeFeedback>
             </View>
           </View>
+          <Gallery photos={this.state.photos} />
           <Separator />
         </View>
         <View>
