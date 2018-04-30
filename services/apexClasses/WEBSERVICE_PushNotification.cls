@@ -35,3 +35,16 @@ global class WEBSERVICE_PushNotification{
         throw new InputErrorException(message);
     }
 }
+
+@isTest
+private class WEBSERVICE_PushNotification{
+	@isTest global static User__c saveNotificationToken(){
+	
+		Notification n = saveNotificationToken('testUserId', 'testNotificationToken', 'testDeviceId', 'testDeviceName')
+		
+		System.assertEquals('testUserId', n.deviceId__c);
+		System.assertEquals('testNotificationToken', n.NotificationToken__c);
+		System.assertEquals('testDeviceId', n.deviceName__c);
+		System.assertEquals('testDeviceName', n.deviceName__c);		
+	}
+}

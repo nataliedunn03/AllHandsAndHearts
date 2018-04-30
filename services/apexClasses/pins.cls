@@ -86,7 +86,7 @@ private class WEBSERVICE_Pins{
         RestContext.request = request;
         RestContext.response = response;
         pins.doDelete();
-        System.assertTrue(doGet().isEmpty());
+        System.assertTrue(doGet().isEmpty())
         
 	}
 }

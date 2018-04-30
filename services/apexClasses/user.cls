@@ -30,3 +30,24 @@ global class WEBSERVICES_usersVolunteerLogin{
         return user;
     }
 }
+
+@isTest
+private class WEBSERVICE_usersVolunteerLogin{
+	@isTest global static User__c getUser(){
+	
+		User u = getUser('testEmail', 'testPassword')
+		
+		System.assertEquals('testEmail', u.Email__c);
+		System.assertEquals('testPassword', u.Password__c);
+		
+	}
+	
+	@isTest global static User__c crateUserAccount(){
+	
+		UserAccount ua = crateUserAccount('testEmail', 'testPassword', testName')		
+		System.assertEquals('testEmail', u.Email__c);
+		System.assertEquals('testPassword', u.Password__c);
+		System.assertEquals('testName', u.Name__c);
+        
+	}
+}

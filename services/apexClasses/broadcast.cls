@@ -36,3 +36,27 @@ global class WEBSERVICE_Broadcasts{
         delete broadcast;
     }
 }
+
+@isTest
+private class WEBSERVICE_Broadcasts{
+	@isTest global static Broadcast_Object__c createBroadcastList(){
+	
+		Broadcast b = createBroadcastList('testType-000', 'test-Summary')
+		
+		System.assertEquals('testType-000', b[0].Broadcast_Type__c);
+		System.assertEquals('test-Summary', b[0].Summary__c);
+	}
+	
+	@isTest global static void doDelete(){		
+		RestRequest req = RestContext.request;
+        RestResponse res = RestContext.response;
+        request.requestURI = '/services/apexClasses/broadcast';
+        request.httpMethod = 'DELETE';
+        request.addParameter('test', 'test');
+        RestContext.request = request;
+        RestContext.response = response;
+        pins.doDelete();
+        System.assertTrue(createBroadcastList().isEmpty());
+        
+	}
+}
