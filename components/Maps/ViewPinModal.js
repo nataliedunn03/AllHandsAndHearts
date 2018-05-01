@@ -101,16 +101,20 @@ export default class ViewPinModal extends React.Component {
             <Gallery photos={data.photos} />
           </View>
         )}
-        <Separator />
-        <StyledText style={styles.styledText}>SOURCE NAME</StyledText>
-        <StyledText style={styles.styledTextValue}>
-          {data.SourceName__c}
-        </StyledText>
-        <Separator />
-        <StyledText style={styles.styledText}>SOURCE LINK</StyledText>
-        <StyledText style={styles.styledTextValue}>
-          {data.LinkUrl__c}
-        </StyledText>
+        {data.SourceName__c && (
+          <Fragment>
+            <Separator />
+            <StyledText style={styles.styledText}>SOURCE NAME</StyledText>
+            <StyledText style={styles.styledTextValue}>
+              {data.SourceName__c}
+            </StyledText>
+            <Separator />
+            <StyledText style={styles.styledText}>SOURCE LINK</StyledText>
+            <StyledText style={styles.styledTextValue}>
+              {data.LinkUrl__c}
+            </StyledText>
+          </Fragment>
+        )}
         {isOwner ? showButton : ''}
       </ScrollView>
     );

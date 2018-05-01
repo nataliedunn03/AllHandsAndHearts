@@ -6,7 +6,7 @@ import {
   View,
   Picker
 } from 'react-native';
-import { Constants } from 'expo';
+import { Constants, ImagePicker } from 'expo';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import LabelSelect from 'react-native-label-select';
 import { Location } from 'expo';
@@ -235,6 +235,13 @@ export default class EditPinScreen extends PureComponent {
 
   _hideKeyboard = () => {
     Keyboard.dismiss();
+  };
+
+  _pickImage = async () => {
+    let pickerResult = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: false
+    });
+    this._updatePhotoState([`${pickerResult.uri}`]);
   };
 
   renderLocationTypeAndroid = () => {
@@ -478,7 +485,7 @@ export default class EditPinScreen extends PureComponent {
             </View>
 
             <View>
-              <TouchableNativeFeedback>
+              <TouchableNativeFeedback onPress={this._pickImage}>
                 <View
                   style={{
                     backgroundColor: 'transparent'
