@@ -346,7 +346,7 @@ export default class MapScreen extends React.PureComponent {
             latitude: marker.Coordinates__Latitude__s,
             longitude: marker.Coordinates__Longitude__s
           }}
-          pinColor={'#FF0000'}
+          pinColor={marker.PinColor__c ? marker.PinColor__c : '#f00'}
           onPress={() => this._onMarkerPress(marker.Id)}
         />
       );

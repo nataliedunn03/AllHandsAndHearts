@@ -24,6 +24,7 @@ export default class Api {
       description: pinData.description,
       latitude: pinData.latitude,
       longitude: pinData.longitude,
+      pinColor: pinData.pinColor ? pinData.pinColor : '',
       pinType: pinData.pinType ? pinData.pinType.name : 'Other',
       Id: pinData.id ? pinData.id : ''
     };

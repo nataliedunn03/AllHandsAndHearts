@@ -8,6 +8,7 @@ import {
   GET_PINS_BY_REGION_RECEIVED,
   GET_PINS_BY_REGION_ERROR,
   SET_PINS_BY_REGION,
+  SET_PINS_BY_REGION_SUCCESS,
   DELETE_PIN_BY_ID
 } from '../actions/actionTypes';
 
@@ -34,22 +35,7 @@ const getRegionDataHelper = function* getRegionDataHelper() {
 
 const getPinsDataHelper = function* getPinsDataHelper(regionId) {
   try {
-    let pinData = yield call(Api.getPinsListByRegion, regionId);
-    pinData = pinData.map(pin => {
-      const newPin = {
-        ...pin,
-        photos: [
-          'https://www.yayomg.com/wp-content/uploads/2014/04/yayomg-pig-wearing-party-hat.jpg',
-          'https://www.yayomg.com/wp-content/uploads/2014/04/yayomg-pig-wearing-party-hat.jpg',
-          'https://www.yayomg.com/wp-content/uploads/2014/04/yayomg-pig-wearing-party-hat.jpg',
-          'https://www.yayomg.com/wp-content/uploads/2014/04/yayomg-pig-wearing-party-hat.jpg',
-          'https://www.yayomg.com/wp-content/uploads/2014/04/yayomg-pig-wearing-party-hat.jpg',
-          'https://www.yayomg.com/wp-content/uploads/2014/04/yayomg-pig-wearing-party-hat.jpg'
-        ]
-      };
-      return newPin;
-    });
-    return pinData;
+    return yield call(Api.getPinsListByRegion, regionId);
   } catch (error) {
     console.log(error);
     yield put({ type: GET_REGION_DATA_ERROR, pinError: error.message });
@@ -84,9 +70,12 @@ function* setPinDataByRegion(action) {
   );
   console.log('New Pin Added::');
   console.log(newPin);
+  if (action.pinData.photos.length > 0) {
+    newPin['photos'] = action.pinData.photos;
+  }
   yield put({
-    type: GET_PINS_BY_REGION,
-    regionId: action.regionId
+    type: SET_PINS_BY_REGION_SUCCESS,
+    pinData: newPin
   });
 }
 

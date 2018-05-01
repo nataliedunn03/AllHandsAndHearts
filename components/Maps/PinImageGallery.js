@@ -48,7 +48,7 @@ export default ({ photos }) => {
 };
 const styles = StyleSheet.create({
   sceneContainer: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-evenly'
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#000',
     borderColor: '#EDEDED',
     borderRadius: 8,
-    marginBottom: 4,
+    marginBottom: 8,
     overflow: 'hidden',
     padding: 0
   },

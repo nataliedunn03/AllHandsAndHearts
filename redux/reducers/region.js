@@ -8,7 +8,8 @@ import {
   GET_PINS_BY_REGION_LOADING,
   GET_PINS_BY_REGION_ERROR,
   SET_PINS_BY_REGION,
-  DELETE_PIN_BY_ID
+  DELETE_PIN_BY_ID,
+  SET_PINS_BY_REGION_SUCCESS
 } from '../actions/actionTypes';
 
 const INITIAL_STATE = {
@@ -44,7 +45,16 @@ export const region = (state = INITIAL_STATE, action) => {
         pinData: []
       };
     }
-    case SET_PINS_BY_REGION: {
+    case SET_PINS_BY_REGION_SUCCESS: {
+      const newPins = state.pinData.filter(
+        item => item.Id !== action.pinData.Id
+      );
+      return {
+        ...state,
+        pinData: [...newPins, action.pinData]
+      };
+    }
+    /*case SET_PINS_BY_REGION: {
       const addedPin = action.pinData;
       const currentPins = [...state.pinData, addedPin];
       console.log('Updated pin list:', currentPins);
@@ -52,7 +62,7 @@ export const region = (state = INITIAL_STATE, action) => {
         ...state,
         pinData: currentPins
       };
-    }
+    }*/
     case DELETE_PIN_BY_ID: {
       let regionMarkerList = state.pinData.filter(
         marker => marker.Id !== action.pinId

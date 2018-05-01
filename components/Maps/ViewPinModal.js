@@ -84,17 +84,24 @@ export default class ViewPinModal extends React.Component {
         <StyledText style={styles.styledTextValue}>
           {data.PinLocationType__c}
         </StyledText>
-        <Separator
-          style={{
-            marginTop: 30
-          }}
-        />
-        <StyledText
-          style={[styles.styledTextValue, { fontSize: 18, marginBottom: 10 }]}
-        >
-          PHOTOS
-        </StyledText>
-        <Gallary photos={data.photos} />
+        {data.photos && (
+          <View>
+            <Separator
+              style={{
+                marginTop: 30
+              }}
+            />
+            <StyledText
+              style={[
+                styles.styledTextValue,
+                { fontSize: 18, marginBottom: 10 }
+              ]}
+            >
+              PHOTOS
+            </StyledText>
+            <Gallary photos={data.photos} />
+          </View>
+        )}
         {isOwner ? showButton : ''}
       </ScrollView>
     );

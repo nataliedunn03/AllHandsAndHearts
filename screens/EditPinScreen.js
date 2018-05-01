@@ -48,6 +48,7 @@ export default class EditPinScreen extends PureComponent {
       latitude: null,
       longitude: null,
       regionId: null,
+      pinColor: null,
       pinType: [
         {
           name: 'Affected Area',
@@ -65,7 +66,7 @@ export default class EditPinScreen extends PureComponent {
           name: 'Health Facility',
           isSelected: false,
           Id: 311,
-          color: '#66eb4b'
+          color: 'lime'
         },
         {
           name: 'IDP Camp',
@@ -110,6 +111,10 @@ export default class EditPinScreen extends PureComponent {
     }));
   };
 
+  _getColor = name => {
+    const matchPin = this.state.pinType.filter(item => item.name === name)[0];
+    return matchPin.color;
+  };
   _generatePayload = () => {
     const { Id } = this.props;
     const selectedPinType = this.state.pinType.filter(
@@ -118,11 +123,18 @@ export default class EditPinScreen extends PureComponent {
     const payload = {
       ...this.state,
       id: Id ? Id : '',
-      pinType: selectedPinType ? selectedPinType : this.state.pinTypeSelected
+      pinType: selectedPinType ? selectedPinType : this.state.pinTypeSelected,
+      pinColor: selectedPinType
+        ? selectedPinType.color
+        : this._getColor(this.state.pinTypeSelected)
     };
-    console.log(payload);
     return payload;
   };
+  componentWillReceiveProps(nexProps) {
+    this.setState(prevState => {
+      return { photos: [...nexProps.photos, ...prevState.photos] };
+    });
+  }
   componentDidUpdate() {
     let selectedItems = this.state.pinType.filter(
       item => item.isSelected === true
@@ -143,6 +155,7 @@ export default class EditPinScreen extends PureComponent {
       Name,
       Additional_Descriptors__c
     } = this.props;
+    const newPhotos = this.props.photos ? this.props.photos : [];
     try {
       Location.setApiKey(GOOGLE_MAPS_API_KEY);
       const decodedLocation = await Location.reverseGeocodeAsync({
@@ -174,7 +187,8 @@ export default class EditPinScreen extends PureComponent {
         longitude,
         regionId,
         pinType: pinType,
-        description: Additional_Descriptors__c
+        description: Additional_Descriptors__c,
+        photos: [...this.state.photos, ...newPhotos]
       });
     } catch (e) {
       console.log(e);
@@ -316,7 +330,6 @@ export default class EditPinScreen extends PureComponent {
 
   renderEditPinBody = () => {
     const { hasPinData, markerIds } = this.props;
-    console.log(hasPinData);
     const latitude = hasPinData ? this.props.latitude : this.state.latitude;
     const longitude = hasPinData ? this.props.longitude : this.state.longitude;
     const { name, description } = this.state;

@@ -36,7 +36,6 @@ export default class SignupForm extends React.PureComponent {
     let { email, password, name } = this.state;
     email = email.trim();
     password = password.trim();
-    console.log(email, password, name);
     if (email.length > 0 && password.length > 0 && name.length > 0) {
       this.props.register({
         email,
