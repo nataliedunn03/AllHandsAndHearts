@@ -8,8 +8,8 @@ import {
   GET_PINS_BY_REGION_LOADING,
   GET_PINS_BY_REGION_ERROR,
   SET_PINS_BY_REGION,
-  DELETE_PIN_BY_ID,
-  SET_PINS_BY_REGION_SUCCESS
+  SET_PINS_BY_REGION_SUCCESS,
+  DELETE_PIN_BY_ID
 } from '../actions/actionTypes';
 
 const INITIAL_STATE = {
@@ -61,8 +61,7 @@ export const region = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         pinData: currentPins
-      };
-    }*/
+      }*/
     case DELETE_PIN_BY_ID: {
       let regionMarkerList = state.pinData.filter(
         marker => marker.Id !== action.pinId

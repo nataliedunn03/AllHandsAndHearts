@@ -359,7 +359,6 @@ export default class EditPinScreen extends PureComponent {
           >
             LOCATION
           </StyledText>
-
           <StyledText style={styles.styledText}>NAME *</StyledText>
           <StyledInput
             style={styles.input}
@@ -631,6 +630,6 @@ const styles = StyleSheet.create({
     borderColor: '#BFBFC0',
     borderWidth: 0.3,
     borderRadius: Colors.Input.BORDER.RADIUS,
-    justifyContent: 'center'
+    backgroundColor: '#EDEFF2'
   }
 });

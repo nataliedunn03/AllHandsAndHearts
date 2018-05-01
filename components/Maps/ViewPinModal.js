@@ -3,7 +3,7 @@ import { StyleSheet, ScrollView, View } from 'react-native';
 import Colors from '../../constants/Colors';
 import { StyledText } from '../../components/StyledText';
 import StyledButton from '../StyledButton';
-import Gallary from '../Maps/PinImageGallery';
+import Gallery from '../Maps/PinImageGallery';
 const Separator = ({ style }) => {
   return (
     <View
@@ -22,7 +22,6 @@ const Separator = ({ style }) => {
 export default class ViewPinModal extends React.Component {
   render() {
     const { data, currentUserId, onDelete, onEdit } = this.props;
-
     if (!data) return null;
 
     const coordsString = `${parseFloat(data.latitude).toFixed(6)}, ${parseFloat(
@@ -34,7 +33,7 @@ export default class ViewPinModal extends React.Component {
       <Fragment>
         <Separator style={{ marginTop: 30 }} />
         <StyledButton
-          style={[styles.editPinButton]}
+          style={[styles.editPinButton, { marginTop: 40 }]}
           textStyle={styles.buttonTextStyle}
           text={'Edit Location'}
           onPress={() => onEdit()}
@@ -99,9 +98,19 @@ export default class ViewPinModal extends React.Component {
             >
               PHOTOS
             </StyledText>
-            <Gallary photos={data.photos} />
+            <Gallery photos={data.photos} />
           </View>
         )}
+        <Separator />
+        <StyledText style={styles.styledText}>SOURCE NAME</StyledText>
+        <StyledText style={styles.styledTextValue}>
+          {data.SourceName__c}
+        </StyledText>
+        <Separator />
+        <StyledText style={styles.styledText}>SOURCE LINK</StyledText>
+        <StyledText style={styles.styledTextValue}>
+          {data.LinkUrl__c}
+        </StyledText>
         {isOwner ? showButton : ''}
       </ScrollView>
     );
