@@ -68,17 +68,19 @@ export default class PinCameraScreen extends React.Component {
         }}
       >
         <View style={{}}>
-          <TouchableOpacity
-            style={{
-              alignItems: 'center'
-            }}
-            onPress={() => {
-              this.props.navigation.state.params.savePhoto(this.state.photos);
-              this.props.navigation.goBack();
-            }}
-          >
-            <Icon name="check" color="#EDEFF2" size={28} />
-          </TouchableOpacity>
+          {this.state.photos.length > 0 && (
+            <TouchableOpacity
+              style={{
+                alignItems: 'center'
+              }}
+              onPress={() => {
+                this.props.navigation.state.params.savePhoto(this.state.photos);
+                this.props.navigation.goBack();
+              }}
+            >
+              <Icon name="check" color="#EDEFF2" size={28} />
+            </TouchableOpacity>
+          )}
         </View>
         <View style={{ alignItems: 'center' }}>
           <TouchableNativeFeedback onPress={this.snap}>
