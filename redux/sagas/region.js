@@ -8,6 +8,7 @@ import {
   GET_PINS_BY_REGION_RECEIVED,
   GET_PINS_BY_REGION_ERROR,
   SET_PINS_BY_REGION,
+  SET_PINS_BY_REGION_SUCCESS,
   DELETE_PIN_BY_ID
 } from '../actions/actionTypes';
 
@@ -69,9 +70,12 @@ function* setPinDataByRegion(action) {
   );
   console.log('New Pin Added::');
   console.log(newPin);
+  if (action.pinData.photos.length > 0) {
+    newPin['photos'] = action.pinData.photos;
+  }
   yield put({
-    type: GET_PINS_BY_REGION,
-    regionId: action.regionId
+    type: SET_PINS_BY_REGION_SUCCESS,
+    pinData: newPin
   });
 }
 

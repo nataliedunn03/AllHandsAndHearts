@@ -9,6 +9,7 @@ import {
 } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 import EditPinScreen from '../screens/EditPinScreen';
+import PinCameraScreen from '../screens/PinCameraScreen';
 import ProfileScreenContainer from '../containers/ProfileContainer';
 import HomeScreenContainer from '../containers/HomeScreenContainer';
 import MapScreenContainer from '../containers/MapScreenContainers';
@@ -140,11 +141,11 @@ const MainModalNavigator = StackNavigator(
         }`
       })
     },
-    EditRegion: {
-      screen: mapNavigationStateParamsToProps(EditPinScreen),
-      path: '/editRegion/:name',
+    Camera: {
+      screen: mapNavigationStateParamsToProps(PinCameraScreen),
+      path: '/camera/:name',
       navigationOptions: {
-        headerTitle: 'Edit Region'
+        header: null
       }
     }
   },

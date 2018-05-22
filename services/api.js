@@ -20,7 +20,6 @@ export default class Api {
     const payload = {
       createdByUserId: currentUserId,
       name: pinData.name,
-      pinColor: pinData.pinType ? pinData.pinType.color : 'grey',
       sourceName: pinData.sourceName,
       linkUrl: pinData.sourceLink,
       regionId: regionId,
@@ -28,6 +27,7 @@ export default class Api {
       description: pinData.description,
       latitude: pinData.latitude,
       longitude: pinData.longitude,
+      pinColor: pinData.pinColor ? pinData.pinColor : '',
       pinType: pinData.pinType ? pinData.pinType.name : 'Other',
       Id: pinData.id ? pinData.id : ''
     };

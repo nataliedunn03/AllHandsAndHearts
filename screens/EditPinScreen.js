@@ -6,7 +6,7 @@ import {
   View,
   Picker
 } from 'react-native';
-import { Constants } from 'expo';
+import { Constants, ImagePicker } from 'expo';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import LabelSelect from 'react-native-label-select';
 import { Location } from 'expo';
@@ -15,7 +15,10 @@ import Colors from '../constants/Colors';
 import { StyledText } from '../components/StyledText';
 import StyledButton from '../components/StyledButton';
 import StyledInput from '../components/StyledInput';
+import { Feather as Icon } from '@expo/vector-icons';
 import Layout from '../constants/Layout';
+import TouchableNativeFeedback from '@expo/react-native-touchable-native-feedback-safe';
+import Gallery from '../components/Maps/PinImageGallery';
 
 const Separator = ({ style }) => {
   return (
@@ -45,6 +48,7 @@ export default class EditPinScreen extends PureComponent {
       latitude: null,
       longitude: null,
       regionId: null,
+      pinColor: null,
       pinType: [
         {
           name: 'Affected Area',
@@ -62,7 +66,7 @@ export default class EditPinScreen extends PureComponent {
           name: 'Health Facility',
           isSelected: false,
           Id: 311,
-          color: '#66eb4b'
+          color: 'lime'
         },
         {
           name: 'IDP Camp',
@@ -96,10 +100,21 @@ export default class EditPinScreen extends PureComponent {
         }
       ],
       showToAddLocationQ: 'Press to choose a location type',
-      enableLocationTypeButton: true
+      enableLocationTypeButton: true,
+      photos: []
     };
   }
 
+  _updatePhotoState = recievedPhotos => {
+    this.setState(({ photos }) => ({
+      photos: [...recievedPhotos, ...photos]
+    }));
+  };
+
+  _getColor = name => {
+    const matchPin = this.state.pinType.filter(item => item.name === name)[0];
+    return matchPin.color;
+  };
   _generatePayload = () => {
     const { Id } = this.props;
     const selectedPinType = this.state.pinType.filter(
@@ -108,10 +123,18 @@ export default class EditPinScreen extends PureComponent {
     const payload = {
       ...this.state,
       id: Id ? Id : '',
-      pinType: selectedPinType ? selectedPinType : this.state.pinTypeSelected
+      pinType: selectedPinType ? selectedPinType : this.state.pinTypeSelected,
+      pinColor: selectedPinType
+        ? selectedPinType.color
+        : this._getColor(this.state.pinTypeSelected)
     };
     return payload;
   };
+  componentWillReceiveProps(nexProps) {
+    this.setState(prevState => {
+      return { photos: [...nexProps.photos, ...prevState.photos] };
+    });
+  }
   componentDidUpdate() {
     let selectedItems = this.state.pinType.filter(
       item => item.isSelected === true
@@ -132,6 +155,7 @@ export default class EditPinScreen extends PureComponent {
       Name,
       Additional_Descriptors__c
     } = this.props;
+    const newPhotos = this.props.photos ? this.props.photos : [];
     try {
       Location.setApiKey(GOOGLE_MAPS_API_KEY);
       const decodedLocation = await Location.reverseGeocodeAsync({
@@ -163,7 +187,8 @@ export default class EditPinScreen extends PureComponent {
         longitude,
         regionId,
         pinType: pinType,
-        description: Additional_Descriptors__c
+        description: Additional_Descriptors__c,
+        photos: [...this.state.photos, ...newPhotos]
       });
     } catch (e) {
       console.log(e);
@@ -210,6 +235,13 @@ export default class EditPinScreen extends PureComponent {
 
   _hideKeyboard = () => {
     Keyboard.dismiss();
+  };
+
+  _pickImage = async () => {
+    let pickerResult = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: false
+    });
+    this._updatePhotoState([`${pickerResult.uri}`]);
   };
 
   renderLocationTypeAndroid = () => {
@@ -305,7 +337,6 @@ export default class EditPinScreen extends PureComponent {
 
   renderEditPinBody = () => {
     const { hasPinData, markerIds } = this.props;
-    console.log(hasPinData);
     const latitude = hasPinData ? this.props.latitude : this.state.latitude;
     const longitude = hasPinData ? this.props.longitude : this.state.longitude;
     const { name, description } = this.state;
@@ -335,7 +366,6 @@ export default class EditPinScreen extends PureComponent {
           >
             LOCATION
           </StyledText>
-
           <StyledText style={styles.styledText}>NAME *</StyledText>
           <StyledInput
             style={styles.input}
@@ -392,6 +422,93 @@ export default class EditPinScreen extends PureComponent {
           <StyledText style={styles.styledText}>TYPE *</StyledText>
 
           {this.renderLocationType()}
+          <Separator />
+        </View>
+        <View>
+          <StyledText
+            style={{
+              color: '#1D2C3C',
+              fontSize: 18,
+              marginBottom: 10,
+              marginLeft: 16,
+              fontWeight: '500',
+              textAlign: 'left',
+              backgroundColor: 'transparent'
+            }}
+          >
+            PHOTOS
+          </StyledText>
+          <View
+            style={{
+              flexDirection: 'row',
+              marginLeft: 16,
+              marginRight: 16,
+              marginBottom: 10,
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <View
+              style={{
+                backgroundColor: 'transparent',
+                borderRightColor: '#f5f7fa',
+                borderRightWidth: 2
+              }}
+            >
+              <TouchableNativeFeedback
+                onPress={() => {
+                  this.props.navigation.navigate('Camera', {
+                    savePhoto: this._updatePhotoState
+                  });
+                }}
+              >
+                <View
+                  style={{
+                    backgroundColor: 'transparent'
+                  }}
+                >
+                  <Icon
+                    name="camera"
+                    color="#1D2C3C"
+                    size={34}
+                    style={{
+                      backgroundColor: 'transparent',
+                      alignSelf: 'center',
+                      marginTop: 6
+                    }}
+                  />
+                  <StyledText style={styles.styledText}>
+                    Capture a photo
+                  </StyledText>
+                </View>
+              </TouchableNativeFeedback>
+            </View>
+
+            <View>
+              <TouchableNativeFeedback onPress={this._pickImage}>
+                <View
+                  style={{
+                    backgroundColor: 'transparent'
+                  }}
+                >
+                  <Icon
+                    name="upload"
+                    color="#1D2C3C"
+                    size={34}
+                    style={{
+                      backgroundColor: 'transparent',
+                      alignSelf: 'center',
+                      marginTop: 6
+                    }}
+                  />
+                  <StyledText style={styles.styledText}>
+                    Choose a photo
+                  </StyledText>
+                </View>
+              </TouchableNativeFeedback>
+            </View>
+          </View>
+          <Gallery photos={this.state.photos} />
           <Separator />
         </View>
         <View>
@@ -506,8 +623,6 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 20,
     padding: 2.5,
-    borderColor: '#BFBFC0',
-    borderWidth: 0.3,
     borderRadius: Colors.Input.BORDER.RADIUS,
     backgroundColor: '#EDEFF2'
   },
@@ -522,6 +637,6 @@ const styles = StyleSheet.create({
     borderColor: '#BFBFC0',
     borderWidth: 0.3,
     borderRadius: Colors.Input.BORDER.RADIUS,
-    justifyContent: 'center'
+    backgroundColor: '#EDEFF2'
   }
 });

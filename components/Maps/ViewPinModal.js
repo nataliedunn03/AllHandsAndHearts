@@ -3,7 +3,7 @@ import { StyleSheet, ScrollView, View } from 'react-native';
 import Colors from '../../constants/Colors';
 import { StyledText } from '../../components/StyledText';
 import StyledButton from '../StyledButton';
-
+import Gallery from '../Maps/PinImageGallery';
 const Separator = ({ style }) => {
   return (
     <View
@@ -31,7 +31,7 @@ export default class ViewPinModal extends React.Component {
     const isOwner = data.UserId__c === currentUserId;
     const showButton = (
       <Fragment>
-        <Separator />
+        <Separator style={{ marginTop: 30 }} />
         <StyledButton
           style={[styles.editPinButton, { marginTop: 40 }]}
           textStyle={styles.buttonTextStyle}
@@ -83,16 +83,38 @@ export default class ViewPinModal extends React.Component {
         <StyledText style={styles.styledTextValue}>
           {data.PinLocationType__c}
         </StyledText>
-        <Separator />
-        <StyledText style={styles.styledText}>SOURCE NAME</StyledText>
-        <StyledText style={styles.styledTextValue}>
-          {data.SourceName__c}
-        </StyledText>
-        <Separator />
-        <StyledText style={styles.styledText}>SOURCE LINK</StyledText>
-        <StyledText style={styles.styledTextValue}>
-          {data.LinkUrl__c}
-        </StyledText>
+        {data.photos && (
+          <View>
+            <Separator
+              style={{
+                marginTop: 30
+              }}
+            />
+            <StyledText
+              style={[
+                styles.styledTextValue,
+                { fontSize: 18, marginBottom: 10 }
+              ]}
+            >
+              PHOTOS
+            </StyledText>
+            <Gallery photos={data.photos} />
+          </View>
+        )}
+        {data.SourceName__c && (
+          <Fragment>
+            <Separator />
+            <StyledText style={styles.styledText}>SOURCE NAME</StyledText>
+            <StyledText style={styles.styledTextValue}>
+              {data.SourceName__c}
+            </StyledText>
+            <Separator />
+            <StyledText style={styles.styledText}>SOURCE LINK</StyledText>
+            <StyledText style={styles.styledTextValue}>
+              {data.LinkUrl__c}
+            </StyledText>
+          </Fragment>
+        )}
         {isOwner ? showButton : ''}
       </ScrollView>
     );

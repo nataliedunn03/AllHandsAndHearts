@@ -11,6 +11,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@expo/react-native-image-gallery": "^2.2.0",
     "@expo/react-native-touchable-native-feedback-safe": "^1.1.2",
     "babel-plugin-transform-remove-console": "^6.9.1",
     "base-64": "^0.1.0",
@@ -30,6 +31,8 @@
     "react-native-keyboard-aware-scroll-view": "^0.5.0",
     "react-native-label-select":
       "https://github.com/nazimamin/react-native-label-select/tarball/master",
+    "react-native-lightbox":
+      "https://github.com/shoutem/react-native-lightbox/tarball/master",
     "react-native-micro-animated-button": "0.0.21",
     "react-native-sliding-modal":
       "https://github.com/nazimamin/react-native-sliding-modal/tarball/master",
