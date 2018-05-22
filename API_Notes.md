@@ -124,9 +124,9 @@ Currently I've inserted 5 sample objects into our Region object. Each of these w
 
 #### SOQL INSERT query
 
-Insertion needs a bit more discussion. Not sure if we should allow all users to insert or just admins? Either way, there are two ways to go about inserting data:
+Insertion needs a bit more discussion. Not sure if we should allow all users to insert or just admins? Either way, there are a few ways to go about inserting data:
 
-1.  Using SQOL query to insert:
+1.  Using SQOL query to insert (HARD/Code-ish way of doing it):
 
 `curl https://cs19.salesforce.com/services/data/v20.0/sobjects/Region__c/ -H 'Authorization: Bearer 00D29000000DglJ!ARUAQGblj8Czla05p9jCL_6iFA7HnEMvBIyiFyGAmRdOF8oRpUbkzsFp4ofiVlDaA56YYAusTb3w7bJa5.ejVIFlU130Zj3K' -H 'Content-Type: application/json' -d '@newregion.json'`
 
@@ -144,10 +144,47 @@ The endpoing for this is `.../sobjects/<OBJECT_NAME>/`. The data needs to be pro
 
 Note, this is just a single insertion of the region "Test Region 1234". These were all the initial required fields that were needed to insert a record (`Name, Radius_for_Disaster_Site__c, Number_of_Pins__c, Coordinates__Latitude__s, Coordinates__Longitude__s`). I have since reduced the required fields to just (`Name, Coordinates__Latitude__s, Coordinates__Longitude__s`), I'm not sure if we should make the radius and # of pins as a requirement just yet? Will need to start looking into pin saving before making this call.
 
-2.  Second and easier way is to use the Salesforce Data Loader app.
+2.  Second and easier way is to use the Salesforce Data Loader app (LESS HARD/Using a SF built app).
 
 More info here: https://developer.salesforce.com/page/Data_Loader
 
 It's essentially a desktop app that acts as an interface to INSERT/UPDATE/DELETE records from Sobjects. They use CSV formatted files to determine the data to insert/delete and lets you export the data from Sobjects into CSV files.
 
 To download it, you will need to log into our account, and search around for "Data Loader". Don't remember where but it is realllly easy to find. You can install it on Windows/OSX and log in with the same account that you use to log into the web portal. _Will need to auth with security token that is sent as a text to Ed, since his info is linked to the account_
+
+3. Using workbench web interface provided by Salesforce (EASY / Most convinent way)
+
+Simply go to https://workbench.developerforce.com/login.php?startUrl=%2Fquery.php
+<br/>And log into the sandbox environment with your SF login.
+<br/>Once logged in, you should be able to access the objects using the `Object` dropdown and selecting the various `Fields`. This should be shown on the default page after logging in.
+<br/>Also on this page are other useful tools such as `queries` and `REST explorer` to test out various queries and explore the custom REST endpoints that you have created using `ApexClasses`.
+
+#### Apex Classes
+
+Apex classes are user defined Java servelet like classes that you can write custom queries in, and output to a specific endpoint that you define. You can access the `ApexClass` list that we have created by following the below steps:
+
+1. Log into `test.salesforce.com`.
+2. Click `Setup` on the cogwheel dropdown. Same step from the above docs.
+3. Look for `Apex` on the quick find search bar on the top left.
+4. Click on `Apex Classes` listed under `Custom Code`.
+5. On the apex class list, click W to list all the apex classes that start with `W`. We named all our apex classes with prefix `WEBSERVICE_` so that we can easily find it.
+
+Below is a sample Apex class that we created for retrieving `Regions` data:
+
+```
+@RestResource(urlMapping='/regions/*')
+global class WEBSERVICE_Regions{
+    @HttpGet
+    global static List<Region__c> getRegionLists(){
+        List<Region__c> regions;
+        try{
+            regions = [SELECT Coordinates__Latitude__s,Coordinates__Longitude__s,DisasterLocation__c,DisasterEnd__c,DisasterStart__c,DisasterType__c,Id,Name FROM Region__c];
+            return regions;
+        }catch(Exception ex){
+            System.debug('Error: '+ex.getMessage());
+        }
+        return regions;
+    }
+```
+
+As seen above, this retrieves from Salesforce objects the `Regions` data using the SOQL query `SELECT .... FROM Region__c`, and lists for a request on our custom REST urlMapping `/regions/*`
