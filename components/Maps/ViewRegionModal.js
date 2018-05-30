@@ -5,7 +5,8 @@ import {
   TouchableHighlight,
   Animated,
   Text,
-  ActivityIndicator
+  ActivityIndicator,
+  Platform
 } from 'react-native';
 import { LinearGradient } from 'expo';
 import { StyledText } from '../../components/StyledText';
@@ -18,7 +19,7 @@ import { runAfterInteractions } from '../../utils/utils';
 
 export default class ViewRegionModal extends React.PureComponent {
   _renderRegionCards = () => {
-    const { regionData } = this.props;
+    const { regionData, regionModalIsFull } = this.props;
     return regionData.map((region, index) => {
       const card = {
         id: region.Id,
@@ -27,7 +28,8 @@ export default class ViewRegionModal extends React.PureComponent {
         longitude: region.Coordinates__Longitude__s,
         type: region.DisasterType__c,
         customName: region.DisasterLocation__c,
-        startDate: region.DisasterStart__c
+        startDate: region.DisasterStart__c,
+        endDate: region.DisasterEnd__c
       };
 
       return (
@@ -50,7 +52,22 @@ export default class ViewRegionModal extends React.PureComponent {
           }}
         >
           <Animated.View>
-            <Animated.View style={styles.mapContent}>
+            <Animated.View
+              style={[
+                styles.mapContent,
+                ...Platform.select({
+                  ios: {
+                    width: Layout.width - 70,
+                    transform: [{ scale: 1 }]
+                  },
+                  android: {
+                    width: regionModalIsFull
+                      ? Layout.width - 70
+                      : Layout.width - 30
+                  }
+                })
+              ]}
+            >
               <FadeIn>
                 <GoogleStaticMap
                   latitude={
@@ -74,10 +91,38 @@ export default class ViewRegionModal extends React.PureComponent {
               </FadeIn>
               <LinearGradient
                 colors={['rgba(0, 0, 0, 0.8)', 'rgba(0, 0, 0, 0.1)']}
-                style={styles.linearGradient}
+                style={[
+                  styles.linearGradient,
+                  ...Platform.select({
+                    ios: {
+                      width: Layout.width - 70,
+                      transform: [{ scaleX: Layout.width }]
+                    },
+                    android: {
+                      width: regionModalIsFull
+                        ? Layout.width - 70
+                        : Layout.width - 30
+                    }
+                  })
+                ]}
               />
             </Animated.View>
-            <View style={styles.textView}>
+            <View
+              style={[
+                styles.textView,
+                ...Platform.select({
+                  ios: {
+                    width: Layout.width - 70,
+                    transform: [{ scale: 1 }]
+                  },
+                  android: {
+                    width: regionModalIsFull
+                      ? Layout.width - 70
+                      : Layout.width - 30
+                  }
+                })
+              ]}
+            >
               <View>
                 <StyledText
                   style={{
@@ -104,7 +149,9 @@ export default class ViewRegionModal extends React.PureComponent {
                 <Text style={styles.textShadow}>
                   {`Start: ${new Date(card.startDate).toDateString()}`}
                 </Text>
-                <Text style={styles.textShadow}>End: May 02, 2019</Text>
+                <Text style={styles.textShadow}>
+                  {`End: ${new Date(card.endDate).toDateString()}`}
+                </Text>
               </View>
             </View>
           </Animated.View>
@@ -154,8 +201,6 @@ const styles = StyleSheet.create({
   textView: {
     top: 0,
     left: 0,
-    width: Layout.width - 70,
-    transform: [{ scale: 1 }],
     height: 190,
     position: 'absolute',
     padding: 20,
@@ -169,14 +214,10 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     top: 0,
-    height: 190,
-    width: Layout.width - 70,
-    transform: [{ scaleX: Layout.width }]
+    height: 190
   },
   mapContent: {
-    width: Layout.width - 70,
-    height: 190,
-    transform: [{ scale: 1 }]
+    height: 190
   },
   textShadow: {
     color: '#ffffff',
