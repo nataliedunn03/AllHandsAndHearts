@@ -64,6 +64,7 @@ class AppContainer extends React.PureComponent {
 
   _handleFinishLoading = () => {
     this.setState({ isLoadingComplete: true });
+    this.props.initializeAppState();
   };
 }
 

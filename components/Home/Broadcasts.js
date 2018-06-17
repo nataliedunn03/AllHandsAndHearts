@@ -42,7 +42,7 @@ export default class Broadcasts extends PureComponent {
     return cards.map((card, index) => {
       return (
         <BroadcastCard
-          key={card.Id}
+          key={card.Id ? card.Id : index}
           cardKey={index}
           title={card.Broadcast_Type__c}
           body={card.Summary__c}
@@ -63,6 +63,7 @@ export default class Broadcasts extends PureComponent {
       style,
       broadcast: { broadcastCards }
     } = this.props;
+    console.log(broadcastCards);
     return (
       broadcastCards &&
       broadcastCards.length > 0 && (

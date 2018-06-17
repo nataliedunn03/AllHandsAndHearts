@@ -1,7 +1,6 @@
 import { SalesforceApiWrapper } from '../utils/utils';
 import * as AuthService from './auth';
 const SalesforceApi = new SalesforceApiWrapper();
-
 export default class Api {
   /**
    * Region related Apis
@@ -77,4 +76,13 @@ export default class Api {
     const queryEndpoint = '/notification';
     return await SalesforceApi.put(queryEndpoint, payload);
   };
+
+  /**
+   * Get and generate Auth token
+   */
+  generateAuthToken = async () => {
+    return SalesforceApi.setToken();
+  };
+
+  getSFHelper = () => SalesforceApi;
 }

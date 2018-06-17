@@ -11,6 +11,7 @@ import {
   SET_PINS_BY_REGION_SUCCESS,
   DELETE_PIN_BY_ID
 } from '../actions/actionTypes';
+import { REHYDRATE } from 'redux-persist';
 
 const INITIAL_STATE = {
   loading: false,
@@ -24,6 +25,14 @@ export const region = (state = INITIAL_STATE, action) => {
     case GET_REGION_DATA:
     case GET_PINS_BY_REGION:
       return { ...state, loading: true };
+    case 'REHYDRATE': {
+      return {
+        ...state,
+        loading: false,
+        regionData: action.region.regionData,
+        regionModalVisible: true
+      };
+    }
     case GET_REGION_DATA_RECEIVED: {
       return {
         ...state,

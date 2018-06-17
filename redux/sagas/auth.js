@@ -1,4 +1,4 @@
-import { takeEvery, call, put } from 'redux-saga/effects';
+import { takeEvery, call, put, select } from 'redux-saga/effects';
 import {
   SENDING_REQUEST,
   LOGIN_REQUEST,
@@ -18,6 +18,8 @@ import {
 import * as AuthService from '../../services/auth';
 import ApiWrapper from '../../services/api';
 const Api = new ApiWrapper();
+
+const getState = state => state;
 
 const authorize = function* authorize({
   email,
@@ -68,10 +70,11 @@ function* loginFlow(action) {
       isRegistering: false
     });
     if (auth && typeof auth === 'object' && auth.Id) {
-      yield put({ type: SET_AUTH, newAuthState: true, currentUserId: auth.Id });
-      yield AuthService.setCookie({
-        ...auth,
-        isLoggedIn: true
+      yield put({
+        type: SET_AUTH,
+        newAuthState: true,
+        currentUserId: auth.Id,
+        user: auth
       });
       yield put({ type: RESET_TO_MAIN });
     } else {
@@ -113,11 +116,8 @@ function* registerFlow(action) {
       yield put({
         type: SET_AUTH,
         newAuthState: true,
-        currentUserId: registerSuccess.Id
-      });
-      yield AuthService.setCookie({
-        ...registerSuccess,
-        isLoggedIn: true
+        currentUserId: registerSuccess.Id,
+        user: registerSuccess
       });
       yield put({ type: REGISTER_REQUEST_LOADING, loading: false });
       yield put({ type: RESET_TO_MAIN });
@@ -134,16 +134,19 @@ function* registerFlow(action) {
 
 function* initializeAppState(action) {
   try {
-    const ffgCookies = yield AuthService.getFFGCookies();
-    if (ffgCookies) {
+    const state = yield select(getState);
+    const SFHelper = yield Api.getSFHelper();
+    if (!state.auth.accessToken) {
+      const token = yield SFHelper.setToken();
       yield put({
-        type: SET_AUTH,
-        newAuthState: ffgCookies.isLoggedIn,
-        currentUserId: ffgCookies.Id
+        type: 'SET_ACCESS_TOKEN',
+        accessToken: token
       });
-      yield put({ type: RESET_TO_MAIN });
     } else {
-      yield put({ type: RESET_TO_SIGN_IN });
+      yield SFHelper.setPersistedToken(state.auth.accessToken);
+    }
+    if (state.auth.loggedIn) {
+      yield put({ type: RESET_TO_MAIN });
     }
   } catch (e) {
     yield put({ type: RESET_TO_SIGN_IN });

@@ -11,11 +11,13 @@ import {
   REGISTER_REQUEST_SUCCESS,
   REGISTER_REQUEST_FAILED
 } from '../actions/actionTypes';
-import * as AuthService from '../../services/auth';
 
 const INITIAL_STATE = {
   loggedIn: false,
-  loading: false
+  loading: false,
+  currentUserId: '',
+  user: {},
+  accessToken: ''
 };
 
 export const auth = (state = INITIAL_STATE, action) => {
@@ -24,7 +26,13 @@ export const auth = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loggedIn: action.newAuthState,
-        currentUserId: action.currentUserId
+        currentUserId: action.currentUserId,
+        user: action.user
+      };
+    case 'SET_ACCESS_TOKEN':
+      return {
+        ...state,
+        accessToken: action.accessToken
       };
     case LOGIN_REQUEST_LOADING:
       return { ...state, loading: action.loading };

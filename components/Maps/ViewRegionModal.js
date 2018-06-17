@@ -55,15 +55,15 @@ export default class ViewRegionModal extends React.PureComponent {
             <Animated.View
               style={[
                 styles.mapContent,
-                ...Platform.select({
+                Platform.select({
                   ios: {
                     width: Layout.width - 70,
                     transform: [{ scale: 1 }]
                   },
                   android: {
                     width: regionModalIsFull
-                      ? Layout.width - 70
-                      : Layout.width - 30
+                      ? Layout.width - 30
+                      : Layout.width - 70
                   }
                 })
               ]}
@@ -93,15 +93,15 @@ export default class ViewRegionModal extends React.PureComponent {
                 colors={['rgba(0, 0, 0, 0.8)', 'rgba(0, 0, 0, 0.1)']}
                 style={[
                   styles.linearGradient,
-                  ...Platform.select({
+                  Platform.select({
                     ios: {
                       width: Layout.width - 70,
                       transform: [{ scaleX: Layout.width }]
                     },
                     android: {
                       width: regionModalIsFull
-                        ? Layout.width - 70
-                        : Layout.width - 30
+                        ? Layout.width - 30
+                        : Layout.width - 70
                     }
                   })
                 ]}
@@ -110,7 +110,7 @@ export default class ViewRegionModal extends React.PureComponent {
             <View
               style={[
                 styles.textView,
-                ...Platform.select({
+                Platform.select({
                   ios: {
                     width: Layout.width - 70,
                     transform: [{ scale: 1 }]

@@ -3,6 +3,7 @@ import {
   SENDING_REQUEST,
   REMOVE_BROADCAST_CARD_SUCCESS
 } from '../actions/actionTypes';
+import { REHYDRATE } from 'redux-persist';
 
 const INITIAL_STATE = {
   refreshing: false,
@@ -19,6 +20,9 @@ export const broadcast = (state = INITIAL_STATE, action) => {
         (card, index) => index != action.cardKey
       );
       return { ...state, broadcastCards: broadcastCards };
+    }
+    case 'REHYDRATE': {
+      return { ...state, broadcastCards: action.broadcast.broadcastCards };
     }
     case GET_BROADCAST_CARDS_RECEIVED: {
       return { ...state, broadcastCards: action.broadcastCards };
