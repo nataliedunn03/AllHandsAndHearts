@@ -63,7 +63,6 @@ export default class Broadcasts extends PureComponent {
       style,
       broadcast: { broadcastCards }
     } = this.props;
-    console.log(broadcastCards);
     return (
       broadcastCards &&
       broadcastCards.length > 0 && (

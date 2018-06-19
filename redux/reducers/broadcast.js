@@ -21,10 +21,12 @@ export const broadcast = (state = INITIAL_STATE, action) => {
       );
       return { ...state, broadcastCards: broadcastCards };
     }
-    case 'REHYDRATE': {
-      return { ...state, broadcastCards: action.broadcast.broadcastCards };
+    case REHYDRATE: {
+      const { broadcast } = action.payload;
+      return { ...state, broadcastCards: broadcast.broadcastCards };
     }
     case GET_BROADCAST_CARDS_RECEIVED: {
+      console.log(action.broadcastCards);
       return { ...state, broadcastCards: action.broadcastCards };
     }
     default:

@@ -68,8 +68,6 @@ function* setPinDataByRegion(action) {
     action.regionId,
     action.pinData
   );
-  console.log('New Pin Added::');
-  console.log(newPin);
   if (action.pinData.photos.length > 0) {
     newPin['photos'] = action.pinData.photos;
   }

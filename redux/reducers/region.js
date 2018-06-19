@@ -25,11 +25,12 @@ export const region = (state = INITIAL_STATE, action) => {
     case GET_REGION_DATA:
     case GET_PINS_BY_REGION:
       return { ...state, loading: true };
-    case 'REHYDRATE': {
+    case REHYDRATE: {
+      const { region } = action.payload;
       return {
         ...state,
         loading: false,
-        regionData: action.region.regionData,
+        regionData: region.regionData,
         regionModalVisible: true
       };
     }

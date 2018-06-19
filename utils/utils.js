@@ -43,12 +43,10 @@ export class SalesforceApiWrapper {
   setToken = async () => {
     await this.generateAuthToken();
     let tokenObj = await this.getAuthToken();
-    console.log(tokenObj);
     this.token = tokenObj.token__c;
     this.setHeaders();
-    return this.token;
+    return tokenObj;
   };
-
   setPersistedToken = token => {
     this.token = token;
     this.setHeaders();

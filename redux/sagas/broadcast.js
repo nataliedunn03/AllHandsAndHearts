@@ -38,7 +38,6 @@ const getBroadcastsHelper = function* getBroadcastsHelper() {
 
 function* getBroadcast() {
   const broadcasts = yield call(getBroadcastsHelper);
-  console.log(broadcasts);
   if (broadcasts) {
     yield put({
       type: GET_BROADCAST_CARDS_RECEIVED,

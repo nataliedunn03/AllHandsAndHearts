@@ -107,7 +107,6 @@ function* registerFlow(action) {
       isRegistering: true
     });
     // If we could register a user, we send the appropiate actions
-    console.log(registerSuccess);
     if (
       registerSuccess &&
       typeof registerSuccess === 'object' &&
@@ -143,7 +142,24 @@ function* initializeAppState(action) {
         accessToken: token
       });
     } else {
-      yield SFHelper.setPersistedToken(state.auth.accessToken);
+      const currentTime = new Date();
+      const tokenGeneratedTime = new Date(
+        state.auth.accessToken.LastModifiedDate
+      );
+      const isLessThan24Hours =
+        Math.ceil(
+          (currentTime.getTime() - tokenGeneratedTime.getTime()) /
+            (1000 * 3600 * 24)
+        ) <= 1;
+      if (isLessThan24Hours) {
+        yield SFHelper.setPersistedToken(state.auth.accessToken.token__c);
+      } else {
+        const token = yield SFHelper.setToken();
+        yield put({
+          type: 'SET_ACCESS_TOKEN',
+          accessToken: token
+        });
+      }
     }
     if (state.auth.loggedIn) {
       yield put({ type: RESET_TO_MAIN });
