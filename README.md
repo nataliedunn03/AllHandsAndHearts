@@ -17,8 +17,7 @@ Post:
 
 [Quick start guide for setting up react app on Expo](https://docs.expo.io/versions/latest/)
 
-### Let's follow this style when we create a story
-
+### Folder Structure
 `/screens` All of the main/container screen should go here i.e MapScreen
 
 `/components` All of reusable components should go here i.e a styled button/view
