@@ -26,13 +26,23 @@ export const region = (state = INITIAL_STATE, action) => {
     case GET_PINS_BY_REGION:
       return { ...state, loading: true };
     case REHYDRATE: {
-      const { region } = action.payload;
-      return {
-        ...state,
-        loading: false,
-        regionData: region.regionData,
-        regionModalVisible: true
-      };
+      if (action.payload) {
+        const { region } = action.payload;
+        if (region) {
+          return {
+            ...state,
+            loading: false,
+            regionData: region.regionData,
+            regionModalVisible: true
+          };
+        }
+        return {
+          ...state,
+          loading: false,
+          regionData: [],
+          regionModalVisible: true
+        };
+      }
     }
     case GET_REGION_DATA_RECEIVED: {
       return {

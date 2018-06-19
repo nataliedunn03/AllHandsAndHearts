@@ -22,11 +22,15 @@ export const broadcast = (state = INITIAL_STATE, action) => {
       return { ...state, broadcastCards: broadcastCards };
     }
     case REHYDRATE: {
-      const { broadcast } = action.payload;
-      return { ...state, broadcastCards: broadcast.broadcastCards };
+      if (action.payload) {
+        const { broadcast } = action.payload;
+        if (broadcast) {
+          return { ...state, broadcastCards: broadcast.broadcastCards };
+        }
+        return { ...state, broadcastCards: [] };
+      }
     }
     case GET_BROADCAST_CARDS_RECEIVED: {
-      console.log(action.broadcastCards);
       return { ...state, broadcastCards: action.broadcastCards };
     }
     default:

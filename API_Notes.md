@@ -1,6 +1,5 @@
 # Salesforce API Notes
 
-Hey all! These are my notes for the Salesforce API call.
 Below are the CURL commands I've used to interface with each of the endpoints/services.
 Details are listed for each requests as well. Please let me know if you have any question.
 
@@ -34,15 +33,36 @@ Details are listed for each requests as well. Please let me know if you have any
 
 We will need to extract the token from `access_token` field from above response.
 
-### Calls for DATA (SOQL, service description, etc...)
+## Token Renew
+
+Since we don't want to manually renew token. Currently there are multi-stage automated token renew we implemented that is described as below.
+
+In-order for the App to retireve data from Salesforce, App needs to first obtain a access*token similar to described at the begining of this file. We expose a public Salesforce API under: https://jdev-aahtoken.cs19.force.com/services/apexrest/getAuthToken and https://jdev-aahtoken.cs19.force.com/services/apexrest/generateAuthToken/ that returns a accessToken. Obtained accessToken is \_required* in-order for subsequent requests to https://cs19.salesforce.com/services/apexrest. The implementation of this service are in following ApexClasses:
+
+1.  WEBSERVICE_generateAuthToken
+2.  WEBSERVICE_generateAuthTokenEndpoint
+3.  WEBSERVICE_getAuthToken
+
+## Registering for Push Notification
+
+We currently implemented registering for push notification as the following flow:
+
+1.  When a user successfully logs in:
+    </br>**a.** App will ask for notification permission. Once the user gives the permission:
+    </br>**b.** We call `/notification` with `userID, notificationToken, deviceId and deviceName`
+    </br>**c.** And register save the notificationToken using the `WEBSERVICE_PushNotification` ApexClass in Slaesforce.
+2.  When there is a broadcast object added to object, we trigger an action on Salesforce using the `WEBSERVICE_PushNotificationTrigger` ApexTriggers which generates necessary payload and calls `WEBSERVICES_PushNotificationToExpo` future ApexClass.
+3.  `WEBSERVICES_PushNotificationToExpo` class takes the payload and publishes to Expo. Expo sends publishes the notification to either GCM/APN depending on if the device is Android/iOS.
+
+#### Note: Anytime you call an external URL (i.e expo publish notification url) inside ApexClass, you will need to allow that URL in Salesforce's. Search in Setup -> [Remote Settings](https://cs19.lightning.force.com/lightning/setup/SecurityRemoteProxy/home)
+
+## Calls for DATA (SOQL, service description, etc...)
 
 They all revolve around the `/service/data/...` endpoints:
 
 `curl https://cs19.salesforce.com/services/data/v20.0/sobjects -H 'Authorization: Bearer 00D29000000DglJ!ARUAQGblj8Czla05p9jCL_6iFA7HnEMvBIyiFyGAmRdOF8oRpUbkzsFp4ofiVlDaA56YYAusTb3w7bJa5.ejVIFlU130Zj3K'`
 
 `cs19.salesforce.com` -> Seems this is our instance. You can check this on the URL onces you log into `test.salesforce.com`.
-
-`/v20.0/` -> version of their data api endpoint. haven't checked them all out yet but v20.0 seems the be the lowest. Consider upgrading?
 
 `/sobjects/` -> Short for salesforce objects. These are essentially the equivalent of "tables" in traditional SQL type database. The above call will list all available sobjects that is linked to our account.
 
@@ -56,7 +76,7 @@ This is the header that is required for every data call it makes. It follows the
 
 Response of all the objects too big to list here. You can see them all through the salesforce web portal by logging into our account with the above steps and on the "Quick Find" menu under Setup page, search for "Objects and Fields" and use the "Object Manager" to view all our objects.
 
-#### SQOL SELECT query
+## SQOL SELECT query
 
 `curl https://cs19.salesforce.com/services/data/v20.0/query/?q=SELECT+Name,+Coordinates__Latitude__s,+Coordinates__Longitude__s+FROM+Region__c -H 'Authorization: Bearer 00D29000000DglJ!ARUAQGblj8Czla05p9jCL_6iFA7HnEMvBIyiFyGAmRdOF8oRpUbkzsFp4ofiVlDaA56YYAusTb3w7bJa5.ejVIFlU130Zj3K'`
 
@@ -122,11 +142,11 @@ In the above example, note that the query is structured in the pattern `SELECT+<
 
 Currently I've inserted 5 sample objects into our Region object. Each of these will be read from salesforce data endpoint and populated in our app. _For inserting data, see below_
 
-#### SOQL INSERT query
+## SOQL INSERT query
 
 Insertion needs a bit more discussion. Not sure if we should allow all users to insert or just admins? Either way, there are a few ways to go about inserting data:
 
-1.  Using SQOL query to insert (HARD/Code-ish way of doing it):
+### 1. Using SQOL query to insert (HARD/Code-ish way of doing it):
 
 `curl https://cs19.salesforce.com/services/data/v20.0/sobjects/Region__c/ -H 'Authorization: Bearer 00D29000000DglJ!ARUAQGblj8Czla05p9jCL_6iFA7HnEMvBIyiFyGAmRdOF8oRpUbkzsFp4ofiVlDaA56YYAusTb3w7bJa5.ejVIFlU130Zj3K' -H 'Content-Type: application/json' -d '@newregion.json'`
 
@@ -144,7 +164,7 @@ The endpoing for this is `.../sobjects/<OBJECT_NAME>/`. The data needs to be pro
 
 Note, this is just a single insertion of the region "Test Region 1234". These were all the initial required fields that were needed to insert a record (`Name, Radius_for_Disaster_Site__c, Number_of_Pins__c, Coordinates__Latitude__s, Coordinates__Longitude__s`). I have since reduced the required fields to just (`Name, Coordinates__Latitude__s, Coordinates__Longitude__s`), I'm not sure if we should make the radius and # of pins as a requirement just yet? Will need to start looking into pin saving before making this call.
 
-2.  Second and easier way is to use the Salesforce Data Loader app (LESS HARD/Using a SF built app).
+### 2. Second and easier way is to use the Salesforce Data Loader app (LESS HARD/Using a SF built app).
 
 More info here: https://developer.salesforce.com/page/Data_Loader
 
@@ -152,22 +172,22 @@ It's essentially a desktop app that acts as an interface to INSERT/UPDATE/DELETE
 
 To download it, you will need to log into our account, and search around for "Data Loader". Don't remember where but it is realllly easy to find. You can install it on Windows/OSX and log in with the same account that you use to log into the web portal. _Will need to auth with security token that is sent as a text to Ed, since his info is linked to the account_
 
-3. Using workbench web interface provided by Salesforce (EASY / Most convinent way)
+### 3. Using workbench web interface provided by Salesforce (EASY / Most convinent way)
 
 Simply go to https://workbench.developerforce.com/login.php?startUrl=%2Fquery.php
 <br/>And log into the sandbox environment with your SF login.
 <br/>Once logged in, you should be able to access the objects using the `Object` dropdown and selecting the various `Fields`. This should be shown on the default page after logging in.
 <br/>Also on this page are other useful tools such as `queries` and `REST explorer` to test out various queries and explore the custom REST endpoints that you have created using `ApexClasses`.
 
-#### Apex Classes
+## Apex Classes
 
 Apex classes are user defined Java servelet like classes that you can write custom queries in, and output to a specific endpoint that you define. You can access the `ApexClass` list that we have created by following the below steps:
 
-1. Log into `test.salesforce.com`.
-2. Click `Setup` on the cogwheel dropdown. Same step from the above docs.
-3. Look for `Apex` on the quick find search bar on the top left.
-4. Click on `Apex Classes` listed under `Custom Code`.
-5. On the apex class list, click W to list all the apex classes that start with `W`. We named all our apex classes with prefix `WEBSERVICE_` so that we can easily find it.
+1.  Log into `test.salesforce.com`.
+2.  Click `Setup` on the cogwheel dropdown. Same step from the above docs.
+3.  Look for `Apex` on the quick find search bar on the top left.
+4.  Click on `Apex Classes` listed under `Custom Code`.
+5.  On the apex class list, click W to list all the apex classes that start with `W`. We named all our apex classes with prefix `WEBSERVICE_` so that we can easily find it.
 
 Below is a sample Apex class that we created for retrieving `Regions` data:
 
@@ -188,11 +208,3 @@ global class WEBSERVICE_Regions{
 ```
 
 As seen above, this retrieves from Salesforce objects the `Regions` data using the SOQL query `SELECT .... FROM Region__c`, and lists for a request on our custom REST urlMapping `/regions/*`
-
-
-### Token Renew 
-There are multi-stage automated token renew described as below. 
-Reason: In-order for the App to retireve data from Salesforce, App needs to first obtain a access_token similar to described at the begining of this file. We expose a public Salesforce API under: https://jdev-aahtoken.cs19.force.com/services/apexrest/getAuthToken and https://jdev-aahtoken.cs19.force.com/services/apexrest/generateAuthToken/ that returns a accessToken. Obtained accessToken is *required* in-order for subsequent requests to https://cs19.salesforce.com/services/apexrest. The implementation of this service are in following ApexClasses: 
- 1. WEBSERVICE_generateAuthToken
- 2. WEBSERVICE_generateAuthTokenEndpoint
- 3. WEBSERVICE_getAuthToken

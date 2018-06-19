@@ -4,21 +4,22 @@ FFG project for HappyHandsHearts client
 
 Pre-Req:
 
-1.  create-react-native-app
-2.  expo exp
-3.  expo xde - optional
+1.  [NodeJS and NPM](https://nodejs.org/en/)
+2.  [React Native](https://facebook.github.io/react-native/)
+3.  [create-react-native-app](https://github.com/react-community/create-react-native-app)
+4.  [expo _exp_](https://docs.expo.io/versions/latest/workflow/exp-cli)
+5.  [expo _xde_ -- exp equivalent in a GUI (optional)](https://expo.io/tools#xde)
 
-Post:
+Post-req:
 
-1.  close and go to root folder
-2.  run npm install / yarn
-3.  exp start / use XDE to navigate to project folder -> select device
+1.  Download this folder and `cd` or go to this folder
+2.  run `npm install` or run `yarn` if you use yarn
+3.  when installation completes run `exp start` or use XDE to navigate to project folder -> select device
     #dir overview
 
-[Quick start guide for setting up react app on Expo](https://docs.expo.io/versions/latest/)
-
 ### Folder Structure
-`/screens` All of the main/container screen should go here i.e MapScreen
+
+`/screens` All of the main screens including LoginScreen, MapScreen, HomeScreen.
 
 `/components` All of reusable components should go here i.e a styled button/view
 `/components/componentName/componentName.styles.js` Have style in a separate file for each components
@@ -29,16 +30,18 @@ Post:
 <br/>`/constans/apiuri` All of API URL should reside here
 <br/>`/constants/actionTypes` All of redux types should persis here
 
-`/utils` All of utility such as Permission, PushNotification, or lodash wrappers should go here
-<br/>`/utils/Auth` All of auth state management should go here (Maybe should remove when we start using redux-persist)
-
-`/actions` Redux actions should go here
+`/utils` All of utility such as Permission, PushNotification and Fetch wrappers
+<br/>`/actions` Redux actions should go here
 <br/>`/reducers` Reducers should go here
 <br/>`/sagas` Redux-Sagas should go here
 <br/>`/containers` Redux containers that wraps screen and components should go here. i.e mapStateToProps, mapDispatchToProps
 
 `/services` All service code that communicates with the backend (Salesforce API) should go here
 <br/>`/services/apexClasses` All Apex class code from Salesforce should be created here in parallel for reference.
+
+### High Level Application Architecture
+
+GOTO: [Architecture](HAD.png)
 
 ### Notes On Salesforce API
 

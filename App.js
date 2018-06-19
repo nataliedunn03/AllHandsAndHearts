@@ -20,7 +20,7 @@ if (process.env.NODE_ENV !== 'production') {
 const persistConfig = {
   key: FFG_AUTH_STORAGE_KEY,
   storage: storage,
-  version: 0,
+  version: 1,
   whitelist: ['auth', 'broadcast', 'region']
 };
 

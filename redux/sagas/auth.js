@@ -134,6 +134,9 @@ function* registerFlow(action) {
 function* initializeAppState(action) {
   try {
     const state = yield select(getState);
+    if (state.auth.loggedIn) {
+      yield put({ type: RESET_TO_MAIN });
+    }
     const SFHelper = yield Api.getSFHelper();
     if (!state.auth.accessToken) {
       const token = yield SFHelper.setToken();
@@ -142,17 +145,17 @@ function* initializeAppState(action) {
         accessToken: token
       });
     } else {
-      const currentTime = new Date();
       const tokenGeneratedTime = new Date(
         state.auth.accessToken.LastModifiedDate
       );
-      const isLessThan24Hours =
-        Math.ceil(
-          (currentTime.getTime() - tokenGeneratedTime.getTime()) /
-            (1000 * 3600 * 24)
-        ) <= 1;
+      const currentTime = new Date();
+      const diffTime =
+        (currentTime.getTime() - tokenGeneratedTime.getTime()) /
+        (1000 * 3600 * 24);
+      const isLessThan24Hours = diffTime <= 1;
       if (isLessThan24Hours) {
-        yield SFHelper.setPersistedToken(state.auth.accessToken.token__c);
+        alert(state.auth.accessToken.token__c);
+        yield call(SFHelper.setPersistedToken, state.auth.accessToken.token__c);
       } else {
         const token = yield SFHelper.setToken();
         yield put({
@@ -160,9 +163,6 @@ function* initializeAppState(action) {
           accessToken: token
         });
       }
-    }
-    if (state.auth.loggedIn) {
-      yield put({ type: RESET_TO_MAIN });
     }
   } catch (e) {
     yield put({ type: RESET_TO_SIGN_IN });
