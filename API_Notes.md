@@ -192,7 +192,7 @@ As seen above, this retrieves from Salesforce objects the `Regions` data using t
 
 ### Token Renew 
 There are multi-stage automated token renew described as below. 
-Reason: In-order for the App to retireve data from Salesforce, App needs to first obtain a access_token similar to described at the begining of this file. We expose a public Salesforce API under: https://jdev-aahtoken.cs19.force.com/services/apexrest that returns a accessToken. Obtained accessToken is *required* in-order for subsequent requests to https://cs19.salesforce.com/services/apexrest. The implementation of this service are in following ApexClasses: 
+Reason: In-order for the App to retireve data from Salesforce, App needs to first obtain a access_token similar to described at the begining of this file. We expose a public Salesforce API under: https://jdev-aahtoken.cs19.force.com/services/apexrest/getAuthToken and https://jdev-aahtoken.cs19.force.com/services/apexrest/generateAuthToken/ that returns a accessToken. Obtained accessToken is *required* in-order for subsequent requests to https://cs19.salesforce.com/services/apexrest. The implementation of this service are in following ApexClasses: 
  1. WEBSERVICE_generateAuthToken
  2. WEBSERVICE_generateAuthTokenEndpoint
  3. WEBSERVICE_getAuthToken
