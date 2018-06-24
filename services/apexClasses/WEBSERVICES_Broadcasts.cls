@@ -3,8 +3,12 @@ global class WEBSERVICE_Broadcasts{
     @HttpGet
     global static List<Broadcast_Object__c> getBroadcastList(){
         List<Broadcast_Object__c> broadcast;
+        RestRequest req = RestContext.request;
+        RestResponse res = RestContext.response;
+        String regionID = req.requestURI.substring(req.requestURI.lastIndexOf('/')+1);
         try{
-            broadcast = [SELECT Broadcast_Type__c,Summary__c FROM Broadcast_Object__c];
+            //broadcast = [SELECT Broadcast_Type__c,Summary__c FROM Broadcast_Object__c WHERE Region_ID__c = :regionID];
+            broadcast = [SELECT Broadcast_Type__c,Summary__c FROM Broadcast_Object__c ORDER BY CreatedDate DESC NULLS LAST];
             return broadcast;
         }catch(Exception ex){
             System.debug('Error: '+ex.getMessage());
@@ -19,8 +23,8 @@ global class WEBSERVICE_Broadcasts{
             broadcast = new Broadcast_Object__c();
             broadcast.Broadcast_Type__c = type;
             broadcast.Summary__c = summary;
+            //broadcast.Region_ID__c = regionID;
             insert broadcast;
-            return broadcast;
         }catch(Exception ex){
             System.debug('Error: '+ex.getMessage());
         }

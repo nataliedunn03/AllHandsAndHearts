@@ -1,0 +1,40 @@
+@isTest
+public class testWEBERVICE_Regions {
+  static testMethod void testRegions(){
+      //Test inserting a sample region entry
+      date myDate = date.parse('01/01/2018');
+      Region__c testInsert = new Region__c(Name='testRegion', Coordinates__Latitude__s=12.34,Coordinates__Longitude__s=56.78, DisasterStart__c=myDate);
+      insert testInsert;
+
+      //Retrieve the inserted entry by name and assert that the values are equal.
+      Region__c testRetrieve = [SELECT Name, Coordinates__Latitude__s, Coordinates__Longitude__s, DisasterStart__c FROM Region__c WHERE Name='testRegion'];
+      System.assertEquals(testRetrieve.Coordinates__Latitude__s, 12.34);
+      System.assertEquals(testRetrieve.Coordinates__Longitude__s, 56.78);
+      System.assertEquals(testRetrieve.DisasterStart__c, myDate);
+      System.assertEquals(testRetrieve.Name, 'testRegion');
+
+      //Test using the actual retrieve function from the ApexClass
+      List<Region__c> testRegions = WEBSERVICE_Regions.getRegionLists();
+      System.assertEquals(testRegions.size(), 1);
+      System.assertEquals(testRegions[0].name, 'testRegion');
+      System.assertEquals(testRegions[0].Coordinates__Latitude__s, 12.34);
+      System.assertEquals(testRegions[0].Coordinates__Longitude__s, 56.78);
+      System.assertEquals(testRegions[0].DisasterStart__c, myDate);
+
+      Region__c testInsert2 = new Region__c(Name='testRegion2', Coordinates__Latitude__s=33.44,Coordinates__Longitude__s=55.77, DisasterStart__c=myDate);
+      insert testInsert2;
+
+      //Test another retrieve
+      List<Region__c> testRegions2 = WEBSERVICE_Regions.getRegionLists();
+      System.assertEquals(testRegions2.size(), 2);
+      System.assertEquals(testRegions2[1].name, 'testRegion2');
+      System.assertEquals(testRegions2[1].Coordinates__Latitude__s, 33.44);
+      System.assertEquals(testRegions2[1].Coordinates__Longitude__s, 55.77);
+      System.assertEquals(testRegions2[1].DisasterStart__c, myDate);
+
+      //Test return of getRegionLists() is a list of Region__c
+      System.assertEquals(WEBSERVICE_Regions.getRegionLists() instanceof List<Region__c>, true);
+
+      Test.isRunningTest();
+  }
+}

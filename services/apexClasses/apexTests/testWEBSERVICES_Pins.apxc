@@ -1,0 +1,21 @@
+@isTest
+public class testWEBERVICE_Pins {
+    static testMethod void doPost(){
+
+        Pin__c testInsert = new Pin__c(Name='Kevin', LinkUrl__c='www.testlink.com', SourceName__c='testSource', PinColor__c='blue', PinImage__c='testImage', Address__c='270 park ave', Additional_Descriptors__c='Pin Description', PinLocationType__c='Road', Coordinates__Latitude__s=10, Coordinates__Longitude__s=15);
+        insert testInsert;
+
+        Pin__c testRetrieve = [SELECT Name, LinkUrl__c, SourceName__c, PinColor__c, PinImage__c, RegionId__c, Address__c, Additional_Descriptors__c, PinLocationType__c, Coordinates__Latitude__s, Coordinates__Longitude__s FROM Pin__c WHERE Name='Kevin'];
+
+        System.assertEquals('Kevin', testRetrieve.Name);
+		System.assertEquals('270 park ave', testRetrieve.Address__c);
+		System.assertEquals('Pin Description', testRetrieve.Additional_Descriptors__c);
+		System.assertEquals(10, testRetrieve.Coordinates__Latitude__s);
+		System.assertEquals(15, testRetrieve.Coordinates__Longitude__s);
+
+        Pin__c testPin = WEBSERVICE_Pins.doPost('userID', 'Kevin', 'www.linkUrl.com', 'sourceName', 'red', 'pinImage.png', 'regionId', '270 park ave', 'pin', 'tree', 10, 12, 'id');
+        System.assertEquals(testPin.Name, 'Kevin');
+        System.assertEquals(testPin.PinColor__c, 'red');
+	}
+
+}

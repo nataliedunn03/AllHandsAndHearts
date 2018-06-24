@@ -1,0 +1,21 @@
+@isTest
+private class testWEBERVICE_Broadcasts{
+    static testMethod void testcreateBroadcastList(){
+        Broadcast_Object__c insertBroadcast  = new Broadcast_Object__c(Broadcast_Type__c = 'HELP', Summary__c = 'test-Summary');
+        insert insertBroadcast;
+
+        Broadcast_Object__c retrieveBroadcast = [SELECT Broadcast_Type__c,Summary__c FROM Broadcast_Object__c];
+        System.assertEquals('HELP', retrieveBroadcast.Broadcast_Type__c);
+        System.assertEquals('test-Summary', retrieveBroadcast.Summary__c);
+
+        Broadcast_Object__c testBroadcast = WEBSERVICE_Broadcasts.createBroadcastList('HELP', 'test-Summary');
+        System.assertEquals(testBroadcast.Broadcast_Type__c, 'HELP');
+        System.assertEquals(testBroadcast.Summary__c, 'test-Summary');
+
+        List<Broadcast_Object__c> testBroadcast2 = WEBSERVICE_Broadcasts.getBroadcastList();
+        System.assertEquals(testBroadcast2.size(), 1);
+        System.assertEquals(testBroadcast2[0].Broadcast_Type__c, 'HELP');
+        System.assertEquals(testBroadcast2[0].Summary__c, 'test-Summary');
+
+    }
+}

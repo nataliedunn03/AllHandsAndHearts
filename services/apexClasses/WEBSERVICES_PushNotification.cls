@@ -7,6 +7,7 @@ global class WEBSERVICE_PushNotification{
 		This notificationToken will be used to send push notification.
 		Idea: 1. we register notificationToken (this gets generated per app basis)
 		2. We save the token and if there's a new broadcast we POST this to our Push notification provider (either GCM/APN)
+		TODO: need to write trigger to to send a POST to notification provider.
 		*/
         User__c user;
         try{

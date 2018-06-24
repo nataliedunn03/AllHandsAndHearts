@@ -1,0 +1,23 @@
+@isTest
+public class testWEBSERVICES_users {
+    	static testMethod void getUser(){
+
+		User__c testInsert = new User__c(Name__c = 'testName', Email__c='testEmail@email.com', Password__c='testPassword');
+        insert testInsert;
+
+        User__c testRetrieve = [SELECT Name__c, Email__c, Password__c FROM User__c WHERE Name__c ='testName'];
+        System.assertEquals(testRetrieve.Email__c, 'testemail@email.com');
+		System.assertEquals(testRetrieve.Password__c, 'testPassword');
+		System.assertEquals(testRetrieve.Name__c, 'testName');
+
+        WEBSERVICES_users.crateUserAccount('testEmail@email.com', 'testPassword', 'testName');
+        System.assertEquals(testRetrieve.Email__c, 'testemail@email.com');
+		System.assertEquals(testRetrieve.Password__c, 'testPassword');
+		System.assertEquals(testRetrieve.Name__c, 'testName');
+        User__c testUser = WEBSERVICES_users.getUser('testEmail@email.com', 'testPassword');
+        System.assertEquals(testUser.Email__c, 'testemail@email.com');
+		System.assertEquals(testUser.Password__c, 'testPassword');
+
+	}
+
+}
