@@ -9,7 +9,8 @@ import {
   LOGIN_REQUEST_FAILED,
   INITIALIZE_APP_STATE,
   RESET_TO_MAIN,
-  RESET_TO_SIGN_IN
+  RESET_TO_SIGN_IN,
+  CHANGE_PASSWORD
 } from './actionTypes';
 
 //will check if the user is already logged in
@@ -60,6 +61,11 @@ export const setAuth = newAuthState => ({
 
 export const logout = () => ({
   type: LOGOUT_REQUEST
+});
+
+export const changePassword = data => ({
+  type: CHANGE_PASSWORD,
+  data
 });
 
 export const registerRequest = data => ({

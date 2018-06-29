@@ -68,6 +68,16 @@ export default class Api {
     return await SalesforceApi.post(queryEndpoint, payload);
   };
 
+  changePassword = async (email, oldHash, newHash) => {
+    const queryEndpoint = '/changePassword';
+    const payload = {
+      email,
+      oldHash,
+      newHash
+    };
+    return await SalesforceApi.post(queryEndpoint, payload);
+  };
+
   /**
    * Push notification specific api
    */

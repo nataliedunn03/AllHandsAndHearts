@@ -5,7 +5,7 @@ Details are listed for each requests as well. Please let me know if you have any
 
 ### Initial auth_token request call:
 
-`curl -v https://test.salesforce.com/services/oauth2/token -d grant_type=password -d client_id=3MVG9Vik22TUgUphE4Ci7YrLJUWXWmDsMRbP_vZUSuotxwrxduN9uO46e6wPDw_vLHPdcQP2e3Hu6axkpM0fB -d client_secret=150414908105213374 -d username=edwardchen93@gmail.com -d password=jpmchase2`
+`curl -v https://test.salesforce.com/services/oauth2/token -d grant_type=password -d client_id=3MVG9Vik22TUgUphE4Ci7YrLJUWXWmDsMRbP_vZUSuotxwrxduN9uO46e6wPDw_vLHPdcQP2e3Hu6axkpM0fB -d client_secret=150414908105213374 -d username=edwardchen93@gmail.com -d password=jpmchase3`
 
 `client_id` -> Retrieved from the app (unique to 1 per app) info page. To retrieve it:
 
@@ -37,9 +37,9 @@ We will need to extract the token from `access_token` field from above response.
 
 Since we don't want to manually renew token. Currently there are multi-stage automated token renew we implemented that is described as below.
 
-In-order for the App to retireve data from Salesforce, App needs to first obtain a access*token similar to described at the begining of this file. We expose a public Salesforce API under: https://jdev-aahtoken.cs19.force.com/services/apexrest/getAuthToken and https://jdev-aahtoken.cs19.force.com/services/apexrest/generateAuthToken/ that returns a accessToken. Obtained accessToken is \_required* in-order for subsequent requests to https://cs19.salesforce.com/services/apexrest. The implementation of this service are in following ApexClasses:
+In-order for the App to retrieve data from Salesforce, App needs to first obtain a access*token similar to described at the begining of this file. We expose a public Salesforce API under: https://jdev-aahtoken.cs19.force.com/services/apexrest/getAuthToken and https://jdev-aahtoken.cs19.force.com/services/apexrest/generateAuthToken/ that returns a accessToken. Obtained accessToken is \_required* in-order for subsequent requests to https://cs19.salesforce.com/services/apexrest. The implementation of this service are in following ApexClasses:
 
-1.  WEBSERVICE_generateAuthToken
+1.  WEBSERVICE_generateAuthToken (Note: Username + Pass are here. Incase you change your Salesforce password/it expires, you'll need to update it here to generate token.)
 2.  WEBSERVICE_generateAuthTokenEndpoint
 3.  WEBSERVICE_getAuthToken
 

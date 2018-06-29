@@ -1,14 +1,59 @@
 import React from 'react';
-import { Text, View, TouchableHighlight } from 'react-native';
-import TouchableNativeFeedback from '@expo/react-native-touchable-native-feedback-safe';
+import { View } from 'react-native';
 import { Feather as Icon } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 import StyledButton from '../components/StyledButton';
+import { StyledButton2 } from '../components/StyledButton';
 import StyledInput from '../components/StyledInput';
 import { StyledText } from '../components/StyledText';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { delayExec } from '../utils/utils';
 export default class ProfileScreen extends React.PureComponent {
+  state = {
+    oldPassword: '',
+    newPassword: '',
+    rePassword: ''
+  };
+
+  _handleOnChangeText = (key, value) => {
+    this.setState({
+      [key]: value
+    });
+  };
+
+  handlePaswordChange = async () => {
+    this.styledButton2.load();
+    const { newPassword, rePassword, oldPassword } = this.state;
+    if (!newPassword.length > 0 || !rePassword.length > 0 || oldPassword > 0) {
+      alert('Required (*) fields cannot be blank.');
+    } else if (newPassword !== rePassword) {
+      alert("New password don't match.");
+    } else if (oldPassword === newPassword) {
+      alert('New password must be different from your current password.');
+    } else {
+      await this.props.changePassword({
+        email: this.props.auth.Email__c,
+        oldPassword,
+        newPassword
+      });
+      if (
+        this.state.oldPassword.length > 0 &&
+        this.state.newPassword.length > 0 &&
+        this.props.auth.passwordChangeStatus
+      ) {
+        alert(this.props.auth.passwordChangeStatus);
+      }
+      this.setState({
+        oldPassword: '',
+        newPassword: '',
+        rePassword: ''
+      });
+    }
+    delayExec(2000, this.styledButton2.reset);
+  };
+
   render() {
+    const { Name__c, Email__c } = this.props.auth.user;
     /* Go ahead and delete ExpoConfigView and replace it with your
      * content, we just wanted to give you a quick view of your config */
     return (
@@ -43,6 +88,35 @@ export default class ProfileScreen extends React.PureComponent {
           />
         </View>
         <View>
+          {this.props.auth &&
+            Name__c && (
+              <View
+                style={{
+                  alignItems: 'center',
+                  alignSelf: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                <StyledText
+                  style={{
+                    color: '#5a5b59',
+                    fontSize: 24,
+                    marginBottom: 4
+                  }}
+                >{`Hi, ${Name__c}!`}</StyledText>
+                <StyledText
+                  style={{
+                    color: '#5a5b59',
+                    fontSize: 24,
+                    marginBottom: 4
+                  }}
+                >
+                  {Email__c}
+                </StyledText>
+              </View>
+            )}
+        </View>
+        <View>
           <StyledText
             style={{
               color: '#5a5b59',
@@ -65,11 +139,13 @@ export default class ProfileScreen extends React.PureComponent {
               borderWidth: 0.3,
               borderRadius: Colors.Input.BORDER.RADIUS
             }}
-            placeholder="Enter current password"
+            placeholder="Enter current password *"
             enablesReturnKeyAutomatically
             inputRef={element => (this.passwordRef = element)}
-            onChangeText={value => this._handleOnChangeText('password', value)}
-            onSubmitEditing={this.handleLogin}
+            onChangeText={value =>
+              this._handleOnChangeText('oldPassword', value)
+            }
+            value={this.state.oldPassword}
           />
           <StyledInput
             secureTextEntry
@@ -83,11 +159,13 @@ export default class ProfileScreen extends React.PureComponent {
               borderWidth: 0.3,
               borderRadius: Colors.Input.BORDER.RADIUS
             }}
-            placeholder="Enter new password"
+            placeholder="Enter new password *"
             enablesReturnKeyAutomatically
             inputRef={element => (this.passwordRef = element)}
-            onChangeText={value => this._handleOnChangeText('password', value)}
-            onSubmitEditing={this.handleLogin}
+            onChangeText={value =>
+              this._handleOnChangeText('newPassword', value)
+            }
+            value={this.state.newPassword}
           />
           <StyledInput
             secureTextEntry
@@ -101,18 +179,26 @@ export default class ProfileScreen extends React.PureComponent {
               borderWidth: 0.3,
               borderRadius: Colors.Input.BORDER.RADIUS
             }}
-            placeholder="Re-enter new password"
+            placeholder="Re-enter new password *"
             enablesReturnKeyAutomatically
             inputRef={element => (this.passwordRef = element)}
-            onChangeText={value => this._handleOnChangeText('password', value)}
-            onSubmitEditing={this.handleLogin}
+            onChangeText={value =>
+              this._handleOnChangeText('rePassword', value)
+            }
+            value={this.state.rePassword}
+          />
+          <StyledButton2
+            buttonRef={ref => (this.styledButton2 = ref)}
+            label="Change password"
+            onPress={this.handlePaswordChange}
+            onSecondaryPress={() => this.styledButton2.reset()}
           />
         </View>
         <View>
           <StyledButton
             style={{
               height: 42,
-              backgroundColor: Colors.defaultColor.PRIMARY_COLOR
+              backgroundColor: Colors.defaultColor.WARNING_COLOR
             }}
             textStyle={{ color: Colors.defaultColor.PAPER_COLOR }}
             text="Log out"

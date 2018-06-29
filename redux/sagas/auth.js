@@ -13,7 +13,10 @@ import {
   INITIALIZE_APP_STATE,
   RESET_TO_MAIN,
   RESET_TO_SIGN_IN,
-  REGISTER_PUSH_NOTIFICATION
+  REGISTER_PUSH_NOTIFICATION,
+  CHANGE_PASSWORD,
+  CHANGE_PASSWORD_ERROR,
+  CHANGE_PASSWORD_SUCCESS
 } from '../actions/actionTypes';
 import * as AuthService from '../../services/auth';
 import ApiWrapper from '../../services/api';
@@ -45,7 +48,6 @@ const authorize = function* authorize({
     return false;
   }
 };
-
 const logout = function* logout() {
   yield put({ type: SENDING_REQUEST, sending: true });
   try {
@@ -145,16 +147,14 @@ function* initializeAppState(action) {
         accessToken: token
       });
     } else {
-      const tokenGeneratedTime = new Date(
-        state.auth.accessToken.LastModifiedDate
-      );
+      let parsedDate = state.auth.accessToken.LastModifiedDate.split('+')[0];
+      let tokenGeneratedTime = new Date(parsedDate);
       const currentTime = new Date();
       const diffTime =
         (currentTime.getTime() - tokenGeneratedTime.getTime()) /
         (1000 * 3600 * 24);
       const isLessThan24Hours = diffTime <= 1;
       if (isLessThan24Hours) {
-        alert(state.auth.accessToken.token__c);
         yield call(SFHelper.setPersistedToken, state.auth.accessToken.token__c);
       } else {
         const token = yield SFHelper.setToken();
@@ -169,10 +169,52 @@ function* initializeAppState(action) {
   }
 }
 
+function* changePasswordFlow(action) {
+  yield put({ type: LOGIN_REQUEST_LOADING, loading: true });
+  try {
+    const { email, oldPassword, newPassword } = action.data;
+    const oldHash = yield call(
+      AuthService.generatePasswordHash,
+      email,
+      oldPassword
+    );
+    const newHash = yield call(
+      AuthService.generatePasswordHash,
+      email,
+      newPassword
+    );
+    if (email && oldHash && newHash) {
+      const status = yield call(Api.changePassword, email, oldHash, newHash);
+      if (status['Email__c']) {
+        yield put({
+          type: CHANGE_PASSWORD_SUCCESS,
+          passwordChangeStatus: 'Password changed successfully!'
+        });
+      } else {
+        yield put({
+          type: CHANGE_PASSWORD_ERROR,
+          passwordChangeStatus: status['status']
+            ? status['status']
+            : 'Error changing password.'
+        });
+      }
+    } else {
+      return;
+    }
+  } catch (e) {
+    console.log(e);
+    yield put({ type: LOGIN_REQUEST_FAILED, error: e });
+  } finally {
+    yield put({ type: LOGIN_REQUEST_LOADING, loading: false });
+    yield put({ type: LOGIN_REQUEST_FAILED, error: null });
+  }
+}
+
 function* saga() {
   yield takeEvery(LOGIN_REQUEST, loginFlow);
   yield takeEvery(REGISTER_REQUEST, registerFlow);
   yield takeEvery(LOGOUT_REQUEST, logoutFlow);
   yield takeEvery(INITIALIZE_APP_STATE, initializeAppState);
+  yield takeEvery(CHANGE_PASSWORD, changePasswordFlow);
 }
 export default saga;
