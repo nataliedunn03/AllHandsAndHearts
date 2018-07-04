@@ -16,12 +16,12 @@ function* registerPushNotification() {
     } else {
       yield put({
         type: REGISTER_PUSH_NOTIFICATION_ERROR,
-        error: `Failed tok get token: ${token}`
+        error: `Failed tok get notification token.`
       });
-      console.log('Failed to get token', token);
+      console.log('Failed to get notification token');
     }
   } catch (e) {
-    console.log(e);
+    console.log('Failed to get notification token', e);
   }
 }
 

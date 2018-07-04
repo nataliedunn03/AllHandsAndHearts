@@ -4,12 +4,12 @@ import {
   LOGIN_REQUEST_LOADING,
   LOGIN_REQUEST_SUCCESS,
   LOGIN_REQUEST_FAILED,
-  LOGOUT_REQUEST_SUCCESS,
   REGISTER_REQUEST_LOADING,
   REGISTER_REQUEST_SUCCESS,
   REGISTER_REQUEST_FAILED,
   CHANGE_PASSWORD_SUCCESS,
-  CHANGE_PASSWORD_ERROR
+  CHANGE_PASSWORD_ERROR,
+  CHANGE_PASSWORD_STATUS_RESET
 } from '../actions/actionTypes';
 
 const INITIAL_STATE = {
@@ -47,12 +47,12 @@ export const auth = (state = INITIAL_STATE, action) => {
       return { ...state, loggedIn: action.newAuthState };
     case REGISTER_REQUEST_FAILED:
       return { ...state, loginError: action.error };
-    case LOGOUT_REQUEST_SUCCESS:
-      return { ...state, loggedIn: false };
     case CHANGE_PASSWORD_SUCCESS:
+      return { ...state, passwordChangeStatus: action.passwordChangeStatus };
     case CHANGE_PASSWORD_ERROR:
       return { ...state, passwordChangeStatus: action.passwordChangeStatus };
-
+    case CHANGE_PASSWORD_STATUS_RESET:
+      return { ...state, passwordChangeStatus: action.passwordChangeStatus };
     default:
       return state;
   }

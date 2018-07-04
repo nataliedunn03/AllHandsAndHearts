@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Alert } from 'react-native';
 import { Feather as Icon } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 import StyledButton from '../components/StyledButton';
@@ -15,6 +15,13 @@ export default class ProfileScreen extends React.PureComponent {
     rePassword: ''
   };
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.auth && nextProps.auth.passwordChangeStatus) {
+      if (nextProps.auth.passwordChangeStatus.length > 0)
+        Alert.alert(nextProps.auth.passwordChangeStatus);
+    }
+  }
+
   _handleOnChangeText = (key, value) => {
     this.setState({
       [key]: value
@@ -25,24 +32,17 @@ export default class ProfileScreen extends React.PureComponent {
     this.styledButton2.load();
     const { newPassword, rePassword, oldPassword } = this.state;
     if (!newPassword.length > 0 || !rePassword.length > 0 || oldPassword > 0) {
-      alert('Required (*) fields cannot be blank.');
+      Alert.alert('Required (*) fields cannot be blank.');
     } else if (newPassword !== rePassword) {
-      alert("New password don't match.");
+      Alert.alert("New password don't match.");
     } else if (oldPassword === newPassword) {
-      alert('New password must be different from your current password.');
+      Alert.alert('New password must be different from your current password.');
     } else {
       await this.props.changePassword({
-        email: this.props.auth.Email__c,
+        email: this.props.auth.user.Email__c,
         oldPassword,
         newPassword
       });
-      if (
-        this.state.oldPassword.length > 0 &&
-        this.state.newPassword.length > 0 &&
-        this.props.auth.passwordChangeStatus
-      ) {
-        alert(this.props.auth.passwordChangeStatus);
-      }
       this.setState({
         oldPassword: '',
         newPassword: '',
@@ -53,9 +53,8 @@ export default class ProfileScreen extends React.PureComponent {
   };
 
   render() {
+    if (!this.props.auth.user) return null;
     const { Name__c, Email__c } = this.props.auth.user;
-    /* Go ahead and delete ExpoConfigView and replace it with your
-     * content, we just wanted to give you a quick view of your config */
     return (
       <KeyboardAwareScrollView
         style={{

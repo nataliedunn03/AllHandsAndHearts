@@ -46,3 +46,8 @@ GOTO: [Architecture](HAD.png)
 ### Notes On Salesforce API
 
 GOTO: [Note on salesforce API calls.](API_Notes.md)
+
+#Build process:
+
+1.  Run `expo build:ios / build:android` and follow the instructions.
+2.  More on: https://docs.expo.io/versions/latest/distribution/app-stores

@@ -1,4 +1,5 @@
 import { Constants, Permissions, Notifications } from 'expo';
+import { Alert } from 'react-native';
 import * as AuthService from './auth';
 import ApiWrapper from '../services/api';
 const Api = new ApiWrapper();
@@ -25,9 +26,7 @@ export default (async function registerForPushNotificationsAsync() {
 
   // Stop here if the user did not grant permissions
   if (finalStatus !== 'granted') {
-    alert(
-      'Hey! You might want to enable notifications to receive broadcast updates.'
-    );
+    Alert.alert('Enable notifications to receive broadcast updates.');
     return;
   }
 

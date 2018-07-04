@@ -146,7 +146,6 @@ export default class MapScreen extends React.PureComponent {
           displayGps: false
         });
       }
-      console.log(this.state.displayGps);
     }
   };
   //see what kind of animation we should perform based on map movement
@@ -192,7 +191,6 @@ export default class MapScreen extends React.PureComponent {
   };
 
   closeRegionModal = () => {
-    console.log('closedRegionModal');
     this.setState({
       regionModalVisible: false,
       regionModalIsFull: false
@@ -244,8 +242,6 @@ export default class MapScreen extends React.PureComponent {
   _createNewMarker = async e => {
     e.persist();
     const coords = e.nativeEvent.coordinate;
-    console.log(' navigate to EditPin');
-
     this.props.navigation.navigate('EditPin', {
       latitude: coords.latitude,
       longitude: coords.longitude,
@@ -256,7 +252,6 @@ export default class MapScreen extends React.PureComponent {
   };
 
   _editCurrentMarker = async pinData => {
-    console.log(' editing to EditPin:', pinData);
     this._closeMarkerModal();
     this.props.navigation.navigate('EditPin', {
       hasPinData: true,
@@ -268,7 +263,6 @@ export default class MapScreen extends React.PureComponent {
   };
 
   _closeMarkerModal = () => {
-    console.log('closedMarkerModal');
     this.setState({
       showMarkerModal: false
     });
@@ -321,8 +315,6 @@ export default class MapScreen extends React.PureComponent {
   };
 
   _onMarkerPress(markerId) {
-    console.log('opening marker modal');
-    console.log(markerId);
     this.setState({
       showMarkerModal: true,
       showDetailsOfMarkerId: markerId
@@ -330,7 +322,6 @@ export default class MapScreen extends React.PureComponent {
   }
 
   _onMarkerClose = () => {
-    console.log('closing marker description');
     this.setState({
       showMarkerModal: false
     });

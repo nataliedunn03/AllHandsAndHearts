@@ -1,11 +1,9 @@
 import { takeEvery, call, put, select } from 'redux-saga/effects';
 import {
-  SENDING_REQUEST,
   LOGIN_REQUEST,
   LOGIN_REQUEST_LOADING,
   LOGIN_REQUEST_FAILED,
   REGISTER_REQUEST,
-  REGISTER_REQUEST_FAILED,
   REGISTER_REQUEST_LOADING,
   SET_AUTH,
   LOGOUT_REQUEST,
@@ -16,10 +14,14 @@ import {
   REGISTER_PUSH_NOTIFICATION,
   CHANGE_PASSWORD,
   CHANGE_PASSWORD_ERROR,
-  CHANGE_PASSWORD_SUCCESS
+  CHANGE_PASSWORD_SUCCESS,
+  CHANGE_PASSWORD_STATUS_RESET,
+  LOGOUT_REQUEST_SUCCESS
 } from '../actions/actionTypes';
 import * as AuthService from '../../services/auth';
+import { purgeStoredState } from 'redux-persist';
 import ApiWrapper from '../../services/api';
+import persistConfig from '../persistConfig';
 const Api = new ApiWrapper();
 
 const getState = state => state;
@@ -49,12 +51,9 @@ const authorize = function* authorize({
   }
 };
 const logout = function* logout() {
-  yield put({ type: SENDING_REQUEST, sending: true });
   try {
-    //const response = yield call(AuthService.logout);
-    yield put({ type: SENDING_REQUEST, sending: false });
-    //return response;
-    yield AuthService.removeCookie();
+    yield call(purgeStoredState, persistConfig());
+    yield put({ type: LOGOUT_REQUEST_SUCCESS });
     yield put({ type: RESET_TO_SIGN_IN });
   } catch (error) {
     yield put({ type: REQUEST_ERROR, error: error.message });
@@ -170,7 +169,6 @@ function* initializeAppState(action) {
 }
 
 function* changePasswordFlow(action) {
-  yield put({ type: LOGIN_REQUEST_LOADING, loading: true });
   try {
     const { email, oldPassword, newPassword } = action.data;
     const oldHash = yield call(
@@ -199,14 +197,23 @@ function* changePasswordFlow(action) {
         });
       }
     } else {
+      yield put({
+        type: CHANGE_PASSWORD_ERROR,
+        passwordChangeStatus: 'Error changing password.'
+      });
       return;
     }
   } catch (e) {
     console.log(e);
-    yield put({ type: LOGIN_REQUEST_FAILED, error: e });
+    yield put({
+      type: CHANGE_PASSWORD_ERROR,
+      passwordChangeStatus: e
+    });
   } finally {
-    yield put({ type: LOGIN_REQUEST_LOADING, loading: false });
-    yield put({ type: LOGIN_REQUEST_FAILED, error: null });
+    yield put({
+      type: CHANGE_PASSWORD_STATUS_RESET,
+      passwordChangeStatus: ''
+    });
   }
 }
 
