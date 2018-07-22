@@ -6,7 +6,7 @@ import {
   View,
   Picker
 } from 'react-native';
-import { Constants, ImagePicker } from 'expo';
+import { Constants, ImagePicker, Permissions } from 'expo';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import LabelSelect from 'react-native-label-select';
 import { Location } from 'expo';
@@ -238,10 +238,15 @@ export default class EditPinScreen extends PureComponent {
   };
 
   _pickImage = async () => {
-    let pickerResult = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: false
-    });
-    this._updatePhotoState([`${pickerResult.uri}`]);
+    const permissions = Permissions.CAMERA_ROLL;
+    const { status } = await Permissions.askAsync(permissions);
+    if (status === 'granted') {
+      let pickerResult = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: 'Images',
+        allowsEditing: false
+      });
+      this._updatePhotoState([`${pickerResult.uri}`]);
+    }
   };
 
   renderLocationTypeAndroid = () => {
