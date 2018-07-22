@@ -59,23 +59,27 @@ export default class ViewPinModal extends React.Component {
         showsVerticalScrollIndicator={false}
       >
         <StyledText style={styles.styledText}>NAME</StyledText>
-        <StyledText style={styles.styledTextValue}>{data.Name}</StyledText>
+        <StyledText selectable style={styles.styledTextValue}>
+          {data.Name}
+        </StyledText>
         <Separator />
         {data &&
           data.Address__c && (
             <Fragment>
               <StyledText style={styles.styledText}>ADDRESS</StyledText>
-              <StyledText style={styles.styledTextValue}>
+              <StyledText selectable style={styles.styledTextValue}>
                 {data.Address__c}
               </StyledText>
               <Separator />
             </Fragment>
           )}
         <StyledText style={styles.styledText}>COORDINATES</StyledText>
-        <StyledText style={styles.styledTextValue}>{coordsString}</StyledText>
+        <StyledText selectable style={styles.styledTextValue}>
+          {coordsString}
+        </StyledText>
         <Separator />
         <StyledText style={styles.styledText}>DESCRIPTION</StyledText>
-        <StyledText style={styles.styledTextValue}>
+        <StyledText selectable style={styles.styledTextValue}>
           {data.Additional_Descriptors__c}
         </StyledText>
         <Separator />
@@ -105,12 +109,12 @@ export default class ViewPinModal extends React.Component {
           <Fragment>
             <Separator />
             <StyledText style={styles.styledText}>SOURCE NAME</StyledText>
-            <StyledText style={styles.styledTextValue}>
+            <StyledText selectable style={styles.styledTextValue}>
               {data.SourceName__c}
             </StyledText>
             <Separator />
             <StyledText style={styles.styledText}>SOURCE LINK</StyledText>
-            <StyledText style={styles.styledTextValue}>
+            <StyledText selectable style={styles.styledTextValue}>
               {data.LinkUrl__c}
             </StyledText>
           </Fragment>

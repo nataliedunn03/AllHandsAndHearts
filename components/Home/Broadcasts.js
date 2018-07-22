@@ -63,9 +63,8 @@ export default class Broadcasts extends PureComponent {
       style,
       broadcast: { broadcastCards }
     } = this.props;
-    return (
-      broadcastCards &&
-      broadcastCards.length > 0 && (
+    if (broadcastCards && broadcastCards.length > 0) {
+      return (
         <View
           ref={ref => {
             this.broadcastRef = ref;
@@ -96,8 +95,10 @@ export default class Broadcasts extends PureComponent {
             {this._renderCards(broadcastCards)}
           </ScrollView>
         </View>
-      )
-    );
+      );
+    } else {
+      return null;
+    }
   }
 }
 

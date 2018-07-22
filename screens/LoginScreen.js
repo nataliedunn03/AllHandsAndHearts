@@ -5,16 +5,13 @@ import {
   TouchableWithoutFeedback,
   Animated
 } from 'react-native';
-import { View, Image } from 'react-native-animatable';
 import { HideWithKeyboard } from 'react-native-hide-with-keyboard';
 import LoginForm from '../components/Login/LoginForm';
 import SignupForm from '../components/Login/SignupForm';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import Slogan from '../components/Login/Slogan';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-//import * as AuthService from '../services/auth';
 export default class Login extends React.PureComponent {
   constructor(props) {
     super(props);

@@ -1,16 +1,16 @@
 import { Permissions, Location } from 'expo';
-
+import { Alert } from 'react-native';
 export async function alertIfNotificationisDisabled() {
   const { status } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
   if (status !== 'granted') {
-    alert('Notification is turned off! Change it in settings!');
+    Alert.alert('Notification service is turned off! Change it in settings!');
   }
 }
 
 export const alertIfLocationisDisabled = async () => {
   const { status } = await Permissions.getAsync(Permissions.LOCATION);
   if (status !== 'granted') {
-    alert('Location is turned off! Chage it in settings');
+    Alert.alert('Location service is turned off! Change it in settings');
   }
 };
 export const getUserCurrentLocation = async () => {
