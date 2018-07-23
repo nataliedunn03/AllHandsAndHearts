@@ -28,7 +28,7 @@ export default class PinCameraScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      flash: 'on',
+      flash: 'off',
       zoom: 0,
       autoFocus: 'on',
       depth: 0,
@@ -53,7 +53,7 @@ export default class PinCameraScreen extends React.Component {
       });
       LayoutAnimation.configureNext(customConfig2);
       this.setState(({ photos }) => ({
-        photos: [photo.uri, ...photos]
+        photos: [photo, ...photos]
       }));
     }
   };
@@ -82,11 +82,13 @@ export default class PinCameraScreen extends React.Component {
             </TouchableOpacity>
           )}
         </View>
-        <View style={{ alignItems: 'center' }}>
-          <TouchableNativeFeedback onPress={this.snap}>
-            <Icon name="circle" color="#EDEFF2" size={60} />
-          </TouchableNativeFeedback>
-        </View>
+        {this.state.photos.length < 3 && (
+          <View style={{ alignItems: 'center' }}>
+            <TouchableNativeFeedback onPress={this.snap}>
+              <Icon name="circle" color="#EDEFF2" size={60} />
+            </TouchableNativeFeedback>
+          </View>
+        )}
         <View>
           <TouchableOpacity
             style={{
@@ -178,6 +180,11 @@ export default class PinCameraScreen extends React.Component {
           <StyledText style={{ fontSize: 100, color: this.getRandomColor() }}>
             {this.state.photos.length}
           </StyledText>
+          {this.state.photos.length >= 3 && (
+            <StyledText style={{ fontSize: 18, backgroundColor: 'red' }}>
+              You can only take maximum of 3 pictures
+            </StyledText>
+          )}
         </View>
       </View>
     );

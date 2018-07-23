@@ -18,6 +18,7 @@ global with sharing class WEBSERVICE_Pins{
                        UserId__c,
                        PinLocationType__c,
                        RegionId__c,
+                	   PinImage__c,
                        Address__c FROM Pin__c WHERE RegionId__c =: regionId];
         return pins;
     }
@@ -38,7 +39,6 @@ global with sharing class WEBSERVICE_Pins{
         String linkUrl,
         String sourceName,
         String pinColor,
-        String pinImage,
         String regionId,
         String address,
         String description,
@@ -53,7 +53,6 @@ global with sharing class WEBSERVICE_Pins{
         pin.LinkUrl__c = linkUrl;
         pin.SourceName__c = sourceName;
         pin.PinColor__c = pinColor;
-        pin.PinImage__c = pinImage;
         pin.RegionId__c = regionId;
         pin.Address__c = address;
         pin.Additional_Descriptors__c = description;

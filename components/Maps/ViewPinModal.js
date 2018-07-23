@@ -20,6 +20,11 @@ const Separator = ({ style }) => {
 };
 
 export default class ViewPinModal extends React.Component {
+  componentWillMount = async () => {
+    if (this.props.data.PinImage__c === 'true') {
+      await this.props.getPinImageById(this.props.data.Id);
+    }
+  };
   render() {
     const { data, currentUserId, onDelete, onEdit } = this.props;
     if (!data) return null;
@@ -87,7 +92,7 @@ export default class ViewPinModal extends React.Component {
         <StyledText style={styles.styledTextValue}>
           {data.PinLocationType__c}
         </StyledText>
-        {data.photos && (
+        {data.PinImage__c === 'true' && (
           <View>
             <Separator
               style={{
@@ -102,7 +107,14 @@ export default class ViewPinModal extends React.Component {
             >
               PHOTOS
             </StyledText>
-            <Gallery photos={data.photos} />
+            {data.photos &&
+              data.photos.length > 0 && <Gallery photos={data.photos} />}
+            {data.PinImage__c === 'true' &&
+              !data.photos && (
+                <StyledText style={styles.styledTextValue}>
+                  Loading images ...
+                </StyledText>
+              )}
           </View>
         )}
         {data.SourceName__c && (

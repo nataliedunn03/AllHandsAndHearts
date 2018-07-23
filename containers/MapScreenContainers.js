@@ -3,7 +3,8 @@ import { getRegionData } from '../redux/actions/region';
 import {
   getPinsByRegion,
   setPinByRegion,
-  deletePinById
+  deletePinById,
+  getPinImageById
 } from '../redux/actions/pins';
 import MapScreen from '../screens/MapScreen';
 
@@ -20,6 +21,9 @@ const mapDispatchToProps = dispatch => {
     },
     deletePinById: pinId => {
       dispatch(deletePinById(pinId));
+    },
+    getPinImageById: pinId => {
+      dispatch(getPinImageById(pinId));
     }
   };
 };

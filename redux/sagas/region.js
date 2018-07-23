@@ -1,12 +1,13 @@
-import { takeEvery, call, put } from 'redux-saga/effects';
+import { takeEvery, call, put, fork } from 'redux-saga/effects';
 import {
   GET_REGION_DATA,
   GET_REGION_DATA_LOADING,
   GET_REGION_DATA_RECEIVED,
   GET_REGION_DATA_ERROR,
   GET_PINS_BY_REGION,
+  GET_PINS_IMAGE_BY_ID,
   GET_PINS_BY_REGION_RECEIVED,
-  GET_PINS_BY_REGION_ERROR,
+  GET_PINS_IMAGE_BY_ID_SUCCESS,
   SET_PINS_BY_REGION,
   SET_PINS_BY_REGION_SUCCESS,
   DELETE_PIN_BY_ID
@@ -68,13 +69,33 @@ function* setPinDataByRegion(action) {
     action.regionId,
     action.pinData
   );
+
+  if (newPin && newPin.Id && action.pinData.photos.length > 0) {
+    for (let photo of action.pinData.photos) {
+      console.log(photo.uri);
+      if (photo.uri) {
+        yield fork(Api.setPinPhotosById, newPin.Id, photo);
+      }
+    }
+  }
   if (action.pinData.photos.length > 0) {
-    newPin['photos'] = action.pinData.photos;
+    newPin['photos'] = [...action.pinData.photos];
   }
   yield put({
     type: SET_PINS_BY_REGION_SUCCESS,
     pinData: newPin
   });
+}
+
+function* getPinImageById(action) {
+  const photos = yield call(Api.getPhotos, action.pinId);
+  if (photos && photos.length > 0 && photos[0].Description) {
+    yield put({
+      type: GET_PINS_IMAGE_BY_ID_SUCCESS,
+      pinId: action.pinId,
+      photos
+    });
+  }
 }
 
 function* deletePinDataById(action) {
@@ -86,5 +107,6 @@ function* saga() {
   yield takeEvery(GET_PINS_BY_REGION, getPinsByRegion);
   yield takeEvery(SET_PINS_BY_REGION, setPinDataByRegion);
   yield takeEvery(DELETE_PIN_BY_ID, deletePinDataById);
+  yield takeEvery(GET_PINS_IMAGE_BY_ID, getPinImageById);
 }
 export default saga;

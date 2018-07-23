@@ -9,7 +9,8 @@ import {
   GET_PINS_BY_REGION_ERROR,
   SET_PINS_BY_REGION,
   SET_PINS_BY_REGION_SUCCESS,
-  DELETE_PIN_BY_ID
+  DELETE_PIN_BY_ID,
+  GET_PINS_IMAGE_BY_ID_SUCCESS
 } from '../actions/actionTypes';
 import { REHYDRATE } from 'redux-persist';
 
@@ -74,6 +75,21 @@ export const region = (state = INITIAL_STATE, action) => {
         pinData: [...newPins, action.pinData]
       };
     }
+
+    case GET_PINS_IMAGE_BY_ID_SUCCESS: {
+      let pin = state.pinData.filter(item => item.Id === action.pinId)[0];
+      const restPins = state.pinData.filter(item => item.Id !== action.pinId);
+      if (action.photos && action.photos.length > 0) {
+        pin['photos'] = [...action.photos];
+      } else {
+        pin['photos'] = [...pin.photos];
+      }
+      return {
+        ...state,
+        pinData: [...restPins, pin]
+      };
+    }
+
     /*case SET_PINS_BY_REGION: {
       const addedPin = action.pinData;
       const currentPins = [...state.pinData, addedPin];

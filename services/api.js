@@ -32,6 +32,26 @@ export default class Api {
 
     return await SalesforceApi.post('/pins', payload);
   };
+  setPinPhotosById = async (pinId, photos) => {
+    let uriParts = photos.uri.split('.');
+    let fileType = uriParts[uriParts.length - 1];
+    const payload = {
+      parentId: pinId,
+      attachmentId: '',
+      fileName: `${pinId}${uriParts[0]}`,
+      contentType: `image/${fileType}`,
+      base64BlobValue: photos.base64
+    };
+    return await SalesforceApi.post('/pinImage', payload);
+  };
+
+  getPhotos = async pinId => {
+    const payload = {
+      pinId: pinId
+    };
+    const res = await SalesforceApi.put('/pinImage', payload);
+    return res;
+  };
 
   deletePinById = async pinId => {
     const queryEndPoint = `/pins/${pinId}`;

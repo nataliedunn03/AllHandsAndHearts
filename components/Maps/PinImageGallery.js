@@ -41,7 +41,16 @@ export default ({ photos }) => {
     <View style={styles.sceneContainer}>
       {photos &&
         photos.map((photo, index) => {
-          return <Gallery key={index} uri={photo} />;
+          return (
+            <Gallery
+              key={index}
+              uri={
+                photo.uri
+                  ? photo.uri
+                  : `data:image/png;base64,${photo.Description}`
+              }
+            />
+          );
         })}
     </View>
   );

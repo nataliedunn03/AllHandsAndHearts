@@ -304,6 +304,7 @@ export default class MapScreen extends React.PureComponent {
         </SlidingModal.Header>
         <ViewPinModal
           data={pinData}
+          getPinImageById={this.props.getPinImageById}
           currentUserId={currentUserId}
           onDelete={this._onPinDelete}
           onEdit={() => {

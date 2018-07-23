@@ -4,7 +4,8 @@ import {
   StyleSheet,
   Keyboard,
   View,
-  Picker
+  Picker,
+  Alert
 } from 'react-native';
 import { Constants, ImagePicker, Permissions } from 'expo';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -224,7 +225,7 @@ export default class EditPinScreen extends PureComponent {
   _handleEditPinSubmit = currentMarkerList => {
     const payload = this._generatePayload();
     if (!payload || !payload.name || !payload.description || !payload.pinType) {
-      alert('All * marked inputs are required');
+      Alert.alert('All * marked inputs are required');
       return;
     }
     this.props.setPinByRegion(this.state.regionId, {
@@ -243,9 +244,10 @@ export default class EditPinScreen extends PureComponent {
     if (status === 'granted') {
       let pickerResult = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: 'Images',
-        allowsEditing: false
+        allowsEditing: false,
+        base64: true
       });
-      this._updatePhotoState([`${pickerResult.uri}`]);
+      this._updatePhotoState([pickerResult]);
     }
   };
 
@@ -441,78 +443,80 @@ export default class EditPinScreen extends PureComponent {
               backgroundColor: 'transparent'
             }}
           >
-            PHOTOS
+            PHOTOS (max 3)
           </StyledText>
-          <View
-            style={{
-              flexDirection: 'row',
-              marginLeft: 16,
-              marginRight: 16,
-              marginBottom: 10,
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-          >
+          {this.state.photos.length < 3 && (
             <View
               style={{
-                backgroundColor: 'transparent',
-                borderRightColor: '#f5f7fa',
-                borderRightWidth: 2
+                flexDirection: 'row',
+                marginLeft: 16,
+                marginRight: 16,
+                marginBottom: 10,
+                alignItems: 'center',
+                justifyContent: 'center'
               }}
             >
-              <TouchableNativeFeedback
-                onPress={() => {
-                  this.props.navigation.navigate('Camera', {
-                    savePhoto: this._updatePhotoState
-                  });
+              <View
+                style={{
+                  backgroundColor: 'transparent',
+                  borderRightColor: '#f5f7fa',
+                  borderRightWidth: 2
                 }}
               >
-                <View
-                  style={{
-                    backgroundColor: 'transparent'
+                <TouchableNativeFeedback
+                  onPress={() => {
+                    this.props.navigation.navigate('Camera', {
+                      savePhoto: this._updatePhotoState
+                    });
                   }}
                 >
-                  <Icon
-                    name="camera"
-                    color="#1D2C3C"
-                    size={34}
+                  <View
                     style={{
-                      backgroundColor: 'transparent',
-                      alignSelf: 'center',
-                      marginTop: 6
+                      backgroundColor: 'transparent'
                     }}
-                  />
-                  <StyledText style={styles.styledText}>
-                    Capture a photo
-                  </StyledText>
-                </View>
-              </TouchableNativeFeedback>
-            </View>
+                  >
+                    <Icon
+                      name="camera"
+                      color="#1D2C3C"
+                      size={34}
+                      style={{
+                        backgroundColor: 'transparent',
+                        alignSelf: 'center',
+                        marginTop: 6
+                      }}
+                    />
+                    <StyledText style={styles.styledText}>
+                      Capture a photo
+                    </StyledText>
+                  </View>
+                </TouchableNativeFeedback>
+              </View>
 
-            <View>
-              <TouchableNativeFeedback onPress={this._pickImage}>
-                <View
-                  style={{
-                    backgroundColor: 'transparent'
-                  }}
-                >
-                  <Icon
-                    name="upload"
-                    color="#1D2C3C"
-                    size={34}
+              <View>
+                <TouchableNativeFeedback onPress={this._pickImage}>
+                  <View
                     style={{
-                      backgroundColor: 'transparent',
-                      alignSelf: 'center',
-                      marginTop: 6
+                      backgroundColor: 'transparent'
                     }}
-                  />
-                  <StyledText style={styles.styledText}>
-                    Choose a photo
-                  </StyledText>
-                </View>
-              </TouchableNativeFeedback>
+                  >
+                    <Icon
+                      name="upload"
+                      color="#1D2C3C"
+                      size={34}
+                      style={{
+                        backgroundColor: 'transparent',
+                        alignSelf: 'center',
+                        marginTop: 6
+                      }}
+                    />
+                    <StyledText style={styles.styledText}>
+                      Choose a photo
+                    </StyledText>
+                  </View>
+                </TouchableNativeFeedback>
+              </View>
             </View>
-          </View>
+          )}
           <Gallery photos={this.state.photos} />
           <Separator />
         </View>
