@@ -50,8 +50,11 @@ GOTO: [Note on salesforce API calls.](API_Notes.md)
 #Build process:
 
 0.  [Make sure you have an expo account and signed in](https://expo.io/signup)
-1.  Run `expo build:ios / build:android` and follow the instructions.
+1.  Run `expo build:ios / build:android` and follow the instructions. YouTube walk-through https://www.youtube.com/watch?v=6IPr7oOugTs
+
     1.  Enter `kris.c@allhandsandhearts.org` and password. Note: if you have two-step authentication enabled, you will need to enter the code that you recieve on your phone. Note 2: Since CLI doesn't support recieving 2FA code via text, go to developer.apple.com -> sing in -> Click on Didn’t get a verification code? -> Text me. And use that recieved code for CLI.
     2.  Then follow the instructions on CLI. Use "Let Expo handle the process" for all the steps. So Expo does all the certifications!
-    3.  Note 2: Since we're using Google Maps, make sure Google Maps API is enabled for iOS and Android. More on: https://developers.google.com/maps/documentation/javascript/get-api-key
+    3.  When you go through all the process, expo will show a link to the build status on terminal ex: `https://expo.io/builds` -> Follow to that link from terminal to see the build status. When the build is complete (which may take a very long time), you can download the .IPA/.APK from that link and upload to App/Google store. App store link: https://itunesconnect.apple.com/login YouTube video with walk-through: https://www.youtube.com/watch?v=R-62gUat0Bc
+
 1.  More on: https://docs.expo.io/versions/latest/guides/app-stores.html and https://docs.expo.io/versions/latest/guides/building-standalone-apps.html
+1.  Note 2: Since we're using Google Maps, make sure Google Maps API is enabled for iOS and Android. More on: https://developers.google.com/maps/documentation/javascript/get-api-key
