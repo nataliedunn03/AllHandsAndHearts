@@ -10,7 +10,9 @@ import {
   GET_PINS_IMAGE_BY_ID_SUCCESS,
   SET_PINS_BY_REGION,
   SET_PINS_BY_REGION_SUCCESS,
-  DELETE_PIN_BY_ID
+  DELETE_PIN_BY_ID,
+  GET_PINS_BY_REGION_ERROR,
+  GET_PINS_IMAGE_ERROR
 } from '../actions/actionTypes';
 
 import ApiWrapper from '../../services/api';
@@ -39,7 +41,6 @@ const getPinsDataHelper = function* getPinsDataHelper(regionId) {
     return yield call(Api.getPinsListByRegion, regionId);
   } catch (error) {
     console.log(error);
-    yield put({ type: GET_REGION_DATA_ERROR, pinError: error.message });
     return false;
   }
 };
@@ -49,18 +50,30 @@ function* getRegion() {
   // Or if the connection was not successful.
   // i.e it will not dispatch a received action, thus no modal will pop up.
   const regionData = yield call(getRegionDataHelper);
-  yield put({
-    type: GET_REGION_DATA_RECEIVED,
-    regionData
-  });
+  if (regionData && regionData.length > 0) {
+    yield put({
+      type: GET_REGION_DATA_RECEIVED,
+      regionData
+    });
+  } else {
+    yield put({ type: GET_REGION_DATA_ERROR });
+  }
 }
 
 function* getPinsByRegion(action) {
   const pinData = yield call(getPinsDataHelper, action.regionId);
-  yield put({
-    type: GET_PINS_BY_REGION_RECEIVED,
-    pinData
-  });
+  if (pinData && pinData[0] && pinData[0].RegionId__c) {
+    yield put({
+      type: GET_PINS_BY_REGION_RECEIVED,
+      pinData: pinData,
+      regionId: action.regionId
+    });
+  } else {
+    yield put({
+      type: GET_PINS_BY_REGION_ERROR,
+      regionId: action.regionId
+    });
+  }
 }
 
 function* setPinDataByRegion(action) {
@@ -72,7 +85,6 @@ function* setPinDataByRegion(action) {
 
   if (newPin && newPin.Id && action.pinData.photos.length > 0) {
     for (let photo of action.pinData.photos) {
-      console.log(photo.uri);
       if (photo.uri) {
         yield fork(Api.setPinPhotosById, newPin.Id, photo);
       }
@@ -83,13 +95,14 @@ function* setPinDataByRegion(action) {
   }
   yield put({
     type: SET_PINS_BY_REGION_SUCCESS,
+    regionId: action.regionId,
     pinData: newPin
   });
 }
 
 function* getPinImageById(action) {
   const photos = yield call(Api.getPhotos, action.pinId);
-  if (photos && photos.length > 0 && photos[0].Description) {
+  if (photos && photos[0] && photos[0].Description) {
     yield put({
       type: GET_PINS_IMAGE_BY_ID_SUCCESS,
       pinId: action.pinId,

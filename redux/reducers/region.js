@@ -10,7 +10,8 @@ import {
   SET_PINS_BY_REGION,
   SET_PINS_BY_REGION_SUCCESS,
   DELETE_PIN_BY_ID,
-  GET_PINS_IMAGE_BY_ID_SUCCESS
+  GET_PINS_IMAGE_BY_ID_SUCCESS,
+  GET_PINS_IMAGE_ERROR
 } from '../actions/actionTypes';
 import { REHYDRATE } from 'redux-persist';
 
@@ -44,6 +45,7 @@ export const region = (state = INITIAL_STATE, action) => {
           regionModalVisible: true
         };
       }
+      break;
     }
     case GET_REGION_DATA_RECEIVED: {
       return {
@@ -53,26 +55,65 @@ export const region = (state = INITIAL_STATE, action) => {
         regionModalVisible: true
       };
     }
-    case GET_PINS_BY_REGION_RECEIVED: {
+    case GET_REGION_DATA_ERROR: {
       return {
         ...state,
-        pinData: action.pinData
+        loading: false,
+        regionData: state.regionData
+      };
+    }
+
+    case GET_PINS_BY_REGION_RECEIVED: {
+      const restRegion = state.regionData.map(item => {
+        if (item.Id === action.regionId) {
+          return {
+            ...item,
+            pinData: action.pinData
+          };
+        }
+        return item;
+      });
+      return {
+        ...state,
+        pinData: action.pinData,
+        regionData: restRegion
       };
     }
     case GET_PINS_BY_REGION_ERROR: {
+      const currentRegion = state.regionData.find(
+        item => item.Id === action.regionId
+      );
+      if (currentRegion) {
+        return {
+          ...state,
+          pinData: currentRegion.pinData
+        };
+      }
       return {
         ...state,
-        pinError: action.pinError,
-        pinData: []
+        pinData: [],
+        pinError: 'Not avilable for offline'
       };
     }
     case SET_PINS_BY_REGION_SUCCESS: {
-      const newPins = state.pinData.filter(
+      const restPins = state.pinData.filter(
         item => item.Id !== action.pinData.Id
       );
+      const pinData = [...restPins, action.pinData];
+      const regionData = state.regionData.map(item => {
+        if (item.Id === action.regionId) {
+          return {
+            ...item,
+            pinData
+          };
+        }
+        return item;
+      });
+
       return {
         ...state,
-        pinData: [...newPins, action.pinData]
+        pinData,
+        regionData
       };
     }
 
@@ -84,9 +125,20 @@ export const region = (state = INITIAL_STATE, action) => {
       } else {
         pin['photos'] = [...pin.photos];
       }
+      const pinData = [...restPins, pin];
+      const regionData = state.regionData.map(item => {
+        if (item.Id === pin.RegionId__c) {
+          return {
+            ...item,
+            pinData
+          };
+        }
+        return item;
+      });
       return {
         ...state,
-        pinData: [...restPins, pin]
+        pinData,
+        regionData
       };
     }
 
@@ -107,6 +159,7 @@ export const region = (state = INITIAL_STATE, action) => {
         pinData: regionMarkerList
       };
     }
+
     default:
       return state;
   }

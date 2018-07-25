@@ -31,7 +31,7 @@ export default class ProfileScreen extends React.PureComponent {
   handlePaswordChange = async () => {
     this.styledButton2.load();
     const { newPassword, rePassword, oldPassword } = this.state;
-    if (!newPassword.length > 0 || !rePassword.length > 0 || oldPassword > 0) {
+    if (!newPassword.length > 0 || !rePassword.length > 0 || !oldPassword > 0) {
       Alert.alert('Required (*) fields cannot be blank.');
     } else if (newPassword !== rePassword) {
       Alert.alert("New password don't match.");

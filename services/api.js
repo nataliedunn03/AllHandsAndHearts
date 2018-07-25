@@ -27,9 +27,9 @@ export default class Api {
       longitude: pinData.longitude,
       pinColor: pinData.pinColor ? pinData.pinColor : '',
       pinType: pinData.pinType ? pinData.pinType.name : 'Other',
-      Id: pinData.id ? pinData.id : ''
+      Id: pinData.id ? pinData.id : '',
+      pinImage: pinData.photos.length > 0 ? 'true' : 'false'
     };
-
     return await SalesforceApi.post('/pins', payload);
   };
   setPinPhotosById = async (pinId, photos) => {

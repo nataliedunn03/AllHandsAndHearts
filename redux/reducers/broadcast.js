@@ -17,7 +17,7 @@ export const broadcast = (state = INITIAL_STATE, action) => {
     case REMOVE_BROADCAST_CARD_SUCCESS: {
       let { broadcastCards } = state;
       broadcastCards = broadcastCards.filter(
-        (card, index) => index != action.cardKey
+        (card, index) => index !== action.cardKey
       );
       return { ...state, broadcastCards: broadcastCards };
     }
