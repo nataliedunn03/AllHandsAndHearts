@@ -229,7 +229,12 @@ export default class MapScreen extends React.PureComponent {
     this.mapViewRef.animateToRegion(region);
     await runAfterInteractions();
     await this.props.getPinsByRegion(card.id);
-    if (this.state.mapReady && this.mapViewRef) {
+    if (
+      this.state.mapReady &&
+      this.mapViewRef &&
+      this.props.pinData &&
+      this.props.pinData.length > 0
+    ) {
       setTimeout(() => {
         this._focusOnCoordinates();
       }, 550);
@@ -329,6 +334,7 @@ export default class MapScreen extends React.PureComponent {
   };
 
   _renderMapMarker() {
+    if (!this.props.pinData || this.props.pinData.length < 0) return;
     return this.props.pinData.map(marker => {
       return (
         <MapView.Marker
