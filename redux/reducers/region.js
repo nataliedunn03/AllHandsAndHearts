@@ -45,7 +45,6 @@ export const region = (state = INITIAL_STATE, action) => {
           regionModalVisible: true
         };
       }
-      break;
     }
     case GET_REGION_DATA_RECEIVED: {
       return {
@@ -159,7 +158,6 @@ export const region = (state = INITIAL_STATE, action) => {
         pinData: regionMarkerList
       };
     }
-
     default:
       return state;
   }

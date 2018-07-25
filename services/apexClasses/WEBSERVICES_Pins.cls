@@ -45,6 +45,7 @@ global with sharing class WEBSERVICE_Pins{
         String pinType,
         Decimal latitude,
         Decimal longitude,
+        String pinImage,
         String Id) {
 
         Pin__c pin = new Pin__c();
@@ -59,6 +60,7 @@ global with sharing class WEBSERVICE_Pins{
         pin.Coordinates__Latitude__s = latitude;
         pin.Coordinates__Longitude__s = longitude;
         pin.PinLocationType__c = pinType;
+        pin.PinImage__c = pinImage;
         //If an Id exist with the payload, we update.
         if(Id != ''){
             pin.Id = Id;
