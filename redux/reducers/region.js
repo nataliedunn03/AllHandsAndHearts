@@ -95,10 +95,13 @@ export const region = (state = INITIAL_STATE, action) => {
       };
     }
     case SET_PINS_BY_REGION_SUCCESS: {
-      const restPins = state.pinData.filter(
-        item => item.Id !== action.pinData.Id
-      );
-      const pinData = [...restPins, action.pinData];
+      let pinData = [action.pinData];
+      if (state.pinData && state.pinData.length > 0) {
+        const restPins = state.pinData.filter(
+          item => item.Id !== action.pinData.Id
+        );
+        pinData = [...restPins, action.pinData];
+      }
       const regionData = state.regionData.map(item => {
         if (item.Id === action.regionId) {
           return {
@@ -108,7 +111,6 @@ export const region = (state = INITIAL_STATE, action) => {
         }
         return item;
       });
-
       return {
         ...state,
         pinData,

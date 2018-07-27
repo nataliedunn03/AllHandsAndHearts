@@ -1,4 +1,4 @@
-import { takeEvery, call, put, fork } from 'redux-saga/effects';
+import { takeEvery, call, put, fork, select } from 'redux-saga/effects';
 import {
   GET_REGION_DATA,
   GET_REGION_DATA_LOADING,
@@ -17,7 +17,7 @@ import {
 
 import ApiWrapper from '../../services/api';
 const Api = new ApiWrapper();
-
+const getState = state => state;
 /**
  * Region saga
  */
@@ -77,10 +77,12 @@ function* getPinsByRegion(action) {
 }
 
 function* setPinDataByRegion(action) {
+  const state = yield select(getState);
   const newPin = yield call(
     Api.setPinByRegion,
     action.regionId,
-    action.pinData
+    action.pinData,
+    state.auth.user.Id
   );
 
   if (newPin && newPin.Id && action.pinData.photos.length > 0) {

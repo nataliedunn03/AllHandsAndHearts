@@ -47,6 +47,11 @@ GOTO: [Architecture](HAD.png)
 
 GOTO: [Note on salesforce API calls.](API_Notes.md)
 
+### Notes on how to change disaster type:
+
+The disaster type options are hard coded in the App. In order for you to update them go to `EditPinScreen.js` file and add to the `pinType` object on line `53`. in this format: `{ name: 'Affected Area', isSelected: false, Id: 111, color: 'red' },`
+Note: It must contain all the name, isSelected, Id, and color keys. You can change the values to your needs.
+
 #Build process:
 
 0.  [Make sure you have an expo account and signed in](https://expo.io/signup)
@@ -54,7 +59,13 @@ GOTO: [Note on salesforce API calls.](API_Notes.md)
 
     1.  Enter `kris.c@allhandsandhearts.org` and password. Note: if you have two-step authentication enabled, you will need to enter the code that you recieve on your phone. Note 2: Since CLI doesn't support recieving 2FA code via text, go to developer.apple.com -> sing in -> Click on Didn’t get a verification code? -> Text me. And use that recieved code for CLI.
     2.  Then follow the instructions on CLI. Use "Let Expo handle the process" for all the steps. So Expo does all the certifications!
-    3.  When you go through all the process, expo will show a link to the build status on terminal ex: `https://expo.io/builds` -> Follow to that link from terminal to see the build status. When the build is complete (which may take a very long time), you can download the .IPA/.APK from that link and upload to App/Google store. App store link: https://itunesconnect.apple.com/login YouTube video with walk-through: https://www.youtube.com/watch?v=R-62gUat0Bc
+    3.  When you go through all the process, expo will show a link to the build status on terminal ex: `https://expo.io/builds` -> Follow to that link from terminal to see the build status. When the build is complete (which may take a very long time), you can download the .IPA/.APK from that link and upload to App/Google store.
+    4.  Once you have the IPA create a new app in App store link: https://itunesconnect.apple.com/login. Click on the + icon and fill out the necessary info as we discussed on our call. Kris has a screenshare of that or you can checkout this YouTube video with walk-through: https://www.youtube.com/watch?v=R-62gUat0Bc
+    5.  When you fill out all the necessary info, before submitting for review, follow Step 6.
+    6.  In order to upload your ipa you'll need to use Apple Application Loader. If you have XCode, application loader already comes with it: Xcode > Open Developer Tools > Application Loader.
+        Note: You will need to have XCode and a Mac in order to access this application. Download XCode: https://developer.apple.com/xcode/downloads/
+        Also, If you have 2-FA enable, you will need to create a app specific password to log into Application Loader at https://appleid.apple.com
+    7.  That's it!! Submit the app for review and wait till you hear from Apple!
 
 1.  More on: https://docs.expo.io/versions/latest/guides/app-stores.html and https://docs.expo.io/versions/latest/guides/building-standalone-apps.html
 1.  Note 2: Since we're using Google Maps, make sure Google Maps API is enabled for iOS and Android. More on: https://developers.google.com/maps/documentation/javascript/get-api-key

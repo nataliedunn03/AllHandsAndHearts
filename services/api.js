@@ -13,8 +13,7 @@ export default class Api {
     return await SalesforceApi.get(queryEndpoint);
   };
 
-  setPinByRegion = async (regionId, pinData) => {
-    let currentUserId = await AuthService.getValueFromStorage('Id');
+  setPinByRegion = async (regionId, pinData, currentUserId) => {
     const payload = {
       createdByUserId: currentUserId,
       name: pinData.name,
