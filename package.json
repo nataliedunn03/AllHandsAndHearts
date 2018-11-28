@@ -5,7 +5,8 @@
     "test": "node ./node_modules/jest/bin/jest.js --watch",
     "storybook": "storybook start -p 7007",
     "lint": "eslint --fix *.js",
-    "precommit": "pretty-quick --staged"
+    "precommit": "pretty-quick --staged",
+    "start": "node App.js"
   },
   "jest": {
     "preset": "jest-expo"

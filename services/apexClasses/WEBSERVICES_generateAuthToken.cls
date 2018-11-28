@@ -8,8 +8,8 @@ global class WEBSERVICE_generateAuthToken {
      String auth_token = '';
      String client_id ='3MVG9Vik22TUgUphE4Ci7YrLJUWXWmDsMRbP_vZUSuotxwrxduN9uO46e6wPDw_vLHPdcQP2e3Hu6axkpM0fB';
      String client_secret = '150414908105213374';
-     String username = 'edwardchen93@gmail.com';
-     String password = 'jpmchase3';
+     String username = 'jpmc@hands.org';
+     String password = 'AHAH2018';
      String URL = 'https://test.salesforce.com/services/oauth2/token?grant_type=password&client_id=' + client_id +'&client_secret=' +client_secret +'&username=' +username +'&password=' +password;
 
     HttpRequest req = new HttpRequest();

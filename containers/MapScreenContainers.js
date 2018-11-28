@@ -29,7 +29,7 @@ const mapDispatchToProps = dispatch => {
 };
 const mapStateToProps = state => {
   const { regionData, pinData, showMarkerModal } = state.region;
-  const { currentUserId } = state.auth;
-  return { regionData, pinData, showMarkerModal, currentUserId };
+  /*const { currentUserId } = state.auth;*/
+  return { regionData, pinData, showMarkerModal, /*currentUserId*/ };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(MapScreen);

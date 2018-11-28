@@ -12,14 +12,14 @@ import { addListener } from '../utils/navigationReduxUtil';
 export const AppNavigator = StackNavigator(
   {
     LoginScreen: {
-      screen: LoginScreen
+      screen: MainModalNavigator
     },
     MainModalNavigator: {
       screen: MainModalNavigator
     }
   },
   {
-    initialRouteName: LoginScreen,
+    initialRouteName: MainModalNavigator,
     headerMode: 'none',
     mode: 'screen'
   }
