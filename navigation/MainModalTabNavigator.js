@@ -13,6 +13,7 @@ import PinCameraScreen from '../screens/PinCameraScreen';
 import ProfileScreenContainer from '../containers/ProfileContainer';
 import HomeScreenContainer from '../containers/HomeScreenContainer';
 import MapScreenContainer from '../containers/MapScreenContainers';
+import AdminScreen from '../screens/AdminScreen';
 import Colors from '../constants/Colors';
 
 const mapNavigationStateParamsToProps = Component => {
@@ -52,6 +53,14 @@ const MainTabNavigator = TabNavigator(
         headerTitle: 'Profile',
         tabBarLabel: 'Profile'
       }
+    },
+    Admin: {
+      screen: AdminScreen,
+      path: '/',
+      navigationOptions: {
+        headerTitle: 'Admin',
+        tabBarLabel: 'Admin'
+      }
     }
   },
   {
@@ -82,6 +91,12 @@ const MainTabNavigator = TabNavigator(
               Platform.OS === 'ios'
                 ? `ios-map${focused ? '' : '-outline'}`
                 : 'md-map';
+            break;
+          case 'Admin':
+            iconName =
+              Platform.OS === 'ios'
+                ? `ios-lock${focused ? '' : '-outline'}`
+                : 'md-admin';
             break;
           /* case 'Notification':
 					iconName =

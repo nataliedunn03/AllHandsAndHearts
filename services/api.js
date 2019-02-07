@@ -114,3 +114,10 @@ export default class Api {
 
   getSFHelper = () => SalesforceApi;
 }
+
+/**
+  Admin screen specific api
+  */
+  getUserDetails = async () => {
+    return await SalesforceApi.get('/userDetails');
+  };
