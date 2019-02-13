@@ -13,6 +13,7 @@ import PinCameraScreen from '../screens/PinCameraScreen';
 import ProfileScreenContainer from '../containers/ProfileContainer';
 import HomeScreenContainer from '../containers/HomeScreenContainer';
 import MapScreenContainer from '../containers/MapScreenContainers';
+import MapUtilScreen from '../screens/MapUtilScreen';
 import Colors from '../constants/Colors';
 
 const mapNavigationStateParamsToProps = Component => {
@@ -43,6 +44,14 @@ const MainTabNavigator = TabNavigator(
       navigationOptions: {
         headerTitle: 'Maps',
         tabBarLabel: 'Maps'
+      }
+    },
+    MapUtil: {
+      screen: MapUtilScreen,
+      path: '/',
+      navigationOptions: {
+        headerTitle: 'Administrator Screen',
+        tabBarLabel: 'Map Util'
       }
     },
     Profile: {
@@ -81,6 +90,12 @@ const MainTabNavigator = TabNavigator(
             iconName =
               Platform.OS === 'ios'
                 ? `ios-map${focused ? '' : '-outline'}`
+                : 'md-map';
+            break;
+          case 'MapUtil':
+            iconName =
+              Platform.OS === 'ios'
+                ? `ios-settings${focused ? '' : '-outline'}`
                 : 'md-map';
             break;
           /* case 'Notification':

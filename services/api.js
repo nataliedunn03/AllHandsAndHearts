@@ -12,6 +12,18 @@ export default class Api {
     const queryEndpoint = `/pins/${regionId}`;
     return await SalesforceApi.get(queryEndpoint);
   };
+  setRegionList = async (name, coordinates_latitude, coordinates_longitude, location, start, end, type) => {
+    const payload = {
+      name: name,
+      coordinates_latitude: coordinates_latitude,
+      coordinates_longitude: coordinates_longitude,
+      location: location,
+      start: start,
+      end: end,
+      type: type
+    };
+    return await SalesforceApi.post('/regions', payload);
+  }
 
   setPinByRegion = async (regionId, pinData, currentUserId) => {
     const payload = {
