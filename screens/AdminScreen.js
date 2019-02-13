@@ -62,35 +62,6 @@ import ApiWrapper from '/Users/Zoe/Desktop/FFG/AllHandsAndHearts/services/api.js
 const Api = new ApiWrapper();
 const getState = state => state;
 
-const getUserDetailsHelper = function* getUserDetailsHelper() {
-  yield put({ type: GET_USER_DATA_LOADING, loading: true });
-  let response;
-  try {
-    response = yield call(Api.getUserDetails);
-    return response;
-  } catch (error) {
-    yield put({ type: GET_USER_DATA_ERROR, error: error.message });
-    return false;
-  } finally {
-    yield put({ type: GET_USER_DATA_LOADING, loading: false });
-  }
-};
-
-function* getUser() {
-  // This will now return undefined if no cards are retrieved from Salesforce.
-  // Or if the connection was not successful.
-  // i.e it will not dispatch a received action, thus no modal will pop up.
-  const userData = yield call(getUserDetailsHelper());
-  if (userData && userData.length > 0) {
-    yield put({
-      type: GET_USER_DATA_RECEIVED,
-      userData
-    });
-  } else {
-    yield put({ type: GET_USER_DATA_ERROR });
-  }
-}
-
 export default class ExampleFive extends Component {
   constructor(props) {
     super(props);
@@ -110,7 +81,7 @@ export default class ExampleFive extends Component {
   // }
 
   _alertIndex(index) {
-    Alert.alert(getUserDetailsHelper);
+    Alert.alert(this.props.getUserDetailData());
   }
 
   render() {

@@ -12,7 +12,11 @@ import {
   SET_PINS_BY_REGION_SUCCESS,
   DELETE_PIN_BY_ID,
   GET_PINS_BY_REGION_ERROR,
-  GET_PINS_IMAGE_ERROR
+  GET_PINS_IMAGE_ERROR,
+  GET_USER_DATA_LOADING,
+  GET_USER_DATA_RECEIVED,
+  GET_USER_DATA_ERROR,
+  GET_USER_DATA
 } from '../actions/actionTypes';
 
 import ApiWrapper from '../../services/api';
@@ -33,6 +37,20 @@ const getRegionDataHelper = function* getRegionDataHelper() {
     return false;
   } finally {
     yield put({ type: GET_REGION_DATA_LOADING, loading: false });
+  }
+};
+
+const getUserDetailsHelper = function* getUserDetailsHelper() {
+  yield put({ type: GET_USER_DATA_LOADING, loading: true });
+  let response;
+  try {
+    response = yield call(Api.getUserDetails);
+    return response;
+  } catch (error) {
+    yield put({ type: GET_USER_DATA_ERROR, error: error.message });
+    return false;
+  } finally {
+    yield put({ type: GET_USER_DATA_LOADING, loading: false });
   }
 };
 
@@ -57,6 +75,21 @@ function* getRegion() {
     });
   } else {
     yield put({ type: GET_REGION_DATA_ERROR });
+  }
+}
+
+function* getUser() {
+  // This will now return undefined if no cards are retrieved from Salesforce.
+  // Or if the connection was not successful.
+  // i.e it will not dispatch a received action, thus no modal will pop up.
+  const userData = yield call(getUserDetailsHelper());
+  if (userData && userData.length > 0) {
+    yield put({
+      type: GET_USER_DATA_RECEIVED,
+      userData
+    });
+  } else {
+    yield put({ type: GET_USER_DATA_ERROR });
   }
 }
 
@@ -123,5 +156,6 @@ function* saga() {
   yield takeEvery(SET_PINS_BY_REGION, setPinDataByRegion);
   yield takeEvery(DELETE_PIN_BY_ID, deletePinDataById);
   yield takeEvery(GET_PINS_IMAGE_BY_ID, getPinImageById);
+  yield takeEvery(GET_USER_DATA, getUser);
 }
 export default saga;

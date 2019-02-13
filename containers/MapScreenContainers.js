@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { getRegionData } from '../redux/actions/region';
+import { getRegionData, getUserDetailData } from '../redux/actions/region';
 import {
   getPinsByRegion,
   setPinByRegion,
@@ -12,6 +12,9 @@ const mapDispatchToProps = dispatch => {
   return {
     getRegionData: () => {
       dispatch(getRegionData());
+    },
+    getUserDetailData: () => {
+      dispatch(getUserDetailData());
     },
     getPinsByRegion: regionId => {
       dispatch(getPinsByRegion(regionId));
