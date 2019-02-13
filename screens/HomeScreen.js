@@ -16,6 +16,7 @@ export default class HomeScreen extends React.PureComponent {
   _handleRefresh = async () => {
     try {
       await this.props.getBroadcastCards();
+      await this.props.getActivities();
     } catch (e) {
       console.log(e);
     }

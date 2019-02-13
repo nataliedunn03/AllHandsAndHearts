@@ -1,3 +1,6 @@
+import ApiWrapper from '../services/api';
+const Api = new ApiWrapper();
+
 const activities = [
   {
     name: 'Maddie',
@@ -42,4 +45,32 @@ const activities = [
   }
 ];
 
-export const getActivities = uerId => activities;
+export const getActivities = async userId => {
+  var testAct = [];
+  var user = 'Username'; // TODO need a way to get user name from info recevied from getPinsListByRegion. Might need to add a new apex class to get user info
+  var regionLocation;
+  var pinDetail;
+
+  var regionList = await Api.getRegionList();
+  console.log(regionList);
+  for (const region of regionList) {
+    console.log('Region ID is: ' + region.Id);
+    console.log('Region name is: ' + region.Name);
+    regionLocation = 'Added a pin in ' + region.Name;
+    var pinList = await Api.getPinsListByRegion(region.Id);
+    console.log(pinList);
+    for (const pin of pinList) {
+      pinDetail = pin.Additional_Descriptors__c;
+      console.log('Pin detail is: ' + pinDetail);
+      testAct.push({
+        name: user,
+        location: regionLocation,
+        detail: pinDetail
+      });
+    }
+  }
+
+  console.log(testAct);
+
+  return testAct;
+};
