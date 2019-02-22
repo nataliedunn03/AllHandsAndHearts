@@ -12,6 +12,10 @@ export default class Api {
     const queryEndpoint = `/pins/${regionId}`;
     return await SalesforceApi.get(queryEndpoint);
   };
+  getRegionById = async regionId => {
+    const queryEndPoint = `/getRegion/${regionId}`;
+    return await SalesforceApi.get(queryEndPoint);
+  };
 
   setPinByRegion = async (regionId, pinData, currentUserId) => {
     const payload = {
@@ -55,6 +59,21 @@ export default class Api {
   deletePinById = async pinId => {
     const queryEndPoint = `/pins/${pinId}`;
     SalesforceApi.delete(queryEndPoint);
+  };
+
+  /**
+   * Pin related Apis
+   */
+  getPinsList = async () => {
+    return await SalesforceApi.get('/getPins');
+  };
+
+  /**
+   * User related Apis
+   */
+  getUserName = async userId => {
+    const queryEndPoint = `/getUserName/${userId}`;
+    return await SalesforceApi.get(queryEndPoint);
   };
 
   /**

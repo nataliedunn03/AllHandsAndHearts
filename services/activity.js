@@ -46,31 +46,36 @@ const activities = [
 ];
 
 export const getActivities = async userId => {
-  var activities = [];
-  var user = 'Username'; // TODO need a way to get user name from info recevied from getPinsListByRegion. Might need to add a new apex class to get user info
-  var regionLocation;
-  var pinDetail;
+  const activities = [];
+  let userName;
+  let regionLocation;
+  let pinDetail;
 
-  var regionList = await Api.getRegionList();
-  //console.log(regionList);
-  for (const region of regionList) {
-    //console.log('Region ID is: ' + region.Id);
-    //console.log('Region name is: ' + region.Name);
-    regionLocation = 'Added a pin in ' + region.Name;
-    var pinList = await Api.getPinsListByRegion(region.Id);
-    //console.log(pinList);
-    for (const pin of pinList) {
-      pinDetail = pin.Additional_Descriptors__c;
-      //console.log('Pin detail is: ' + pinDetail);
-      activities.push({
-        name: user,
-        location: regionLocation,
-        detail: pinDetail
-      });
+  const pinList = await Api.getPinsList();
+  //console.log(pinList);
+  let region;
+  let user;
+  for (const pin of pinList) {
+    userName = 'Username';
+    if (pin.UserId__c) {
+      user = await Api.getUserName(pin.UserId__c);
+      // console.log(user);
+      userName = user.Name__c;
     }
-  }
 
-  console.log(activities);
+    region = await Api.getRegionById(pin.RegionId__c);
+    //console.log(region);
+    regionLocation = 'Added a pin in ' + region.Name;
+
+    pinDetail = pin.Additional_Descriptors__c;
+
+    activities.push({
+      name: userName,
+      location: regionLocation,
+      detail: pinDetail
+    });
+  }
+  //console.log(activities);
 
   return activities;
 };
