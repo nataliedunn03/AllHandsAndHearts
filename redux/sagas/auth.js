@@ -22,6 +22,9 @@ import * as AuthService from '../../services/auth';
 import { purgeStoredState } from 'redux-persist';
 import ApiWrapper from '../../services/api';
 import persistConfig from '../persistConfig';
+
+import { Alert } from 'react-native';
+
 const Api = new ApiWrapper();
 
 const getState = state => state;
@@ -124,11 +127,18 @@ function* registerFlow(action) {
     } else {
       yield put({ type: REGISTER_REQUEST_LOADING, loading: false });
       yield put({ type: RESET_TO_SIGN_IN });
+      yield call(
+        Alert.alert,
+        'Error with Registration',
+        'Email Already Exists'
+      );
+      console.log('error');
     }
   } catch (e) {
     yield put({ type: REGISTER_REQUEST_LOADING, loading: false });
     yield put({ type: LOGIN_REQUEST_FAILED, error: null });
     yield put({ type: RESET_TO_SIGN_IN });
+    console.log('error2');
   }
 }
 
