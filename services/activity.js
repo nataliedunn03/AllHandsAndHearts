@@ -46,35 +46,7 @@ const activities = [
 ];
 
 export const getActivities = async userId => {
-  const activities = [];
-  let userName;
-  let regionLocation;
-  let pinDetail;
-
-  const pinList = await Api.getPinsList();
-  //console.log(pinList);
-  let region;
-  let user;
-  for (const pin of pinList) {
-    userName = 'Username';
-    if (pin.UserId__c) {
-      user = await Api.getUserName(pin.UserId__c);
-      // console.log(user);
-      userName = user.Name__c;
-    }
-
-    region = await Api.getRegionById(pin.RegionId__c);
-    //console.log(region);
-    regionLocation = 'Added a pin in ' + region.Name;
-
-    pinDetail = pin.Additional_Descriptors__c;
-
-    activities.push({
-      name: userName,
-      location: regionLocation,
-      detail: pinDetail
-    });
-  }
+  const activities = await Api.getActivities();
   //console.log(activities);
 
   return activities;

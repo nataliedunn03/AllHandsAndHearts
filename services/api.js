@@ -62,6 +62,13 @@ export default class Api {
   };
 
   /**
+   * Activity related Apis
+   */
+  getActivities = async () => {
+    return await SalesforceApi.get('/activities');
+  };
+
+  /**
    * Pin related Apis
    */
   getPinsList = async () => {
