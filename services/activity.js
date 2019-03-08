@@ -47,7 +47,6 @@ const activities = [
 
 export const getActivities = async userId => {
   const activities = await Api.getActivities();
-  //console.log(activities);
 
   return activities;
 };
