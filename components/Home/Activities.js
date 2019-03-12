@@ -25,6 +25,7 @@ export default class Activities extends PureComponent {
           name={card.name}
           taskText={card.location}
           taskDetail={card.detail}
+          score={card.score}
         />
       );
     });

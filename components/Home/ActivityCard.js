@@ -1,8 +1,8 @@
 import React from 'react';
-import { StyleSheet, TouchableHighlight } from 'react-native';
+import { StyleSheet, TouchableHighlight, TouchableOpacity } from 'react-native';
 import { View, Text } from 'react-native-animatable';
 import Colors from '../../constants/Colors';
-import { Feather as Icon } from '@expo/vector-icons';
+import { Feather as Icon, Entypo } from '@expo/vector-icons';
 
 const styles = StyleSheet.create({
   card: {
@@ -64,11 +64,22 @@ const styles = StyleSheet.create({
     fontSize: 13,
     letterSpacing: -0.08,
     lineHeight: 18
+  },
+  scoreContainer: {
+    alignItems: 'center',
+    // backgroundColor: 'yellow',
+    height: '100%',
+    top: -28
+  },
+  score: {
+    color: Colors.defaultColor.PRIMARY_COLOR,
+    fontSize: 18
+    //fontWeight: 'bold'
   }
 });
 
 const ActivityCard = props => {
-  const { style, name, taskText, taskDetail } = props;
+  const { style, name, taskText, taskDetail, score } = props;
 
   return (
     <View style={style}>
@@ -97,7 +108,9 @@ const ActivityCard = props => {
             style={{
               flex: 1,
               margin: 12,
-              marginTop: 4
+              marginTop: 4,
+              flexDirection: 'row',
+              justifyContent: 'space-between'
             }}
           >
             <View style={styles.mainBody}>
@@ -110,6 +123,23 @@ const ActivityCard = props => {
               >
                 {taskDetail}
               </Text>
+            </View>
+            <View style={styles.scoreContainer}>
+              <TouchableOpacity style={styles.button}>
+                <Entypo
+                  name="chevron-with-circle-up"
+                  color={Colors.defaultColor.PRIMARY_COLOR}
+                  size={20}
+                />
+              </TouchableOpacity>
+              <Text style={styles.score}>{score}</Text>
+              <TouchableOpacity style={styles.button}>
+                <Entypo
+                  name="chevron-with-circle-down"
+                  color={Colors.defaultColor.PRIMARY_COLOR}
+                  size={20}
+                />
+              </TouchableOpacity>
             </View>
           </View>
         </View>
