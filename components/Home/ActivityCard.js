@@ -67,14 +67,12 @@ const styles = StyleSheet.create({
   },
   scoreContainer: {
     alignItems: 'center',
-    // backgroundColor: 'yellow',
     height: '100%',
     top: -28
   },
   score: {
     color: Colors.defaultColor.PRIMARY_COLOR,
     fontSize: 18
-    //fontWeight: 'bold'
   }
 });
 
