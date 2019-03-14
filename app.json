@@ -21,9 +21,9 @@
     },
     "assetBundlePatterns": ["assets/images/*"],
     "ios": {
-      "bundleIdentifier": "com.allhandsandhearts.aah",
-      "icon": "./assets/images/icon.png",
-      "buildNumber": "1.0.2",
+      "bundleIdentifier": "com.allhandsandhearts.dev",
+      "icon": "./assets/images/icon3.png",
+      "buildNumber": "1.0.6",
       "config": {
         "googleMapsApiKey": "AIzaSyBTvryrzm7ymvBS2NyOTpgDPtjtR0SC3p4"
       },

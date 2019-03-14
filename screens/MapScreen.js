@@ -353,6 +353,7 @@ export default class MapScreen extends React.PureComponent {
   //see if map is ready
   _onMapReady = () => {
     this.setState({ mapReady: true });
+    this.openRegionModal();
   };
   //callback on pan map
   _onRegionChange = region => {};
