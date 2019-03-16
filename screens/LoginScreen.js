@@ -8,6 +8,7 @@ import {
 import { HideWithKeyboard } from 'react-native-hide-with-keyboard';
 import LoginForm from '../components/Login/LoginForm';
 import SignupForm from '../components/Login/SignupForm';
+import ForgotPassword from '../components/Login/ForgotPassword';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import Slogan from '../components/Login/Slogan';
@@ -78,6 +79,13 @@ export default class Login extends React.PureComponent {
     this.setState(prevState => ({
       switchForm: prevState.switchForm === 'login' ? 'signup' : 'login'
     }));
+    console.log('form 1');
+  };
+  _handleSwitchForm2 = () => {
+    this.setState(prevState => ({
+      switchForm: prevState.switchForm === 'login' ? 'signup' : 'login'
+    }));
+    console.log('form 2');
   };
   render() {
     if (this.props.loggedIn === true) {
@@ -143,6 +151,14 @@ export default class Login extends React.PureComponent {
               animation={'fadeInUpBig'}
               duration={350}
               linkPress={this._handleSwitchForm}
+              {...this.props}
+            />
+          )}
+          {this.state.switchForm === 'forgotPassword' && (
+            <ForgotPassword
+              animation={'fadeInUpBig'}
+              duration={350}
+              linkPress={this._handleSwitchForm2}
               {...this.props}
             />
           )}

@@ -54,6 +54,11 @@ export default class LoginForm extends React.PureComponent {
       delayExec(2000, this.styledButton2.reset);
     }
   };
+
+  goToForgotPassword = () => {
+    this.props.navigation.navigate('ForgotPassword');
+  };
+
   render() {
     return (
       <View style={styles.container} {...this.props}>
@@ -87,6 +92,10 @@ export default class LoginForm extends React.PureComponent {
         />
         <TouchableNativeFeedback onPress={() => this.props.linkPress()}>
           <Text style={styles.link}>Don't have an account?</Text>
+        </TouchableNativeFeedback>
+
+        <TouchableNativeFeedback onPress={() => this.props.linkPress()}>
+          <Text style={styles.link}>Forgot Password</Text>
         </TouchableNativeFeedback>
       </View>
     );
