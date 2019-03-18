@@ -1,6 +1,7 @@
 import React from 'react';
 import propTypes from 'prop-types';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Button, Modal, TouchableHighlight, TextInput, TouchableOpacity,
+  Alert } from 'react-native';
 import TouchableNativeFeedback from '@expo/react-native-touchable-native-feedback-safe';
 import { View, Text } from 'react-native-animatable';
 import StyledInput from '../../components/StyledInput';
@@ -9,7 +10,12 @@ import Colors from '../../constants/Colors';
 import { delayExec } from '../../utils/utils';
 export default class LoginForm extends React.PureComponent {
   state = {
+    modalVisible: false,
     email: '',
+    submitText:"Send",
+    placeHolderText:"Email Address",
+    backgroundColor: 'white',
+    close: 'Close',
     password: ''
   };
 
@@ -30,6 +36,17 @@ export default class LoginForm extends React.PureComponent {
       [key]: value
     });
   };
+
+  setModalVisible(visible) {
+    this.setState({modalVisible: visible});
+  }
+
+  btnSubmitPress() {
+    alert('webservice call to send user email to reset password');
+}
+closeModal() {
+  this.setState({modalVisible:false});
+}
 
   handleLogin = async () => {
     this.styledButton2.load();
@@ -88,6 +105,42 @@ export default class LoginForm extends React.PureComponent {
         <TouchableNativeFeedback onPress={() => this.props.linkPress()}>
           <Text style={styles.link}>Don't have an account?</Text>
         </TouchableNativeFeedback>
+        <View style="halfHeight">
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={this.state.modalVisible}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+          }}>
+          <View style={styles.modalContainer}>
+            <View>
+              <View style={styles.inputView}>
+                  <TextInput style={styles.inputText} placeholder={this.state.placeHolderText}
+                  multiline={false} placeholderTextColor={'#3c3c3c'} autoCapitalize={'none'} keyboardType={'email-address'} autoCorrect={false} underlineColorAndroid={'transparent'} onChangeText={(email) => this.setState({email})} value={this.state.email}></TextInput>
+              </View>
+              <TouchableOpacity style={styles.btnCancel} activeOpacity={0.6} onPress={() => this.btnSubmitPress()}>
+                            <Text style={styles.textCancel} numberOfLines={1}>
+                            {this.state.submitText}
+                            </Text>
+                        </TouchableOpacity>
+              <TouchableOpacity style={styles.btnCancel} activeOpacity={0.6} onPress={() => {
+                  this.setModalVisible(!this.state.modalVisible);
+                }}>
+                            <Text style={styles.textCancel} numberOfLines={1}>
+                            {this.state.close}
+                            </Text>
+                        </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+        </View>
+        <TouchableHighlight
+          onPress={() => {
+            this.setModalVisible(true);
+          }}>
+          <Text style={styles.link}>Forgot Password</Text>
+        </TouchableHighlight>
       </View>
     );
   }
@@ -107,6 +160,56 @@ const styles = StyleSheet.create({
     borderWidth: 0.3,
     borderRadius: Colors.Input.BORDER.RADIUS
   },
+  halfHeight: {
+    height: 50,
+    width:50
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  innerContainer: {
+    flex: 0,
+    alignItems: 'center',
+  },
+  inputText: {
+    paddingVertical: 5,
+    color: 'black',
+    marginLeft: 10,
+    fontSize: 14,
+    textAlign: 'left'
+},
+inputView:{
+    backgroundColor: 'white',
+    borderRadius: 5,
+    justifyContent: 'flex-start',
+    borderWidth: 1,
+    marginHorizontal: 10,
+    marginVertical: 10,
+    borderColor: '#3c3c3c',
+    overflow: 'hidden',
+},
+btnCancel: {
+  backgroundColor: '#6A6A6A',
+  justifyContent: 'center',
+  borderRadius: 15,
+  marginTop: 10,
+  overflow: 'hidden',
+  alignSelf: 'center',
+  marginBottom: 20
+},
+buttonRow: {
+  flexDirection: 'row'
+},
+
+textCancel: {
+  color: 'white',
+  paddingHorizontal: 20,
+  paddingVertical: 5,
+  fontSize: 16,
+  textAlign: 'center',
+  marginHorizontal: 10
+},
   link: {
     color: '#9999a3',
     alignSelf: 'center',
