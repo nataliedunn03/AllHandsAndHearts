@@ -20,9 +20,16 @@ import { runAfterInteractions } from '../../utils/utils';
 export default class ViewRegionModal extends React.PureComponent {
   _renderRegionCards = () => {
     const { regionData, regionModalIsFull } = this.props;
+
+    //filter out disaster sites that have been archived
+    for (var i = regionData.length - 1; i--; ) {
+      if (regionData[i].IsArchived__c == true) regionData.splice(i, 1);
+    }
+
     return regionData.map((region, index) => {
       const card = {
         id: region.Id,
+        isArchived: region.IsArchived__c,
         name: region.Name,
         latitude: region.Coordinates__Latitude__s,
         longitude: region.Coordinates__Longitude__s,
@@ -149,9 +156,7 @@ export default class ViewRegionModal extends React.PureComponent {
                 <Text style={styles.textShadow}>
                   {`Start: ${new Date(card.startDate).toDateString()}`}
                 </Text>
-                <Text style={styles.textShadow}>
-                  {`End: ${new Date(card.endDate).toDateString()}`}
-                </Text>
+                <Text style={styles.textShadow} />
               </View>
             </View>
           </Animated.View>
