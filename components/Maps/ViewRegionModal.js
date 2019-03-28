@@ -97,7 +97,10 @@ export default class ViewRegionModal extends React.PureComponent {
                 />
               </FadeIn>
               <LinearGradient
-                colors={['rgba(0, 0, 0, 0.8)', 'rgba(0, 0, 0, 0.1)']}
+                colors={[
+                  Colors.defaultColor.PRIMARY_COLOR,
+                  `rgba(133, 19, 198,0.9)`
+                ]}
                 style={[
                   styles.linearGradient,
                   Platform.select({
@@ -153,9 +156,7 @@ export default class ViewRegionModal extends React.PureComponent {
                 </Text>
               </View>
               <View style={{ justifyContent: 'flex-end' }}>
-                <Text style={styles.textShadow}>
-                  {`Start: ${new Date(card.startDate).toDateString()}`}
-                </Text>
+                <Text style={styles.textShadow}>{card.customName}</Text>
                 <Text style={styles.textShadow} />
               </View>
             </View>

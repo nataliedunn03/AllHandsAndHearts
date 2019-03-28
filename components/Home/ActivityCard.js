@@ -114,7 +114,7 @@ const ActivityCard = props => {
             <View style={styles.mainBody}>
               <Text
                 style={styles.body}
-                numberOfLines={5}
+                numberOfLines={6}
                 ellipsizeMode="tail"
                 selectable
                 selectionColor={Colors.defaultColor.PRIMARY_COLOR}
