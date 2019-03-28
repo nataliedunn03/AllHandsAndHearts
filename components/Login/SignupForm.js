@@ -11,7 +11,8 @@ export default class SignupForm extends React.PureComponent {
   state = {
     name: '',
     email: '',
-    password: ''
+    password: '',
+    password_verification: ''
   };
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.loginError && this.styledButton2) {
@@ -33,10 +34,15 @@ export default class SignupForm extends React.PureComponent {
 
   handleRegister = () => {
     this.styledButton2.load();
-    let { email, password, name } = this.state;
+    let { email, password, name, password_verification } = this.state;
     email = email.trim();
     password = password.trim();
-    if (email.length > 0 && password.length > 0 && name.length > 0) {
+    if (
+      email.length > 0 &&
+      password.length > 0 &&
+      name.length > 0 &&
+      password === password_verification
+    ) {
       this.props.register({
         email,
         password,
@@ -45,6 +51,18 @@ export default class SignupForm extends React.PureComponent {
       this.props.auth.loggedIn &&
         this.styledButton2 &&
         this.styledButton2.success();
+    } else if (
+      password !== password_verification &&
+      password.length > 0 &&
+      password_verification.length > 0
+    ) {
+      this.props.alertWithType(
+        'error',
+        'Password',
+        'Passwords entered do not match'
+      );
+      this.styledButton2 && this.styledButton2.error();
+      delayExec(2000, this.styledButton2.reset);
     } else {
       this.props.alertWithType(
         'error',
@@ -89,6 +107,19 @@ export default class SignupForm extends React.PureComponent {
           enablesReturnKeyAutomatically
           inputRef={element => (this.passwordRef = element)}
           onChangeText={value => this._handleOnChangeText('password', value)}
+          onSubmitEditing={this.handleRegister}
+        />
+        <StyledInput
+          secureTextEntry
+          clearTextOnFocus
+          returnKeyType="done"
+          style={styles.input}
+          placeholder="Re-enter Password"
+          enablesReturnKeyAutomatically
+          inputRef={element => (this.passwordRef = element)}
+          onChangeText={value =>
+            this._handleOnChangeText('password_verification', value)
+          }
           onSubmitEditing={this.handleRegister}
         />
         <StyledButton2
