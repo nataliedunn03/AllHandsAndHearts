@@ -410,7 +410,9 @@ export default class EditPinScreen extends PureComponent {
             inputRef={element => (this.coordinatesRef = element)}
             onSubmitEditing={() => this.descriptionRef.focus()}
           />
-          <StyledText style={styles.styledText}>DESCRIPTION *</StyledText>
+          <StyledText style={styles.styledText}>
+            DESCRIPTION * (maximum 200 charaters)
+          </StyledText>
           <StyledInput
             style={styles.inputWide}
             inputRef={element => (this.descriptionRef = element)}
