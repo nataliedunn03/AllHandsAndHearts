@@ -212,7 +212,7 @@ export default class MapScreen extends React.PureComponent {
       //this.mapViewRef.fitToElements(true); // this will fill all the markers, not ideal when we will have all the region on the map.
       */
       this.mapViewRef.fitToCoordinates(this.state.markersData, {
-        edgePadding: { top: 100, right: 100, bottom: 100, left: 100 },
+        edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
         animated: true
       });
     }
@@ -226,7 +226,11 @@ export default class MapScreen extends React.PureComponent {
     };
     this.state.regionModalIsFull && this.regionModalRef.openModalHalfway();
     //this.scrollCardRef && this.scrollCardRef.scrollTo({ x: -9 });
-    this.mapViewRef.animateToRegion(region);
+    //*In order to avoid maps being zoomed in AND out, we need to add a field in the
+    //adding a marker form with the region (as a prepopulated dropdown? ) in order ensure
+    //that user adds pin in selected region
+    //WIP
+    //this.mapViewRef.animateToRegion(region);
     await runAfterInteractions();
     await this.props.getPinsByRegion(card.id);
     if (
