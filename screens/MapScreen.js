@@ -212,7 +212,7 @@ export default class MapScreen extends React.PureComponent {
       //this.mapViewRef.fitToElements(true); // this will fill all the markers, not ideal when we will have all the region on the map.
       */
       this.mapViewRef.fitToCoordinates(this.state.markersData, {
-        edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+        edgePadding: { top: 100, right: 100, bottom: 100, left: 100 },
         animated: true
       });
     }
