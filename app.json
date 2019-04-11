@@ -4,7 +4,7 @@
     "description": "All Hands and Hearts -- Smart Response",
     "slug": "AHH",
     "privacy": "unlisted",
-    "sdkVersion": "28.0.0",
+    "sdkVersion": "32.0.0",
     "version": "1.0.9",
     "orientation": "portrait",
     "primaryColor": "#cccccc",
