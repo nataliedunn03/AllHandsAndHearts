@@ -226,7 +226,11 @@ export default class MapScreen extends React.PureComponent {
     };
     this.state.regionModalIsFull && this.regionModalRef.openModalHalfway();
     //this.scrollCardRef && this.scrollCardRef.scrollTo({ x: -9 });
-    this.mapViewRef.animateToRegion(region);
+    //*In order to avoid maps being zoomed in AND out, we need to add a field in the
+    //adding a marker form with the region (as a prepopulated dropdown? ) in order ensure
+    //that user adds pin in selected region
+    //WIP
+    //this.mapViewRef.animateToRegion(region);
     await runAfterInteractions();
     await this.props.getPinsByRegion(card.id);
     if (
