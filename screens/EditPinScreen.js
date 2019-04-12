@@ -121,9 +121,14 @@ export default class EditPinScreen extends PureComponent {
     const selectedPinType = this.state.pinType.filter(
       item => item.isSelected === true
     )[0];
-    if (!this.state.pinTypeSelected) {
+    if (Constants.platform.android && !this.state.pinTypeSelected) {
       return;
     }
+
+    if (!selectedPinType) {
+      return;
+    }
+
     const payload = {
       ...this.state,
       id: Id ? Id : '',
