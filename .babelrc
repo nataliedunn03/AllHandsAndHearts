@@ -1,5 +1,15 @@
 {
-  "presets": ["module:react-native", "react-native", "babel-preset-expo", "module:react-native-dotenv"],
+  "presets": [
+	"module:react-native", 
+	"react-native", 
+	"@babel/preset-env",
+	"module:babel-preset-expo",
+	"babel-preset-expo", 
+	"react-native-dotenv", 
+	"module:react-native-dotenv", 
+	"@babel/preset-flow", 
+	"module:metro-react-native-babel-preset"
+	],
   "retainLines": true,
   "env": {
     "development": {
