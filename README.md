@@ -95,4 +95,6 @@ Note: It must contain all the name, isSelected, Id, and color keys. You can chan
 1. Open Xcode (must be version 10.1+). Xcode -> Open Developer Tool -> Application loader
    ![Xcode & Application Loader screen shot](https://github.com/nataliedunn03/AllHandsAndHearts/blob/develop/documentation/upload_1.png)
 1. Upload downloaded .ipa file from step 6 to the Application Loader.
+   ![Xcode & Application Loader](https://github.com/nataliedunn03/AllHandsAndHearts/blob/develop/documentation/upload_2.mov)
 1. Open itunesconnect.com. Submit new version of the app to Apple.
+   ![iTunesConnect submit new version](https://github.com/nataliedunn03/AllHandsAndHearts/blob/develop/documentation/upload_3.mov)
