@@ -87,12 +87,12 @@ Note: It must contain all the name, isSelected, Id, and color keys. You can chan
 0. Find the project folder on your local machine.
 1. Open Terminal, drag project folder into terminal. Press `Enter`.
 1. Run `expo start`.
-   <-- WATCH SCREEN RECORDING [![Terminal screen recording](https://www.youtube.com/watch?v=R-62gUat0Bc)] -->
+   ![Terminal screen recording](https://github.com/nataliedunn03/AllHandsAndHearts/blob/develop/documentation/upload_0.mov)
 1. Open an additional terminal session by pressing cntr + n.
 1. Run `expo build:ios`.
 1. Open `expo.com` url from terminal logs.
 1. Download the .ipa file from the expo website.
 1. Open Xcode (must be version 10.1+). Xcode -> Open Developer Tool -> Application loader
-   <-- SCREEN SHOT [![Xcode & Application Loader screen shot](https://www.youtube.com/watch?v=R-62gUat0Bc)] -->
+   ![Xcode & Application Loader screen shot](https://github.com/nataliedunn03/AllHandsAndHearts/blob/develop/documentation/upload_1.png)
 1. Upload downloaded .ipa file from step 6 to the Application Loader.
 1. Open itunesconnect.com. Submit new version of the app to Apple.
