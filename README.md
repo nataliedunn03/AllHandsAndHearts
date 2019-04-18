@@ -1,6 +1,16 @@
-# HappyHandsHearts
+# All Hands and Hearts
 
-FFG project for HappyHandsHearts client
+FFG project for All Hands and Hearts.
+
+### Mission Statement:
+
+All Hands and Hearts efficiently and effectively address the immediate and long-term needs of communities impacted by natural disasters.
+
+### Project Context
+
+All Hands and Hearts frequently has to coordinate large groups of Volunteers in disaster zones in order to effectively deploy assistance to their project sites. Managing volunteers and facilitating communication can be very difficult. The FFG 2017 team built a Mobile Disaster Assessment application to engage volunteers, partners, and local communities. Our team is seeking to leverage an app to give All Hands and Hearts more functionality and capabilities to coordinate volunteers on the ground.
+
+### Installation
 
 Pre-Req:
 
@@ -52,7 +62,7 @@ GOTO: [Note on salesforce API calls.](API_Notes.md)
 The disaster type options are hard coded in the App. In order for you to update them go to `EditPinScreen.js` file and add to the `pinType` object on line `53`. in this format: `{ name: 'Affected Area', isSelected: false, Id: 111, color: 'red' },`
 Note: It must contain all the name, isSelected, Id, and color keys. You can change the values to your needs.
 
-#Build process:
+# Build process:
 
 0.  [Make sure you have an expo account and signed in](https://expo.io/signup)
 1.  Run `expo build:ios / build:android` and follow the instructions. YouTube walk-through https://www.youtube.com/watch?v=6IPr7oOugTs
@@ -69,3 +79,20 @@ Note: It must contain all the name, isSelected, Id, and color keys. You can chan
 
 1.  More on: https://docs.expo.io/versions/latest/guides/app-stores.html and https://docs.expo.io/versions/latest/guides/building-standalone-apps.html
 1.  Note 2: Since we're using Google Maps, make sure Google Maps API is enabled for iOS and Android. More on: https://developers.google.com/maps/documentation/javascript/get-api-key
+
+### How to upload app
+
+(From Macbook)
+
+0. Find the project folder on your local machine.
+1. Open Terminal, drag project folder into terminal. Press `Enter`.
+1. Run `expo start`.
+   <-- WATCH SCREEN RECORDING [![Terminal screen recording](https://www.youtube.com/watch?v=R-62gUat0Bc)] -->
+1. Open an additional terminal session by pressing cntr + n.
+1. Run `expo build:ios`.
+1. Open `expo.com` url from terminal logs.
+1. Download the .ipa file from the expo website.
+1. Open Xcode (must be version 10.1+). Xcode -> Open Developer Tool -> Application loader
+   <-- SCREEN SHOT [![Xcode & Application Loader screen shot](https://www.youtube.com/watch?v=R-62gUat0Bc)] -->
+1. Upload downloaded .ipa file from step 6 to the Application Loader.
+1. Open itunesconnect.com. Submit new version of the app to Apple.
