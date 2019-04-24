@@ -4,8 +4,8 @@
     "description": "All Hands and Hearts -- Smart Response",
     "slug": "AHH",
     "privacy": "unlisted",
-    "sdkVersion": "28.0.0",
-    "version": "1.0.9",
+    "sdkVersion": "30.0.0",
+    "version": "1.0.0",
     "orientation": "portrait",
     "primaryColor": "#cccccc",
     "icon": "./assets/images/icon.png",
@@ -21,9 +21,9 @@
     },
     "assetBundlePatterns": ["assets/images/*"],
     "ios": {
-      "bundleIdentifier": "com.allhandsandhearts.dev",
-      "icon": "./assets/images/icon3.png",
-      "buildNumber": "1.0.9",
+      "bundleIdentifier": "com.allhandsandhearts.aah",
+      "icon": "./assets/images/icon.png",
+      "buildNumber": "1.0.2",
       "config": {
         "googleMapsApiKey": "AIzaSyBTvryrzm7ymvBS2NyOTpgDPtjtR0SC3p4"
       },
