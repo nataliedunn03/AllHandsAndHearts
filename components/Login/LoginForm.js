@@ -59,11 +59,11 @@ export default class LoginForm extends React.PureComponent {
 
   resetPasswordClicked() {
     Linking.openURL(
-      'mailto:zoe.a.halbeisen@tsgforce.com?subject=Reset Password Request &body=The following user is requesting a password reset:\n\n' +
+      'mailto:disastercrowdsupport@allhandsandhearts.org?subject=Reset Password Request &body=The following user is requesting a password reset:\n\n' +
         this.state.email
     );
     Alert.alert(
-      'You password reset request has been sent. Someone from the AHAH team will get back with you shortly.'
+      'Your password reset request has been sent. Someone from the AHAH team will get back with you shortly.'
     );
   }
 
