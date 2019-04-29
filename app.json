@@ -23,7 +23,7 @@
     "ios": {
       "bundleIdentifier": "com.allhandsandhearts.dev",
       "icon": "./assets/images/icon3.png",
-      "buildNumber": "1.0.9",
+      "buildNumber": "1.0.10",
       "config": {
         "googleMapsApiKey": "AIzaSyBTvryrzm7ymvBS2NyOTpgDPtjtR0SC3p4"
       },
