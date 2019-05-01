@@ -251,6 +251,10 @@ export default class MapScreen extends React.PureComponent {
   _createNewMarker = async e => {
     e.persist();
     const coords = e.nativeEvent.coordinate;
+    if (!this.state.currentRegionId) {
+      this.openRegionModal();
+      return;
+    }
     this.props.navigation.navigate('EditPin', {
       latitude: coords.latitude,
       longitude: coords.longitude,
