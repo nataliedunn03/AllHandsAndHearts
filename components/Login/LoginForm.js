@@ -7,6 +7,8 @@ import StyledInput from '../../components/StyledInput';
 import { StyledButton2 } from '../StyledButton';
 import Colors from '../../constants/Colors';
 import { delayExec } from '../../utils/utils';
+import { Linking } from 'react-native';
+import { Alert } from 'react-native';
 export default class LoginForm extends React.PureComponent {
   state = {
     email: '',
@@ -54,6 +56,17 @@ export default class LoginForm extends React.PureComponent {
       delayExec(2000, this.styledButton2.reset);
     }
   };
+
+  resetPasswordClicked() {
+    Linking.openURL(
+      'mailto:disastercrowdsupport@allhandsandhearts.org?subject=Reset Password Request &body=The following user is requesting a password reset:\n\n' +
+        this.state.email
+    );
+    Alert.alert(
+      'Your password reset request has been sent. Someone from the AHAH team will get back with you shortly.'
+    );
+  }
+
   render() {
     return (
       <View style={styles.container} {...this.props}>
@@ -88,10 +101,14 @@ export default class LoginForm extends React.PureComponent {
         <TouchableNativeFeedback onPress={() => this.props.linkPress()}>
           <Text style={styles.link}>Don't have an account?</Text>
         </TouchableNativeFeedback>
+        <TouchableNativeFeedback onPress={this.resetPasswordClicked.bind(this)}>
+          <Text style={styles.link}>Forgot Password?</Text>
+        </TouchableNativeFeedback>
       </View>
     );
   }
 }
+
 LoginForm.propTypes = {
   linkPress: propTypes.func.isRequired
 };
