@@ -40,7 +40,7 @@ export default class EditPinScreen extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      pinTypeSelected: '',
+      pinTypeSelected: 'Affected Area',
       name: '',
       address: '',
       description: '',
@@ -121,11 +121,10 @@ export default class EditPinScreen extends PureComponent {
     const selectedPinType = this.state.pinType.filter(
       item => item.isSelected === true
     )[0];
-    if (Constants.platform.android && !this.state.pinTypeSelected) {
-      return;
-    }
 
-    if (!selectedPinType) {
+    // For IOS selectedPinType is what holds the selected pinType
+    // so that is what we are worried about in that case
+    if (Constants.platform.ios && !selectedPinType) {
       return;
     }
 
