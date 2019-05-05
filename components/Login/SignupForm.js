@@ -11,14 +11,17 @@ export default class SignupForm extends React.PureComponent {
   state = {
     name: '',
     email: '',
-    password: ''
+    password: '',
+    securityQuestion: ''
   };
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.loginError && this.styledButton2) {
       this.props.alertWithType(
         'error',
         'Sign up',
-        `${nextProps.auth.loginError} Check Name, Email, and Password`
+        `${
+          nextProps.auth.loginError
+        } Check Name, Email, Password, and Security Question`
       );
       this.styledButton2.error();
       delayExec(2000, this.styledButton2.reset);
@@ -33,14 +36,20 @@ export default class SignupForm extends React.PureComponent {
 
   handleRegister = () => {
     this.styledButton2.load();
-    let { email, password, name } = this.state;
+    let { email, password, name, securityQuestion } = this.state;
     email = email.trim();
     password = password.trim();
-    if (email.length > 0 && password.length > 0 && name.length > 0) {
+    if (
+      email.length > 0 &&
+      password.length > 0 &&
+      name.length > 0 &&
+      securityQuestion.length > 0
+    ) {
       this.props.register({
         email,
         password,
-        name
+        name,
+        securityQuestion
       });
       this.props.auth.loggedIn &&
         this.styledButton2 &&
@@ -49,7 +58,7 @@ export default class SignupForm extends React.PureComponent {
       this.props.alertWithType(
         'error',
         'Sign up',
-        'Name, Email, and Password are all required'
+        'Name, Email, Password, and Security Question are all required'
       );
       this.styledButton2 && this.styledButton2.error();
       delayExec(2000, this.styledButton2.reset);
@@ -61,7 +70,7 @@ export default class SignupForm extends React.PureComponent {
       <View style={styles.container} {...this.props}>
         <StyledInput
           style={styles.input}
-          placeholder="Name"
+          placeholder="First and Last Name"
           returnKeyType="next"
           autoCorrect={false}
           enablesReturnKeyAutomatically
@@ -82,14 +91,27 @@ export default class SignupForm extends React.PureComponent {
         />
         <StyledInput
           secureTextEntry
-          clearTextOnFocus
-          returnKeyType="done"
           style={styles.input}
+          clearTextOnFocus
           placeholder="Password"
+          returnKeyType="next"
           enablesReturnKeyAutomatically
           inputRef={element => (this.passwordRef = element)}
+          onSubmitEditing={() => this.securityQuestionRef.focus()}
           onChangeText={value => this._handleOnChangeText('password', value)}
+        />
+        <StyledInput
+          style={styles.input}
+          placeholder="In what city was your high school?"
+          returnKeyType="done"
+          autoCapitalize="none"
+          autoCorrect={false}
+          enablesReturnKeyAutomatically
+          inputRef={element => (this.securityQuestionRef = element)}
           onSubmitEditing={this.handleRegister}
+          onChangeText={value =>
+            this._handleOnChangeText('securityQuestion', value)
+          }
         />
         <StyledButton2
           buttonRef={ref => (this.styledButton2 = ref)}
