@@ -1,13 +1,19 @@
-import { takeEvery, call, put } from 'redux-saga/effects';
+import { takeEvery, call, put, select } from 'redux-saga/effects';
 import { delay } from 'redux-saga';
 import {
   GET_ACTIVITY_CARDS,
   SENDING_REQUEST,
   GET_ACTIVITY_CARDS_RECEIVED,
   GET_ACTIVITY_CARDS_ON_LOGIN,
-  REQUEST_ERROR
+  REQUEST_ERROR,
+  SET_ACTIVITY_CARD_VOTE,
+  SET_ACTIVITY_CARD_VOTE_SUCCESS,
+  GET_VOTED_ACTIVITIES_ON_LOGIN,
+  GET_VOTED_ACTIVITIES_RECEIVED
 } from '../actions/actionTypes';
-import { getActivities } from '../../services/activity';
+import { getActivities, setVote, getVotedPins } from '../../services/activity';
+
+const getState = state => state;
 
 /**
  * Activity saga
@@ -36,8 +42,39 @@ function* getActivityCards() {
   }
 }
 
+function* setActivityVote(action) {
+  const state = yield select(getState);
+  const newVotedPins = yield call(
+    setVote,
+    action.pinId,
+    action.vote,
+    state.auth.user.Id
+  );
+
+  if (newVotedPins) {
+    yield put({
+      type: SET_ACTIVITY_CARD_VOTE_SUCCESS,
+      votedPins: newVotedPins
+    });
+  }
+}
+
+function* getVotedActivities() {
+  const state = yield select(getState);
+  const votedPins = yield call(getVotedPins, state.auth.user.Id);
+
+  if (votedPins) {
+    yield put({
+      type: GET_VOTED_ACTIVITIES_RECEIVED,
+      votedPins: votedPins
+    });
+  }
+}
+
 function* saga() {
   yield takeEvery(GET_ACTIVITY_CARDS_ON_LOGIN, getActivityCards);
   yield takeEvery(GET_ACTIVITY_CARDS, getActivityCards);
+  yield takeEvery(SET_ACTIVITY_CARD_VOTE, setActivityVote);
+  yield takeEvery(GET_VOTED_ACTIVITIES_ON_LOGIN, getVotedActivities);
 }
 export default saga;

@@ -51,3 +51,15 @@ export const getActivities = async userId => {
 
   return activities;
 };
+
+export const setVote = async (pinId, vote, userId) => {
+  const newUserVotedList = await Api.setVote(pinId, vote, userId);
+  //console.log(newUserVotedList);
+  return newUserVotedList;
+};
+
+export const getVotedPins = async userId => {
+  const votedPins = await Api.getVotedPins(userId);
+  //console.log(votedPins);
+  return votedPins;
+};

@@ -77,7 +77,8 @@ const styles = StyleSheet.create({
 });
 
 const ActivityCard = props => {
-  const { style, name, taskText, taskDetail, score } = props;
+  //console.log(props);
+  const { style, name, taskText, taskDetail, score, pinId, voting } = props;
 
   return (
     <View style={style}>
@@ -128,6 +129,7 @@ const ActivityCard = props => {
                   name="chevron-with-circle-up"
                   color={Colors.defaultColor.PRIMARY_COLOR}
                   size={20}
+                  onPress={() => voting(pinId, 1)}
                 />
               </TouchableOpacity>
               <Text style={styles.score}>{score}</Text>
@@ -136,6 +138,7 @@ const ActivityCard = props => {
                   name="chevron-with-circle-down"
                   color={Colors.defaultColor.PRIMARY_COLOR}
                   size={20}
+                  onPress={() => voting(pinId, -1)}
                 />
               </TouchableOpacity>
             </View>

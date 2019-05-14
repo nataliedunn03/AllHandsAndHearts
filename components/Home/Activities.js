@@ -17,21 +17,30 @@ export default class Activities extends PureComponent {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     }, 5);
   }
+
+  handleVote = async (pinId, vote) => {
+    //console.log('vote');
+    this.props.voting(pinId, vote);
+  };
+
   _renderCards = cards => {
     return cards.map((card, index) => {
       return (
         <ActivityCard
           key={index}
           name={card.name}
-          taskText={card.location}
+          taskText={'Added a pin in ' + card.location}
           taskDetail={card.detail}
           score={card.score}
+          pinId={card.pinId}
+          voting={this.handleVote}
         />
       );
     });
   };
 
   render() {
+    //console.log(this.props);
     let {
       style,
       activity: { activityCards }
