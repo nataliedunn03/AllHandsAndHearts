@@ -27,7 +27,6 @@ export default class ViewPinModal extends React.Component {
   };
   render() {
     const { data, currentUserId, onDelete, onEdit } = this.props;
-    console.log(this.props);
     if (!data) return null;
 
     const coordsString = `${parseFloat(data.latitude).toFixed(6)}, ${parseFloat(
