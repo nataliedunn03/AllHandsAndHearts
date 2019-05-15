@@ -30,6 +30,7 @@ const authorize = function* authorize({
   email,
   password,
   name,
+  securityQuestion,
   isRegistering = false
 }) {
   try {
@@ -39,7 +40,7 @@ const authorize = function* authorize({
     });
     let response;
     if (isRegistering) {
-      response = yield call(Api.register, email, hash, name);
+      response = yield call(Api.register, email, hash, name, securityQuestion);
     } else {
       response = yield call(Api.login, email, hash);
     }
@@ -96,7 +97,7 @@ function* logoutFlow() {
 }
 
 function* registerFlow(action) {
-  const { email, password, name } = action.data;
+  const { email, password, name, securityQuestion } = action.data;
   yield put({ type: REGISTER_REQUEST_LOADING, loading: true });
   try {
     // We call the `authorize` task with the data, telling it that we are registering a user
@@ -105,6 +106,7 @@ function* registerFlow(action) {
       email,
       password,
       name,
+      securityQuestion,
       isRegistering: true
     });
     // If we could register a user, we send the appropiate actions

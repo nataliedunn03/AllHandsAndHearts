@@ -103,12 +103,13 @@ export default class Api {
     return await SalesforceApi.put(queryEndpoint, payload);
   };
 
-  register = async (email, hash, name) => {
+  register = async (email, hash, name, securityQuestion) => {
     const queryEndpoint = '/users';
     const payload = {
       email,
       name,
-      password: hash
+      password: hash,
+      securityQuestion
     };
     return await SalesforceApi.post(queryEndpoint, payload);
   };
