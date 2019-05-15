@@ -55,6 +55,10 @@ export default class HomeScreen extends React.PureComponent {
     }
   };
 
+  _handleVote = async (pinId, vote) => {
+    this.props.setActivityVote(pinId, vote);
+  };
+
   render() {
     //console.log(this.props);
     return (
@@ -86,7 +90,7 @@ export default class HomeScreen extends React.PureComponent {
           {this.props.activity && (
             <Activities
               activity={this.props.activity}
-              voting={this.props.setActivityVote}
+              voting={this._handleVote}
             />
           )}
         </ScrollView>

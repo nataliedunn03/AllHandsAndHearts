@@ -77,8 +77,16 @@ const styles = StyleSheet.create({
 });
 
 const ActivityCard = props => {
-  //console.log(props);
-  const { style, name, taskText, taskDetail, score, pinId, voting } = props;
+  const {
+    style,
+    name,
+    taskText,
+    taskDetail,
+    score,
+    pinId,
+    voting,
+    voted
+  } = props;
 
   return (
     <View style={style}>
@@ -124,23 +132,27 @@ const ActivityCard = props => {
               </Text>
             </View>
             <View style={styles.scoreContainer}>
-              <TouchableOpacity style={styles.button}>
-                <Entypo
-                  name="chevron-with-circle-up"
-                  color={Colors.defaultColor.PRIMARY_COLOR}
-                  size={20}
-                  onPress={() => voting(pinId, 1)}
-                />
-              </TouchableOpacity>
+              {!voted && (
+                <TouchableOpacity style={styles.button}>
+                  <Entypo
+                    name="chevron-with-circle-up"
+                    color={Colors.defaultColor.PRIMARY_COLOR}
+                    size={20}
+                    onPress={() => voting(pinId, 1)}
+                  />
+                </TouchableOpacity>
+              )}
               <Text style={styles.score}>{score}</Text>
-              <TouchableOpacity style={styles.button}>
-                <Entypo
-                  name="chevron-with-circle-down"
-                  color={Colors.defaultColor.PRIMARY_COLOR}
-                  size={20}
-                  onPress={() => voting(pinId, -1)}
-                />
-              </TouchableOpacity>
+              {!voted && (
+                <TouchableOpacity style={styles.button}>
+                  <Entypo
+                    name="chevron-with-circle-down"
+                    color={Colors.defaultColor.PRIMARY_COLOR}
+                    size={20}
+                    onPress={() => voting(pinId, -1)}
+                  />
+                </TouchableOpacity>
+              )}
             </View>
           </View>
         </View>

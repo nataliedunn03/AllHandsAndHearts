@@ -18,12 +18,8 @@ export default class Activities extends PureComponent {
     }, 5);
   }
 
-  handleVote = async (pinId, vote) => {
-    //console.log('vote');
-    this.props.voting(pinId, vote);
-  };
-
-  _renderCards = cards => {
+  _renderCards = (cards, votedPins) => {
+    const votedPinsList = votedPins.split(';');
     return cards.map((card, index) => {
       return (
         <ActivityCard
@@ -33,7 +29,8 @@ export default class Activities extends PureComponent {
           taskDetail={card.detail}
           score={card.score}
           pinId={card.pinId}
-          voting={this.handleVote}
+          voting={this.props.voting}
+          voted={votedPinsList.includes(card.pinId)}
         />
       );
     });
@@ -43,7 +40,7 @@ export default class Activities extends PureComponent {
     //console.log(this.props);
     let {
       style,
-      activity: { activityCards }
+      activity: { activityCards, votedPins }
     } = this.props;
     return (
       activityCards &&
@@ -73,7 +70,7 @@ export default class Activities extends PureComponent {
           >
             Activities
           </StyledText>
-          {this._renderCards(activityCards)}
+          {this._renderCards(activityCards, votedPins)}
         </View>
       )
     );
