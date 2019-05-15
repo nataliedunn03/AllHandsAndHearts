@@ -57,7 +57,7 @@ export default class HomeScreen extends React.PureComponent {
 
   _handleVote = async (pinId, vote) => {
     this.props.setActivityVote(pinId, vote);
-    this.props.getActivities();
+    //this.props.getActivities();
   };
 
   render() {
