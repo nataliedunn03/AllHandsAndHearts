@@ -27,6 +27,7 @@ export default class ViewPinModal extends React.Component {
   };
   render() {
     const { data, currentUserId, onDelete, onEdit } = this.props;
+    console.log(this.props);
     if (!data) return null;
 
     const coordsString = `${parseFloat(data.latitude).toFixed(6)}, ${parseFloat(
@@ -81,6 +82,11 @@ export default class ViewPinModal extends React.Component {
         <StyledText style={styles.styledText}>COORDINATES</StyledText>
         <StyledText selectable style={styles.styledTextValue}>
           {coordsString}
+        </StyledText>
+        <Separator />
+        <StyledText style={styles.styledText}>CREATED BY</StyledText>
+        <StyledText selectable style={styles.styledTextValue}>
+          {data.UserId__r.Name__c}
         </StyledText>
         <Separator />
         <StyledText style={styles.styledText}>DESCRIPTION</StyledText>
