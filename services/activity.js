@@ -47,9 +47,18 @@ const activities = [
 
 export const getActivities = async userId => {
   const activities = await Api.getActivities();
-  //console.log(activities);
-
-  return activities;
+  if (activities[0].errorCode) {
+    console.log(activities);
+    var errorCard = [
+      {
+        name: 'Unable to load activities.',
+        location: 'Please reload application to try again.'
+      }
+    ];
+    return errorCard;
+  } else {
+    return activities;
+  }
 };
 
 export const setVote = async (pinId, vote, userId) => {
