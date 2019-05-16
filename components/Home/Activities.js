@@ -23,10 +23,10 @@ export default class Activities extends PureComponent {
     if (votedPins.length > 0) {
       votedPinsList = votedPins.split(';');
     }
-    return cards.map((card, index) => {
+    return cards.map(card => {
       return (
         <ActivityCard
-          key={index}
+          key={card.pinId + card.score}
           name={card.name}
           taskText={'Added a pin in ' + card.location}
           taskDetail={card.detail}
