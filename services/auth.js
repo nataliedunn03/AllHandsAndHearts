@@ -35,7 +35,7 @@ export const generatePasswordHash = (username, password) => {
         resolve(passwordHash);
       });
     } else {
-      reject(new Error('username & passwords are required'));
+      resolve('');
     }
   });
 };

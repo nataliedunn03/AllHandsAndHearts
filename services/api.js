@@ -93,12 +93,13 @@ export default class Api {
   /**
    * Auth specific Apis
    */
-  login = async (email, passwordHash) => {
+  login = async (email, passwordHash, securityQuestion) => {
     //PUT is login
     const queryEndpoint = '/users';
     const payload = {
       email: email,
-      password: passwordHash
+      password: passwordHash,
+      securityQuestion: securityQuestion
     };
     return await SalesforceApi.put(queryEndpoint, payload);
   };

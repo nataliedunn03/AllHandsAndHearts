@@ -19,6 +19,7 @@ export default class LoginForm extends React.PureComponent {
 
   showDialog = () => {
     this.setState({ dialogVisible: true });
+    this.setState({ password: '' });
   };
 
   handleCancel = () => {
@@ -45,13 +46,22 @@ export default class LoginForm extends React.PureComponent {
 
   handleLogin = async () => {
     this.styledButton2.load();
-    let { email, password } = this.state;
+    let { email, password, securityQuestion } = this.state;
     email = email.trim();
     password = password.trim();
+    securityQuestion = securityQuestion.trim();
     if (email.length > 0 && password.length > 0) {
       await this.props.login({
         email,
         password
+      });
+      this.props.auth.loggedIn &&
+        this.styledButton2 &&
+        this.styledButton2.success();
+    } else if (email.length > 0 && securityQuestion.length > 0) {
+      await this.props.login({
+        email,
+        securityQuestion
       });
       this.props.auth.loggedIn &&
         this.styledButton2 &&
@@ -119,7 +129,8 @@ export default class LoginForm extends React.PureComponent {
         <Dialog.Container visible={this.state.dialogVisible}>
           <Dialog.Title>Forgot Password</Dialog.Title>
           <Dialog.Description>
-            Please enter your email and security question
+            Please enter your email and security question. If authentication is
+            successful, please go to your profile and reset your password.
           </Dialog.Description>
           <StyledInput
             style={styles.input}
