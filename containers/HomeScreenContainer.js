@@ -4,7 +4,11 @@ import {
   removeBroadcastCard,
   getBroadcastCards
 } from '../redux/actions/broadcast';
-import { getActivities } from '../redux/actions/activity';
+import {
+  getActivities,
+  setActivityVote,
+  getVotedActivities
+} from '../redux/actions/activity';
 import { registerPushNotification } from '../redux/actions/notification';
 import HomeScreen from '../screens/HomeScreen';
 import { AlertConsumer } from '../containers/AlertContainer';
@@ -21,6 +25,12 @@ const mapDispatchToProps = dispatch => {
     },
     registerPushNotification: () => {
       dispatch(registerPushNotification());
+    },
+    setActivityVote: (pinId, vote) => {
+      dispatch(setActivityVote(pinId, vote));
+    },
+    getVotedActivities: () => {
+      dispatch(getVotedActivities());
     }
   };
 };
@@ -29,7 +39,10 @@ const mapStateToProps = state => ({
   broadcast: state.broadcast,
   activity: state.activity
 });
-const Home = connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
+const Home = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(HomeScreen);
 export default props => {
   return (
     <AlertConsumer>{value => <Home {...value} {...props} />}</AlertConsumer>

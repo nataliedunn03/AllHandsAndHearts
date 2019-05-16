@@ -12,6 +12,7 @@ export default class HomeScreen extends React.PureComponent {
   componentWillMount() {
     this.props.getBroadcastCards();
     this.props.getActivities();
+    this.props.getVotedActivities();
   }
   _handleRefresh = async () => {
     try {
@@ -54,7 +55,13 @@ export default class HomeScreen extends React.PureComponent {
     }
   };
 
+  _handleVote = async (pinId, vote) => {
+    this.props.setActivityVote(pinId, vote);
+    //this.props.getActivities();
+  };
+
   render() {
+    //console.log(this.props);
     return (
       <View style={{ flex: 1 }}>
         <ScrollView
@@ -81,7 +88,12 @@ export default class HomeScreen extends React.PureComponent {
               removeBroadcastCard={this.props.removeBroadcastCard}
             />
           )}
-          {this.props.activity && <Activities activity={this.props.activity} />}
+          {this.props.activity && (
+            <Activities
+              activity={this.props.activity}
+              voting={this._handleVote}
+            />
+          )}
         </ScrollView>
       </View>
     );

@@ -76,74 +76,104 @@ const styles = StyleSheet.create({
   }
 });
 
-const ActivityCard = props => {
-  const { style, name, taskText, taskDetail, score } = props;
+export default class ActivityCard extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      score: this.props.score,
+      voted: this.props.voted
+    };
+  }
 
-  return (
-    <View style={style}>
-      <TouchableHighlight
-        underlayColor={'transparent'}
-        onPress={() => console.log('clicked')}
-      >
-        <View style={styles.card}>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row'
-            }}
-          >
-            <View style={styles.userLogo}>
-              <Icon name="user" color="#ffffff" size={20} style={styles.icon} />
+  handleVote = async (pinId, vote, oldScore) => {
+    this.props.voting(pinId, vote);
+    this.setState({
+      score: oldScore + vote,
+      voted: !this.state.voted
+    });
+  };
+
+  render() {
+    const { style, name, taskText, taskDetail, pinId } = this.props;
+    return (
+      <View style={style}>
+        <TouchableHighlight
+          underlayColor={'transparent'}
+          onPress={() => console.log('clicked')}
+        >
+          <View style={styles.card}>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row'
+              }}
+            >
+              <View style={styles.userLogo}>
+                <Icon
+                  name="user"
+                  color="#ffffff"
+                  size={20}
+                  style={styles.icon}
+                />
+              </View>
+              <View style={styles.infoContainer}>
+                <View style={styles.Informations}>
+                  <Text style={styles.name}>{name}</Text>
+                  <Text style={styles.task}>{taskText}</Text>
+                </View>
+              </View>
             </View>
-            <View style={styles.infoContainer}>
-              <View style={styles.Informations}>
-                <Text style={styles.name}>{name}</Text>
-                <Text style={styles.task}>{taskText}</Text>
+            <View
+              style={{
+                flex: 1,
+                margin: 12,
+                marginTop: 4,
+                flexDirection: 'row',
+                justifyContent: 'space-between'
+              }}
+            >
+              <View style={styles.mainBody}>
+                <Text
+                  style={styles.body}
+                  numberOfLines={6}
+                  ellipsizeMode="tail"
+                  selectable
+                  selectionColor={Colors.defaultColor.PRIMARY_COLOR}
+                >
+                  {taskDetail}
+                </Text>
+              </View>
+              <View style={styles.scoreContainer}>
+                {!this.state.voted && (
+                  <TouchableOpacity style={styles.button}>
+                    <Entypo
+                      name="chevron-with-circle-up"
+                      color={Colors.defaultColor.PRIMARY_COLOR}
+                      size={20}
+                      onPress={() =>
+                        this.handleVote(pinId, 1, this.state.score)
+                      }
+                    />
+                  </TouchableOpacity>
+                )}
+                <Text style={styles.score}>{this.state.score}</Text>
+                {!this.state.voted && (
+                  <TouchableOpacity style={styles.button}>
+                    <Entypo
+                      name="chevron-with-circle-down"
+                      color={Colors.defaultColor.PRIMARY_COLOR}
+                      size={20}
+                      onPress={() =>
+                        this.handleVote(pinId, -1, this.state.score)
+                      }
+                    />
+                  </TouchableOpacity>
+                )}
               </View>
             </View>
           </View>
-          <View
-            style={{
-              flex: 1,
-              margin: 12,
-              marginTop: 4,
-              flexDirection: 'row',
-              justifyContent: 'space-between'
-            }}
-          >
-            <View style={styles.mainBody}>
-              <Text
-                style={styles.body}
-                numberOfLines={6}
-                ellipsizeMode="tail"
-                selectable
-                selectionColor={Colors.defaultColor.PRIMARY_COLOR}
-              >
-                {taskDetail}
-              </Text>
-            </View>
-            <View style={styles.scoreContainer}>
-              <TouchableOpacity style={styles.button}>
-                <Entypo
-                  name="chevron-with-circle-up"
-                  color={Colors.defaultColor.PRIMARY_COLOR}
-                  size={20}
-                />
-              </TouchableOpacity>
-              <Text style={styles.score}>{score}</Text>
-              <TouchableOpacity style={styles.button}>
-                <Entypo
-                  name="chevron-with-circle-down"
-                  color={Colors.defaultColor.PRIMARY_COLOR}
-                  size={20}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </TouchableHighlight>
-    </View>
-  );
-};
-
-export default ActivityCard;
+        </TouchableHighlight>
+      </View>
+    );
+  }
+}

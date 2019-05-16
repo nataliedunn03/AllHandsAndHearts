@@ -68,6 +68,20 @@ export default class Api {
     return await SalesforceApi.get('/activities');
   };
 
+  setVote = async (pinId, vote, userId) => {
+    const payload = {
+      pinId: pinId,
+      vote: vote,
+      userId: userId
+    };
+    return await SalesforceApi.post('/vote', payload);
+  };
+
+  getVotedPins = async userId => {
+    const queryEndpoint = `/vote/${userId}`;
+    return await SalesforceApi.get(queryEndpoint);
+  };
+
   /**
    * Pin related Apis
    */
