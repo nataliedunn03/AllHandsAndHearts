@@ -42,7 +42,7 @@ const authorize = function* authorize({
     if (isRegistering) {
       response = yield call(Api.register, email, hash, name, securityQuestion);
     } else {
-      response = yield call(Api.login, email, hash);
+      response = yield call(Api.login, email, hash, securityQuestion);
     }
     return response;
   } catch (error) {
@@ -65,10 +65,11 @@ const logout = function* logout() {
 function* loginFlow(action) {
   yield put({ type: LOGIN_REQUEST_LOADING, loading: true });
   try {
-    const { email, password } = action.data;
+    const { email, password, securityQuestion } = action.data;
     const auth = yield call(authorize, {
       email,
       password,
+      securityQuestion,
       isRegistering: false
     });
     if (auth && typeof auth === 'object' && auth.Id) {

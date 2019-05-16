@@ -102,7 +102,7 @@ export default class SignupForm extends React.PureComponent {
         />
         <StyledInput
           style={styles.input}
-          placeholder="In what city was your high school?"
+          placeholder="What city were you born?"
           returnKeyType="done"
           autoCapitalize="none"
           autoCorrect={false}
