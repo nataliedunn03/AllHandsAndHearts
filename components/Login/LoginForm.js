@@ -7,12 +7,23 @@ import StyledInput from '../../components/StyledInput';
 import { StyledButton2 } from '../StyledButton';
 import Colors from '../../constants/Colors';
 import { delayExec } from '../../utils/utils';
-import { Linking } from 'react-native';
-import { Alert } from 'react-native';
+import { Linking, TouchableOpacity, Alert } from 'react-native';
+import Dialog from 'react-native-dialog';
 export default class LoginForm extends React.PureComponent {
   state = {
     email: '',
-    password: ''
+    password: '',
+    dialogVisible: false,
+    securityQuestion: ''
+  };
+
+  showDialog = () => {
+    this.setState({ dialogVisible: true });
+    this.setState({ password: '' });
+  };
+
+  handleCancel = () => {
+    this.setState({ dialogVisible: false });
   };
 
   componentWillReceiveProps(nextProps) {
@@ -35,13 +46,22 @@ export default class LoginForm extends React.PureComponent {
 
   handleLogin = async () => {
     this.styledButton2.load();
-    let { email, password } = this.state;
+    let { email, password, securityQuestion } = this.state;
     email = email.trim();
     password = password.trim();
+    securityQuestion = securityQuestion.trim();
     if (email.length > 0 && password.length > 0) {
       await this.props.login({
         email,
         password
+      });
+      this.props.auth.loggedIn &&
+        this.styledButton2 &&
+        this.styledButton2.success();
+    } else if (email.length > 0 && securityQuestion.length > 0) {
+      await this.props.login({
+        email,
+        securityQuestion
       });
       this.props.auth.loggedIn &&
         this.styledButton2 &&
@@ -101,9 +121,53 @@ export default class LoginForm extends React.PureComponent {
         <TouchableNativeFeedback onPress={() => this.props.linkPress()}>
           <Text style={styles.link}>Don't have an account?</Text>
         </TouchableNativeFeedback>
-        <TouchableNativeFeedback onPress={this.resetPasswordClicked.bind(this)}>
+        //
+        ****************************************************************************
+        <TouchableNativeFeedback onPress={this.showDialog}>
           <Text style={styles.link}>Forgot Password?</Text>
         </TouchableNativeFeedback>
+        <Dialog.Container visible={this.state.dialogVisible}>
+          <Dialog.Title>Forgot Password</Dialog.Title>
+          <Dialog.Description>
+            Please enter your email and security question. If authentication is
+            successful, please go to your profile and reset your password.
+          </Dialog.Description>
+          <StyledInput
+            style={styles.input}
+            placeholder="Email"
+            keyboardType="email-address"
+            returnKeyType="next"
+            autoCapitalize="none"
+            autoCorrect={false}
+            enablesReturnKeyAutomatically
+            onSubmitEditing={() => this.securityQuestionRef.focus()}
+            onChangeText={value => this._handleOnChangeText('email', value)}
+          />
+          <StyledInput
+            returnKeyType="done"
+            style={styles.input}
+            autoCapitalize="none"
+            autoCorrect={false}
+            placeholder="What city were you born?"
+            enablesReturnKeyAutomatically
+            inputRef={element => (this.securityQuestionRef = element)}
+            onChangeText={value =>
+              this._handleOnChangeText('securityQuestion', value)
+            }
+            onSubmitEditing={this.handleLogin}
+          />
+          <TouchableNativeFeedback
+            onPress={this.resetPasswordClicked.bind(this)}
+          >
+            <Text style={styles.link}>
+              Still having issues? Contact an administrator
+            </Text>
+          </TouchableNativeFeedback>
+          <Dialog.Button label="Cancel" onPress={this.handleCancel} />
+          <Dialog.Button label="Submit" onPress={this.handleLogin} />
+        </Dialog.Container>
+        //
+        ****************************************************************************
       </View>
     );
   }
