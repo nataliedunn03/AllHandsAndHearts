@@ -82,9 +82,7 @@ export default class LoginForm extends React.PureComponent {
       'mailto:disastercrowdsupport@allhandsandhearts.org?subject=Reset Password Request &body=The following user is requesting a password reset:\n\n' +
         this.state.email
     );
-    Alert.alert(
-      'Your password reset request has been sent. Someone from the AHAH team will get back with you shortly.'
-    );
+    Alert.alert('Someone from the AHAH team will get back with you shortly.');
   }
 
   render() {
@@ -128,10 +126,6 @@ export default class LoginForm extends React.PureComponent {
         </TouchableNativeFeedback>
         <Dialog.Container visible={this.state.dialogVisible}>
           <Dialog.Title>Forgot Password</Dialog.Title>
-          <Dialog.Description>
-            Please enter your email and security question. If authentication is
-            successful, please go to your profile and reset your password.
-          </Dialog.Description>
           <StyledInput
             style={styles.input}
             placeholder="Email"
@@ -160,7 +154,7 @@ export default class LoginForm extends React.PureComponent {
             onPress={this.resetPasswordClicked.bind(this)}
           >
             <Text style={styles.link}>
-              Still having issues? Contact an administrator
+              Still having issues? Please contact an administrator.
             </Text>
           </TouchableNativeFeedback>
           <Dialog.Button label="Cancel" onPress={this.handleCancel} />
