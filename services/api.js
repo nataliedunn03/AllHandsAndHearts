@@ -83,6 +83,13 @@ export default class Api {
   };
 
   /**
+   * Pin location related Apis
+   */
+  getPinLocationTypes = async () => {
+    return await SalesforceApi.get('/types');
+  };
+
+  /**
    * Pin related Apis
    */
   getPinsList = async () => {

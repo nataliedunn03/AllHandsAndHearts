@@ -9,6 +9,8 @@ import {
   setActivityVote,
   getVotedActivities
 } from '../redux/actions/activity';
+
+import { getPinLocationTypes } from '../redux/actions/pins';
 import { registerPushNotification } from '../redux/actions/notification';
 import HomeScreen from '../screens/HomeScreen';
 import { AlertConsumer } from '../containers/AlertContainer';
@@ -22,6 +24,9 @@ const mapDispatchToProps = dispatch => {
     },
     getActivities: () => {
       dispatch(getActivities());
+    },
+    getPinLocationTypes: () => {
+      dispatch(getPinLocationTypes());
     },
     registerPushNotification: () => {
       dispatch(registerPushNotification());

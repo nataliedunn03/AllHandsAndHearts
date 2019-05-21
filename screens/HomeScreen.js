@@ -12,12 +12,14 @@ export default class HomeScreen extends React.PureComponent {
   componentWillMount() {
     this.props.getBroadcastCards();
     this.props.getActivities();
+    this.props.getPinLocationTypes();
     this.props.getVotedActivities();
   }
   _handleRefresh = async () => {
     try {
       await this.props.getBroadcastCards();
       await this.props.getActivities();
+      await this.props.getPinLocationTypes();
     } catch (e) {
       console.log(e);
     }

@@ -53,6 +53,7 @@ export default class MapScreen extends React.PureComponent {
     };
   }
   componentDidMount() {
+    this.props.getPinLocationTypes();
     this._getUserCurrentLocation();
   }
   componentWillReceiveProps(nextProps) {

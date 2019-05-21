@@ -50,56 +50,7 @@ export default class EditPinScreen extends PureComponent {
       longitude: null,
       regionId: null,
       pinColor: null,
-      pinType: [
-        {
-          name: 'Affected Area',
-          isSelected: false,
-          Id: 111,
-          color: 'red'
-        },
-        {
-          name: 'Airport',
-          isSelected: false,
-          Id: 211,
-          color: 'purple'
-        },
-        {
-          name: 'Health Facility',
-          isSelected: false,
-          Id: 311,
-          color: 'lime'
-        },
-        {
-          name: 'IDP Camp',
-          isSelected: false,
-          Id: 411,
-          color: 'green'
-        },
-        {
-          name: 'Point of Interest',
-          isSelected: false,
-          Id: 511,
-          color: 'blue'
-        },
-        {
-          name: 'Risk Assessment',
-          isSelected: false,
-          Id: 711,
-          color: 'orange'
-        },
-        {
-          name: 'Partner Locations',
-          isSelected: false,
-          Id: 622,
-          color: 'brown'
-        },
-        {
-          name: 'Other',
-          isSelected: false,
-          Id: 76661,
-          color: 'grey'
-        }
-      ],
+      pinType: [],
       showToAddLocationQ: 'Press to choose a location type',
       enableLocationTypeButton: true,
       photos: []
@@ -155,6 +106,16 @@ export default class EditPinScreen extends PureComponent {
   }
 
   async componentWillMount() {
+    //populate pinType from types stored in Salesforce
+    for (type in global.pinLocationTypes) {
+      this.state.pinType.push({
+        name: global.pinLocationTypes[type]['Name'],
+        isSelected: global.pinLocationTypes[type]['isSelected__c'],
+        Id: global.pinLocationTypes[type]['Id'],
+        color: global.pinLocationTypes[type]['Color__c']
+      });
+    }
+
     let {
       latitude,
       longitude,
