@@ -5,7 +5,7 @@
     "slug": "AHH",
     "privacy": "unlisted",
     "sdkVersion": "30.0.0",
-    "version": "1.0.13",
+    "version": "1.0.14",
     "orientation": "portrait",
     "primaryColor": "#cccccc",
     "icon": "./assets/images/icon.png",
@@ -23,7 +23,7 @@
     "ios": {
       "bundleIdentifier": "com.allhandsandhearts.dev",
       "icon": "./assets/images/icon3.png",
-      "buildNumber": "1.0.13",
+      "buildNumber": "1.0.14",
       "config": {
         "googleMapsApiKey": "AIzaSyBTvryrzm7ymvBS2NyOTpgDPtjtR0SC3p4"
       },
