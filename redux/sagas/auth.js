@@ -173,19 +173,14 @@ function* initializeAppState(action) {
 
 function* changePasswordFlow(action) {
   try {
-    const { email, oldPassword, newPassword } = action.data;
-    const oldHash = yield call(
-      AuthService.generatePasswordHash,
-      email,
-      oldPassword
-    );
+    const { email, newPassword } = action.data;
     const newHash = yield call(
       AuthService.generatePasswordHash,
       email,
       newPassword
     );
-    if (email && oldHash && newHash) {
-      const status = yield call(Api.changePassword, email, oldHash, newHash);
+    if (email && newHash) {
+      const status = yield call(Api.changePassword, email, newHash);
       if (status['Email__c']) {
         yield put({
           type: CHANGE_PASSWORD_SUCCESS,

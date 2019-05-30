@@ -21,7 +21,7 @@ export default class Activities extends PureComponent {
   _renderCards = (cards, votedPins) => {
     let votedPinsList = [];
     if (votedPins.length > 0) {
-      votedPinsList = votedPins.split(';');
+      votedPinsList = votedPins.toString().split(';');
     }
     return cards.map(card => {
       return (

@@ -119,8 +119,6 @@ export default class LoginForm extends React.PureComponent {
         <TouchableNativeFeedback onPress={() => this.props.linkPress()}>
           <Text style={styles.link}>Don't have an account?</Text>
         </TouchableNativeFeedback>
-        //
-        ****************************************************************************
         <TouchableNativeFeedback onPress={this.showDialog}>
           <Text style={styles.link}>Forgot Password?</Text>
         </TouchableNativeFeedback>
@@ -160,8 +158,6 @@ export default class LoginForm extends React.PureComponent {
           <Dialog.Button label="Cancel" onPress={this.handleCancel} />
           <Dialog.Button label="Submit" onPress={this.handleLogin} />
         </Dialog.Container>
-        //
-        ****************************************************************************
       </View>
     );
   }

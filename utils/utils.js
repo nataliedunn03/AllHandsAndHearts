@@ -1,5 +1,4 @@
 import { InteractionManager } from 'react-native';
-import { SF_BASE_URL, SF_BASE_URL_FOR_OAUTH_TOKEN } from 'react-native-dotenv';
 import * as AuthService from '../services/auth';
 
 /**
@@ -89,7 +88,7 @@ export class SalesforceApiWrapper {
   };
 
   get = async url => {
-    const requestUrl = `${SF_BASE_URL}${url}`;
+    const requestUrl = `https://cs19.salesforce.com/services/apexrest${url}`;
     const init = {
       method: 'GET',
       headers: this.HEADERS
@@ -109,7 +108,7 @@ export class SalesforceApiWrapper {
   };
 
   post = async (url, payload) => {
-    const requestUrl = `${SF_BASE_URL}${url}`;
+    const requestUrl = `https://cs19.salesforce.com/services/apexrest${url}`;
     return await this.fetchWrapper(
       requestUrl,
       this.payloadHelper('POST', payload)
@@ -117,7 +116,7 @@ export class SalesforceApiWrapper {
   };
 
   put = async (url, payload) => {
-    const requestUrl = `${SF_BASE_URL}${url}`;
+    const requestUrl = `https://cs19.salesforce.com/services/apexrest${url}`;
     return await this.fetchWrapper(
       requestUrl,
       this.payloadHelper('PUT', payload)
@@ -125,7 +124,7 @@ export class SalesforceApiWrapper {
   };
 
   delete = async url => {
-    const requestUrl = `${SF_BASE_URL}${url}`;
+    const requestUrl = `https://cs19.salesforce.com/services/apexrest${url}`;
     const init = {
       method: 'DELETE',
       headers: this.HEADERS
@@ -137,12 +136,14 @@ export class SalesforceApiWrapper {
    * Get and generate Auth token
    */
   getAuthToken = async () => {
-    return await this.getBase(`${SF_BASE_URL_FOR_OAUTH_TOKEN}/getAuthToken`);
+    return await this.getBase(
+      `https://jdev-aahtoken.cs19.force.com/services/apexrest/getAuthToken`
+    );
   };
 
   generateAuthToken = async () => {
     return await this.getBase(
-      `${SF_BASE_URL_FOR_OAUTH_TOKEN}/generateAuthToken`
+      `https://jdev-aahtoken.cs19.force.com/services/apexrest/generateAuthToken`
     );
   };
 }
