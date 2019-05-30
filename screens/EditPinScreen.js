@@ -196,6 +196,20 @@ export default class EditPinScreen extends PureComponent {
       Alert.alert('All * marked inputs are required');
       return;
     }
+    //require the user to select only one pin location type
+    selected = 0;
+
+    let selectedPins = this.state.pinType.map(pin => {
+      if (pin.isSelected === true) {
+        selected += 1;
+      }
+      return selectedPins;
+    });
+
+    if (selected > 1) {
+      Alert.alert('Only one pin location type can be selected');
+      return;
+    }
     this.props.setPinByRegion(this.state.regionId, {
       ...payload
     });
