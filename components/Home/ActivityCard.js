@@ -45,7 +45,8 @@ const styles = StyleSheet.create({
   mainBody: {
     flexDirection: 'column',
     height: '100%',
-    top: -15
+    top: -15,
+    marginRight: 28
   },
   body: {
     overflow: 'hidden',
@@ -68,7 +69,8 @@ const styles = StyleSheet.create({
   scoreContainer: {
     alignItems: 'center',
     height: '100%',
-    top: -28
+    top: -28,
+    right: 8
   },
   score: {
     color: Colors.defaultColor.PRIMARY_COLOR,
