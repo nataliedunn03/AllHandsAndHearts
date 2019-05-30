@@ -136,7 +136,7 @@ export default class ViewPinModal extends React.Component {
             </StyledText>
           </Fragment>
         )}
-        {isOwner ? showButton : ''}
+        {isOwner ? showButton : undefined }
       </ScrollView>
     );
   }
