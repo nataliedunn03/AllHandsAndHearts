@@ -10,7 +10,6 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { delayExec } from '../utils/utils';
 export default class ProfileScreen extends React.PureComponent {
   state = {
-    oldPassword: '',
     newPassword: '',
     rePassword: ''
   };
@@ -30,21 +29,17 @@ export default class ProfileScreen extends React.PureComponent {
 
   handlePaswordChange = async () => {
     this.styledButton2.load();
-    const { newPassword, rePassword, oldPassword } = this.state;
-    if (!newPassword.length > 0 || !rePassword.length > 0 || !oldPassword > 0) {
+    const { newPassword, rePassword } = this.state;
+    if (!newPassword.length > 0 || !rePassword.length > 0) {
       Alert.alert('Required (*) fields cannot be blank.');
     } else if (newPassword !== rePassword) {
-      Alert.alert("New password don't match.");
-    } else if (oldPassword === newPassword) {
-      Alert.alert('New password must be different from your current password.');
+      Alert.alert("Passwords don't match.");
     } else {
       await this.props.changePassword({
         email: this.props.auth.user.Email__c,
-        oldPassword,
         newPassword
       });
       this.setState({
-        oldPassword: '',
         newPassword: '',
         rePassword: ''
       });
@@ -87,33 +82,32 @@ export default class ProfileScreen extends React.PureComponent {
           />
         </View>
         <View>
-          {this.props.auth &&
-            Name__c && (
-              <View
+          {this.props.auth && Name__c && (
+            <View
+              style={{
+                alignItems: 'center',
+                alignSelf: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <StyledText
                 style={{
-                  alignItems: 'center',
-                  alignSelf: 'center',
-                  justifyContent: 'center'
+                  color: '#5a5b59',
+                  fontSize: 24,
+                  marginBottom: 4
+                }}
+              >{`Hi, ${Name__c}!`}</StyledText>
+              <StyledText
+                style={{
+                  color: '#5a5b59',
+                  fontSize: 24,
+                  marginBottom: 4
                 }}
               >
-                <StyledText
-                  style={{
-                    color: '#5a5b59',
-                    fontSize: 24,
-                    marginBottom: 4
-                  }}
-                >{`Hi, ${Name__c}!`}</StyledText>
-                <StyledText
-                  style={{
-                    color: '#5a5b59',
-                    fontSize: 24,
-                    marginBottom: 4
-                  }}
-                >
-                  {Email__c}
-                </StyledText>
-              </View>
-            )}
+                {Email__c}
+              </StyledText>
+            </View>
+          )}
         </View>
         <View>
           <StyledText
@@ -126,26 +120,6 @@ export default class ProfileScreen extends React.PureComponent {
           >
             CHANGE PASSWORD
           </StyledText>
-          <StyledInput
-            secureTextEntry
-            clearTextOnFocus
-            returnKeyType="done"
-            style={{
-              height: 42,
-              color: Colors.defaultColor.PRIMARY_COLOR,
-              backgroundColor: Colors.defaultColor.PAPER_COLOR,
-              borderColor: '#BFBFC0',
-              borderWidth: 0.3,
-              borderRadius: Colors.Input.BORDER.RADIUS
-            }}
-            placeholder="Enter current password *"
-            enablesReturnKeyAutomatically
-            inputRef={element => (this.passwordRef = element)}
-            onChangeText={value =>
-              this._handleOnChangeText('oldPassword', value)
-            }
-            value={this.state.oldPassword}
-          />
           <StyledInput
             secureTextEntry
             clearTextOnFocus
