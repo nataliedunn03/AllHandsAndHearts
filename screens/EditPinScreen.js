@@ -11,7 +11,6 @@ import { Constants, ImagePicker, Permissions } from 'expo';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import LabelSelect from 'react-native-label-select';
 import { Location } from 'expo';
-import { GOOGLE_MAPS_API_KEY } from 'react-native-dotenv';
 import Colors from '../constants/Colors';
 import { StyledText } from '../components/StyledText';
 import StyledButton from '../components/StyledButton';
@@ -126,7 +125,7 @@ export default class EditPinScreen extends PureComponent {
     } = this.props;
     const newPhotos = this.props.photos ? this.props.photos : [];
     try {
-      Location.setApiKey(GOOGLE_MAPS_API_KEY);
+      Location.setApiKey('AIzaSyBTvryrzm7ymvBS2NyOTpgDPtjtR0SC3p4');
       const decodedLocation = await Location.reverseGeocodeAsync({
         latitude,
         longitude
@@ -395,10 +394,7 @@ export default class EditPinScreen extends PureComponent {
               this._handleOnChangeText('description', value)
             }
           />
-
           <StyledText style={styles.styledText}>TYPE *</StyledText>
-
-          {this.renderLocationType()}
           <Separator />
         </View>
         <View>

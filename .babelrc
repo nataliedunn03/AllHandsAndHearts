@@ -1,10 +1,7 @@
 {
-  "presets": ["react-native", "babel-preset-expo", "react-native-dotenv"],
+  "presets": ["babel-preset-expo"],
   "retainLines": true,
   "env": {
-    "development": {
-      "plugins": ["transform-react-jsx-source"]
-    },
     "production": {
       "plugins": ["transform-remove-console"]
     }
