@@ -41,7 +41,7 @@ const mapDispatchToProps = dispatch => {
 };
 const mapStateToProps = state => ({
   auth: state.auth,
-  broadcast: state.broadcast,
+  // broadcast: state.broadcast,
   activity: state.activity
 });
 const Home = connect(
