@@ -305,7 +305,7 @@ export default class MapScreen extends React.PureComponent {
       <SlidingModal
         show={this.state.showMarkerModal}
         closeCallback={this._closeMarkerModal}
-        top={Layout.height - 450}
+        top={Layout.height - 750}
       >
         <SlidingModal.Header style={styles.slidingHeader}>
           <MapsModalHeader
