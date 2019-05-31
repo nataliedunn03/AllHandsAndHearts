@@ -144,7 +144,15 @@ export default class ActivityCard extends React.PureComponent {
                 </Text>
               </View>
               <View style={styles.scoreContainer}>
-                {!this.state.voted && (
+                {this.state.voted ? (
+                  <TouchableOpacity style={styles.button}>
+                    <Entypo
+                      name="chevron-with-circle-up"
+                      color={Colors.defaultColor.DISABLED_BUTTON}
+                      size={20}
+                    />
+                  </TouchableOpacity>
+                ) : (
                   <TouchableOpacity style={styles.button}>
                     <Entypo
                       name="chevron-with-circle-up"
@@ -157,7 +165,15 @@ export default class ActivityCard extends React.PureComponent {
                   </TouchableOpacity>
                 )}
                 <Text style={styles.score}>{this.state.score}</Text>
-                {!this.state.voted && (
+                {this.state.voted ? (
+                  <TouchableOpacity style={styles.button}>
+                    <Entypo
+                      name="chevron-with-circle-down"
+                      color={Colors.defaultColor.DISABLED_BUTTON}
+                      size={20}
+                    />
+                  </TouchableOpacity>
+                ) : (
                   <TouchableOpacity style={styles.button}>
                     <Entypo
                       name="chevron-with-circle-down"
