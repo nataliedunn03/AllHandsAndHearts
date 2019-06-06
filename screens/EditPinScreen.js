@@ -255,69 +255,24 @@ export default class EditPinScreen extends PureComponent {
   };
   renderLocationType = () => {
     return (
-      <View style={{ marginBottom: 10 }}>
+      <View style={{ marginBottom: 0 }}>
         {Constants.platform.android && this.renderLocationTypeAndroid()}
         {Constants.platform.ios && (
-          <LabelSelect
-            title="Choose a type"
-            ref={element => (this.select = element)}
-            style={styles.labelSelect}
-            onConfirm={this.selectConfirm}
-            addButtonText={this.state.showToAddLocationQ}
-            customStyle={{
-              addButtonText: {
-                color: '#1D2C3C',
-                padding: 6,
-                fontSize: 14,
-                lineHeight: 20,
-                maxWidth: 300
-              },
-              addButton: {
-                padding: 9
-              }
+          <Picker
+            selectedValue={this.state.pinTypeSelected}
+            onValueChange={itemValue => {
+              this.setState({ pinTypeSelected: itemValue });
             }}
-            enableAddBtn={this.state.enableLocationTypeButton}
+            enabled={true}
           >
-            {this.state.pinType
-              .filter(item => item.isSelected)
-              .map((item, index) => (
-                <LabelSelect.Label
-                  key={'label-' + index}
-                  data={item}
-                  onCancel={() => {
-                    this.deleteItem(item);
-                  }}
-                  customStyle={{
-                    text: {
-                      color: '#1D2C3C',
-                      padding: 6,
-                      fontSize: 14,
-                      lineHeight: 20,
-                      maxWidth: 300
-                    }
-                  }}
-                >
-                  {item.name}
-                </LabelSelect.Label>
-              ))}
-            {this.state.pinType
-              .filter(item => !item.isSelected)
-              .map((item, index) => {
-                return (
-                  <LabelSelect.ModalItem
-                    key={'modal-item-' + index}
-                    data={item}
-                    customStyle={{
-                      innerCircle: {
-                        backgroundColor: Colors.defaultColor.PRIMARY_COLOR
-                      }
-                    }}
-                  >
-                    {item.name}
-                  </LabelSelect.ModalItem>
-                );
-              })}
-          </LabelSelect>
+            {this.state.pinType.map((item, index) => (
+              <Picker.Item
+                key={`${item.name}${index}`}
+                label={item.name}
+                value={item.name}
+              />
+            ))}
+          </Picker>
         )}
       </View>
     );
@@ -409,6 +364,7 @@ export default class EditPinScreen extends PureComponent {
             }
           />
           <StyledText style={styles.styledText}>TYPE *</StyledText>
+          {this.renderLocationType()}
           <Separator />
         </View>
         <View>

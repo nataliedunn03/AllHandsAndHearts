@@ -52,7 +52,7 @@ export const getActivities = async userId => {
     var errorCard = [
       {
         name: 'Unable to load activities.',
-        detail: 'Please reload application to try again.'
+        detail: 'Please reload the Activity list to try again.'
       }
     ];
     return errorCard;
