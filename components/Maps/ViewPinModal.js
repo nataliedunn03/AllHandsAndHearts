@@ -84,9 +84,7 @@ export default class ViewPinModal extends React.Component {
         </StyledText>
         <Separator />
         <StyledText style={styles.styledText}>CREATED BY</StyledText>
-        <StyledText selectable style={styles.styledTextValue}>
-          {data.UserId__r.Name__c}
-        </StyledText>
+        <StyledText selectable style={styles.styledTextValue} />
         <Separator />
         <StyledText style={styles.styledText}>DESCRIPTION</StyledText>
         <StyledText selectable style={styles.styledTextValue}>
@@ -136,7 +134,7 @@ export default class ViewPinModal extends React.Component {
             </StyledText>
           </Fragment>
         )}
-        {isOwner ? showButton : undefined }
+        {isOwner ? showButton : undefined}
       </ScrollView>
     );
   }
