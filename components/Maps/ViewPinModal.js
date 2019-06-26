@@ -84,7 +84,9 @@ export default class ViewPinModal extends React.Component {
         </StyledText>
         <Separator />
         <StyledText style={styles.styledText}>CREATED BY</StyledText>
-        <StyledText selectable style={styles.styledTextValue} />
+        <StyledText selectable style={styles.styledTextValue}>
+          {data.UserId__r.Name__c}
+        </StyledText>
         <Separator />
         <StyledText style={styles.styledText}>DESCRIPTION</StyledText>
         <StyledText selectable style={styles.styledTextValue}>
