@@ -205,6 +205,7 @@ export default class EditPinScreen extends PureComponent {
     this.props.setPinByRegion(this.state.regionId, {
       ...payload
     });
+    this.props.getPinsByRegion(this.state.regionId);
     this.props.navigation.goBack();
   };
 
