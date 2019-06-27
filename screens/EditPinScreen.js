@@ -553,6 +553,7 @@ const styles = StyleSheet.create({
     height: 42,
     marginTop: 0,
     paddingTop: 0,
+    marginBottom: 35,
     backgroundColor: Colors.defaultColor.PRIMARY_COLOR
   },
   addButtonTextStyle: {
