@@ -89,6 +89,7 @@ Update Version Number
 0. Navigate to app.json
 1. Update "Expo" -> "version"
 1. Update "Expo" -> "ios" -> "buildNumber"
+   ![Screenshot](https://github.com/nataliedunn03/AllHandsAndHearts/blob/develop/documentation/upload_0a.png)
 
 Upload App
 
