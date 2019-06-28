@@ -97,5 +97,5 @@ Note: It must contain all the name, isSelected, Id, and color keys. You can chan
 1. Upload downloaded .ipa file from step 6 to the Application Loader.
    ![Xcode & Application Loader](https://github.com/nataliedunn03/AllHandsAndHearts/blob/develop/documentation/upload_2.mov)
 1. Open itunesconnect.com. Submit new version of the app to Apple.
-   [DOWNLOAD: iTunesConnect submit new AppStore version](https://github.com/nataliedunn03/AllHandsAndHearts/blob/develop/documentation/upload_3.mov)
-   [DOWNLOAD: iTunesConnect submit new TestFlight version](https://github.com/nataliedunn03/AllHandsAndHearts/blob/develop/documentation/upload_4.mov)
+   <br>[DOWNLOAD: iTunesConnect submit new AppStore version - click "Download" on the next page.](https://github.com/nataliedunn03/AllHandsAndHearts/blob/develop/documentation/upload_3.mov)
+   <br>[DOWNLOAD: iTunesConnect submit new TestFlight version - click "Download" on the next page.](https://github.com/nataliedunn03/AllHandsAndHearts/blob/develop/documentation/upload_4.mov)
