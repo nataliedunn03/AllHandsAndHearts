@@ -84,6 +84,14 @@ Note: It must contain all the name, isSelected, Id, and color keys. You can chan
 
 (From Macbook)
 
+Update Version Number
+
+0. Navigate to app.json
+1. Update "Expo" -> "version"
+1. Update "Expo" -> "ios" -> "buildNumber"
+
+Upload App
+
 0. Find the project folder on your local machine.
 1. Open Terminal, drag project folder into terminal. Press `Enter`.
 1. Run `expo start`.
