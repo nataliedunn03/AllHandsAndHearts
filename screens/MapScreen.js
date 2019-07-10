@@ -261,6 +261,7 @@ export default class MapScreen extends React.PureComponent {
       longitude: coords.longitude,
       regionId: this.state.currentRegionId,
       setPinByRegion: this.props.setPinByRegion,
+      getPinsByRegion: this.props.getPinsByRegion,
       routeName: 'Add Location'
     });
   };
@@ -271,6 +272,7 @@ export default class MapScreen extends React.PureComponent {
       hasPinData: true,
       setPinByRegion: this.props.setPinByRegion,
       regionId: this.state.currentRegionId,
+      getPinsByRegion: this.props.getPinsByRegion,
       ...pinData,
       routeName: 'Edit Location'
     });
