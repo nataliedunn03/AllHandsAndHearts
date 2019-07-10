@@ -29,7 +29,7 @@ export default class Api {
       latitude: pinData.latitude,
       longitude: pinData.longitude,
       pinColor: pinData.pinColor ? pinData.pinColor : '',
-      pinType: pinData.pinType ? pinData.pinType.name : 'Other',
+      pinType: pinData.pinType,
       Id: pinData.id ? pinData.id : '',
       pinImage: pinData.photos.length > 0 ? 'true' : 'false'
     };
