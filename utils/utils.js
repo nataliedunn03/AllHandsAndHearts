@@ -88,7 +88,7 @@ export class SalesforceApiWrapper {
   };
 
   get = async url => {
-    const requestUrl = `https://cs19.salesforce.com/services/apexrest${url}`;
+    const requestUrl = `https://ahah--jpmc.cs22.my.salesforce.com/services/apexrest${url}`;
     const init = {
       method: 'GET',
       headers: this.HEADERS
@@ -108,7 +108,7 @@ export class SalesforceApiWrapper {
   };
 
   post = async (url, payload) => {
-    const requestUrl = `https://cs19.salesforce.com/services/apexrest${url}`;
+    const requestUrl = `https://ahah--jpmc.cs22.my.salesforce.com/services/apexrest${url}`;
     return await this.fetchWrapper(
       requestUrl,
       this.payloadHelper('POST', payload)
@@ -116,7 +116,7 @@ export class SalesforceApiWrapper {
   };
 
   put = async (url, payload) => {
-    const requestUrl = `https://cs19.salesforce.com/services/apexrest${url}`;
+    const requestUrl = `https://ahah--jpmc.cs22.my.salesforce.com/services/apexrest${url}`;
     return await this.fetchWrapper(
       requestUrl,
       this.payloadHelper('PUT', payload)
@@ -124,7 +124,7 @@ export class SalesforceApiWrapper {
   };
 
   delete = async url => {
-    const requestUrl = `https://cs19.salesforce.com/services/apexrest${url}`;
+    const requestUrl = `https://ahah--jpmc.cs22.my.salesforce.com/services/apexrest${url}`;
     const init = {
       method: 'DELETE',
       headers: this.HEADERS
