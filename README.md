@@ -83,11 +83,13 @@ Note: It must contain all the name, isSelected, Id, and color keys. You can chan
 ### How to upload app
 
 (From Macbook)
+
 Update Version Number
 
 0. Navigatetoapp.json
 1. Update"Expo"->"version"
 1. Update"Expo"->"ios"->"buildNumber"
+   ![Screenshot of code for Version Bumping](https://github.com/nataliedunn03/AllHandsAndHearts/blob/develop/documentation/upload_0a.png)
 
 Upload App
 
