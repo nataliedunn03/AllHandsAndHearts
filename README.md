@@ -83,8 +83,15 @@ Note: It must contain all the name, isSelected, Id, and color keys. You can chan
 ### How to upload app
 
 (From Macbook)
+Update Version Number
 
-0. Find the project folder on your local machine.
+0. Navigatetoapp.json
+1. Update"Expo"->"version"
+1. Update"Expo"->"ios"->"buildNumber"
+
+Upload App
+
+1. Find the project folder on your local machine.
 1. Open Terminal, drag project folder into terminal. Press `Enter`.
 1. Run `expo start`.
    ![Terminal screen recording](https://github.com/nataliedunn03/AllHandsAndHearts/blob/develop/documentation/upload_0.mov)
