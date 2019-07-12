@@ -12,6 +12,10 @@ export default class Api {
     const queryEndpoint = `/pins/${regionId}`;
     return await SalesforceApi.get(queryEndpoint);
   };
+  getRegionById = async regionId => {
+    const queryEndPoint = `/getRegion/${regionId}`;
+    return await SalesforceApi.get(queryEndPoint);
+  };
 
   setPinByRegion = async (regionId, pinData, currentUserId) => {
     const payload = {
@@ -25,7 +29,7 @@ export default class Api {
       latitude: pinData.latitude,
       longitude: pinData.longitude,
       pinColor: pinData.pinColor ? pinData.pinColor : '',
-      pinType: pinData.pinType ? pinData.pinType.name : 'Other',
+      pinType: pinData.pinType,
       Id: pinData.id ? pinData.id : '',
       pinImage: pinData.photos.length > 0 ? 'true' : 'false'
     };
@@ -58,6 +62,49 @@ export default class Api {
   };
 
   /**
+   * Activity related Apis
+   */
+  getActivities = async () => {
+    return await SalesforceApi.get('/activities');
+  };
+
+  setVote = async (pinId, vote, userId) => {
+    const payload = {
+      pinId: pinId,
+      vote: vote,
+      userId: userId
+    };
+    return await SalesforceApi.post('/vote', payload);
+  };
+
+  getVotedPins = async userId => {
+    const queryEndpoint = `/vote/${userId}`;
+    return await SalesforceApi.get(queryEndpoint);
+  };
+
+  /**
+   * Pin location related Apis
+   */
+  getPinLocationTypes = async () => {
+    return await SalesforceApi.get('/types');
+  };
+
+  /**
+   * Pin related Apis
+   */
+  getPinsList = async () => {
+    return await SalesforceApi.get('/getPins');
+  };
+
+  /**
+   * User related Apis
+   */
+  getUserName = async userId => {
+    const queryEndPoint = `/getUserName/${userId}`;
+    return await SalesforceApi.get(queryEndPoint);
+  };
+
+  /**
    * Alert related Apis
    */
   getBroadcastCards = async () => {
@@ -67,31 +114,32 @@ export default class Api {
   /**
    * Auth specific Apis
    */
-  login = async (email, passwordHash) => {
+  login = async (email, passwordHash, securityQuestion) => {
     //PUT is login
     const queryEndpoint = '/users';
     const payload = {
       email: email,
-      password: passwordHash
+      password: passwordHash,
+      securityQuestion: securityQuestion
     };
     return await SalesforceApi.put(queryEndpoint, payload);
   };
 
-  register = async (email, hash, name) => {
+  register = async (email, hash, name, securityQuestion) => {
     const queryEndpoint = '/users';
     const payload = {
       email,
       name,
-      password: hash
+      password: hash,
+      securityQuestion
     };
     return await SalesforceApi.post(queryEndpoint, payload);
   };
 
-  changePassword = async (email, oldHash, newHash) => {
+  changePassword = async (email, newHash) => {
     const queryEndpoint = '/changePassword';
     const payload = {
       email,
-      oldHash,
       newHash
     };
     return await SalesforceApi.post(queryEndpoint, payload);

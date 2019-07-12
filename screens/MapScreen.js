@@ -53,6 +53,7 @@ export default class MapScreen extends React.PureComponent {
     };
   }
   componentDidMount() {
+    this.props.getPinLocationTypes();
     this._getUserCurrentLocation();
   }
   componentWillReceiveProps(nextProps) {
@@ -226,7 +227,11 @@ export default class MapScreen extends React.PureComponent {
     };
     this.state.regionModalIsFull && this.regionModalRef.openModalHalfway();
     //this.scrollCardRef && this.scrollCardRef.scrollTo({ x: -9 });
-    this.mapViewRef.animateToRegion(region);
+    //*In order to avoid maps being zoomed in AND out, we need to add a field in the
+    //adding a marker form with the region (as a prepopulated dropdown? ) in order ensure
+    //that user adds pin in selected region
+    //WIP
+    //this.mapViewRef.animateToRegion(region);
     await runAfterInteractions();
     await this.props.getPinsByRegion(card.id);
     if (
@@ -247,11 +252,16 @@ export default class MapScreen extends React.PureComponent {
   _createNewMarker = async e => {
     e.persist();
     const coords = e.nativeEvent.coordinate;
+    if (!this.state.currentRegionId) {
+      this.openRegionModal();
+      return;
+    }
     this.props.navigation.navigate('EditPin', {
       latitude: coords.latitude,
       longitude: coords.longitude,
       regionId: this.state.currentRegionId,
       setPinByRegion: this.props.setPinByRegion,
+      getPinsByRegion: this.props.getPinsByRegion,
       routeName: 'Add Location'
     });
   };
@@ -262,6 +272,7 @@ export default class MapScreen extends React.PureComponent {
       hasPinData: true,
       setPinByRegion: this.props.setPinByRegion,
       regionId: this.state.currentRegionId,
+      getPinsByRegion: this.props.getPinsByRegion,
       ...pinData,
       routeName: 'Edit Location'
     });
@@ -296,7 +307,7 @@ export default class MapScreen extends React.PureComponent {
       <SlidingModal
         show={this.state.showMarkerModal}
         closeCallback={this._closeMarkerModal}
-        top={Layout.height - 450}
+        top={Layout.height - 750}
       >
         <SlidingModal.Header style={styles.slidingHeader}>
           <MapsModalHeader
@@ -353,6 +364,7 @@ export default class MapScreen extends React.PureComponent {
   //see if map is ready
   _onMapReady = () => {
     this.setState({ mapReady: true });
+    this.openRegionModal();
   };
   //callback on pan map
   _onRegionChange = region => {};

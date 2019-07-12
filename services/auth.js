@@ -1,4 +1,3 @@
-import { FFG_AUTH_STORAGE_KEY } from 'react-native-dotenv';
 import { AsyncStorage } from 'react-native';
 import base64 from 'base-64';
 import bcrypt from 'react-native-bcrypt';
@@ -35,7 +34,7 @@ export const generatePasswordHash = (username, password) => {
         resolve(passwordHash);
       });
     } else {
-      reject(new Error('username & passwords are required'));
+      resolve('');
     }
   });
 };
@@ -60,13 +59,14 @@ export const encryptPayload = payload => {
 
 // value is of type object, but set as string since AsyncStorage only support strings
 export const setCookie = value =>
-  AsyncStorage.setItem(FFG_AUTH_STORAGE_KEY, JSON.stringify(value));
+  AsyncStorage.setItem('FFG_AUTH_STORAGE_KEY', JSON.stringify(value));
 
-export const removeCookie = () => AsyncStorage.removeItem(FFG_AUTH_STORAGE_KEY);
+export const removeCookie = () =>
+  AsyncStorage.removeItem('FFG_AUTH_STORAGE_KEY');
 
 export const isLoggedIn = async () => {
   let loggedIn = false;
-  const savedObject = await AsyncStorage.getItem(FFG_AUTH_STORAGE_KEY);
+  const savedObject = await AsyncStorage.getItem('FFG_AUTH_STORAGE_KEY');
   if (savedObject) {
     const { isLoggedIn } = JSON.parse(savedObject);
     loggedIn = isLoggedIn;
@@ -76,7 +76,7 @@ export const isLoggedIn = async () => {
 
 export const getValueFromStorage = async key => {
   let value = null;
-  const savedObject = await AsyncStorage.getItem(FFG_AUTH_STORAGE_KEY);
+  const savedObject = await AsyncStorage.getItem('FFG_AUTH_STORAGE_KEY');
   if (savedObject) {
     const data = JSON.parse(savedObject);
     value = data[key];
@@ -85,7 +85,7 @@ export const getValueFromStorage = async key => {
 };
 
 export const getFFGCookies = async () => {
-  const savedObject = await AsyncStorage.getItem(FFG_AUTH_STORAGE_KEY);
+  const savedObject = await AsyncStorage.getItem('FFG_AUTH_STORAGE_KEY');
   let value = null;
   if (savedObject) {
     value = JSON.parse(savedObject);

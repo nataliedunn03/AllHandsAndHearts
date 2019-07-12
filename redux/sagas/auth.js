@@ -30,6 +30,7 @@ const authorize = function* authorize({
   email,
   password,
   name,
+  securityQuestion,
   isRegistering = false
 }) {
   try {
@@ -39,9 +40,9 @@ const authorize = function* authorize({
     });
     let response;
     if (isRegistering) {
-      response = yield call(Api.register, email, hash, name);
+      response = yield call(Api.register, email, hash, name, securityQuestion);
     } else {
-      response = yield call(Api.login, email, hash);
+      response = yield call(Api.login, email, hash, securityQuestion);
     }
     return response;
   } catch (error) {
@@ -64,10 +65,11 @@ const logout = function* logout() {
 function* loginFlow(action) {
   yield put({ type: LOGIN_REQUEST_LOADING, loading: true });
   try {
-    const { email, password } = action.data;
+    const { email, password, securityQuestion } = action.data;
     const auth = yield call(authorize, {
       email,
       password,
+      securityQuestion,
       isRegistering: false
     });
     if (auth && typeof auth === 'object' && auth.Id) {
@@ -96,7 +98,7 @@ function* logoutFlow() {
 }
 
 function* registerFlow(action) {
-  const { email, password, name } = action.data;
+  const { email, password, name, securityQuestion } = action.data;
   yield put({ type: REGISTER_REQUEST_LOADING, loading: true });
   try {
     // We call the `authorize` task with the data, telling it that we are registering a user
@@ -105,6 +107,7 @@ function* registerFlow(action) {
       email,
       password,
       name,
+      securityQuestion,
       isRegistering: true
     });
     // If we could register a user, we send the appropiate actions
@@ -170,19 +173,14 @@ function* initializeAppState(action) {
 
 function* changePasswordFlow(action) {
   try {
-    const { email, oldPassword, newPassword } = action.data;
-    const oldHash = yield call(
-      AuthService.generatePasswordHash,
-      email,
-      oldPassword
-    );
+    const { email, newPassword } = action.data;
     const newHash = yield call(
       AuthService.generatePasswordHash,
       email,
       newPassword
     );
-    if (email && oldHash && newHash) {
-      const status = yield call(Api.changePassword, email, oldHash, newHash);
+    if (email && newHash) {
+      const status = yield call(Api.changePassword, email, newHash);
       if (status['Email__c']) {
         yield put({
           type: CHANGE_PASSWORD_SUCCESS,

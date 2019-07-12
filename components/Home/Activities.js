@@ -17,23 +17,33 @@ export default class Activities extends PureComponent {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     }, 5);
   }
-  _renderCards = cards => {
-    return cards.map((card, index) => {
+
+  _renderCards = (cards, votedPins) => {
+    let votedPinsList = [];
+    if (votedPins.length > 0) {
+      votedPinsList = votedPins.toString().split(';');
+    }
+    return cards.map(card => {
       return (
         <ActivityCard
-          key={index}
+          key={card.pinId + card.score}
           name={card.name}
-          taskText={card.location}
+          taskText={'Added a pin in ' + card.location}
           taskDetail={card.detail}
+          score={card.score}
+          pinId={card.pinId}
+          voting={this.props.voting}
+          voted={votedPinsList.includes(card.pinId)}
         />
       );
     });
   };
 
   render() {
+    //console.log(this.props);
     let {
       style,
-      activity: { activityCards }
+      activity: { activityCards, votedPins }
     } = this.props;
     return (
       activityCards &&
@@ -63,7 +73,7 @@ export default class Activities extends PureComponent {
           >
             Activities
           </StyledText>
-          {this._renderCards(activityCards)}
+          {this._renderCards(activityCards, votedPins)}
         </View>
       )
     );

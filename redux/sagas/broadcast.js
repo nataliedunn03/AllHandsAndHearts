@@ -38,7 +38,10 @@ const getBroadcastsHelper = function* getBroadcastsHelper() {
 
 function* getBroadcast() {
   const broadcasts = yield call(getBroadcastsHelper);
-  if (broadcasts && broadcasts[0].hasOwnProperty('Broadcast_Type__c')) {
+  if (
+    broadcasts.length > 0 &&
+    broadcasts[0].hasOwnProperty('Broadcast_Type__c')
+  ) {
     yield put({
       type: GET_BROADCAST_CARDS_RECEIVED,
       broadcastCards: broadcasts

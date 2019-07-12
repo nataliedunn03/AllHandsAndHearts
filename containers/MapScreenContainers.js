@@ -6,6 +6,7 @@ import {
   deletePinById,
   getPinImageById
 } from '../redux/actions/pins';
+import { getPinLocationTypes } from '../redux/actions/pins';
 import MapScreen from '../screens/MapScreen';
 
 const mapDispatchToProps = dispatch => {
@@ -18,6 +19,9 @@ const mapDispatchToProps = dispatch => {
     },
     setPinByRegion: (regionId, pinData) => {
       dispatch(setPinByRegion(regionId, pinData));
+    },
+    getPinLocationTypes: () => {
+      dispatch(getPinLocationTypes());
     },
     deletePinById: pinId => {
       dispatch(deletePinById(pinId));
@@ -32,4 +36,7 @@ const mapStateToProps = state => {
   const { currentUserId } = state.auth;
   return { regionData, pinData, showMarkerModal, currentUserId };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(MapScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MapScreen);

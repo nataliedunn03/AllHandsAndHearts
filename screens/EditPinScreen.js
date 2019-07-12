@@ -5,13 +5,13 @@ import {
   Keyboard,
   View,
   Picker,
-  Alert
+  Alert,
+  PickerIOS
 } from 'react-native';
 import { Constants, ImagePicker, Permissions } from 'expo';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import LabelSelect from 'react-native-label-select';
 import { Location } from 'expo';
-import { GOOGLE_MAPS_API_KEY } from 'react-native-dotenv';
 import Colors from '../constants/Colors';
 import { StyledText } from '../components/StyledText';
 import StyledButton from '../components/StyledButton';
@@ -40,7 +40,7 @@ export default class EditPinScreen extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      pinTypeSelected: '',
+      pinTypeSelected: 'Affected Area',
       name: '',
       address: '',
       description: '',
@@ -50,56 +50,7 @@ export default class EditPinScreen extends PureComponent {
       longitude: null,
       regionId: null,
       pinColor: null,
-      pinType: [
-        {
-          name: 'Affected Area',
-          isSelected: false,
-          Id: 111,
-          color: 'red'
-        },
-        {
-          name: 'Airport',
-          isSelected: false,
-          Id: 211,
-          color: 'purple'
-        },
-        {
-          name: 'Health Facility',
-          isSelected: false,
-          Id: 311,
-          color: 'lime'
-        },
-        {
-          name: 'IDP Camp',
-          isSelected: false,
-          Id: 411,
-          color: 'green'
-        },
-        {
-          name: 'Point of Interest',
-          isSelected: false,
-          Id: 511,
-          color: 'blue'
-        },
-        {
-          name: 'Risk Assessment',
-          isSelected: false,
-          Id: 711,
-          color: 'orange'
-        },
-        {
-          name: 'Partner Locations',
-          isSelected: false,
-          Id: 622,
-          color: 'brown'
-        },
-        {
-          name: 'Other',
-          isSelected: false,
-          Id: 76661,
-          color: 'grey'
-        }
-      ],
+      pinType: [],
       showToAddLocationQ: 'Press to choose a location type',
       enableLocationTypeButton: true,
       photos: []
@@ -121,6 +72,7 @@ export default class EditPinScreen extends PureComponent {
     const selectedPinType = this.state.pinType.filter(
       item => item.isSelected === true
     )[0];
+
     const payload = {
       ...this.state,
       id: Id ? Id : '',
@@ -136,18 +88,18 @@ export default class EditPinScreen extends PureComponent {
       return { photos: [...nexProps.photos, ...prevState.photos] };
     });
   }
-  componentDidUpdate() {
-    let selectedItems = this.state.pinType.filter(
-      item => item.isSelected === true
-    );
-    let size = selectedItems ? selectedItems.length : 0;
-    this.setState({
-      showToAddLocationQ: size < 1 ? 'Press to choose a location type' : '',
-      enableLocationTypeButton: size < 1 ? true : false
-    });
-  }
 
   async componentWillMount() {
+    //populate pinType from types stored in Salesforce
+    for (type in global.pinLocationTypes) {
+      this.state.pinType.push({
+        name: global.pinLocationTypes[type]['Name'],
+        isSelected: global.pinLocationTypes[type]['isSelected__c'],
+        Id: global.pinLocationTypes[type]['Id'],
+        color: global.pinLocationTypes[type]['Color__c']
+      });
+    }
+
     let {
       latitude,
       longitude,
@@ -158,7 +110,7 @@ export default class EditPinScreen extends PureComponent {
     } = this.props;
     const newPhotos = this.props.photos ? this.props.photos : [];
     try {
-      Location.setApiKey(GOOGLE_MAPS_API_KEY);
+      Location.setApiKey('AIzaSyBTvryrzm7ymvBS2NyOTpgDPtjtR0SC3p4');
       const decodedLocation = await Location.reverseGeocodeAsync({
         latitude,
         longitude
@@ -216,6 +168,18 @@ export default class EditPinScreen extends PureComponent {
     });
   };
 
+  setSelectedPinType = item => {
+    let { pinType } = this.state;
+    var newItems = pinType.map(pin => {
+      return pin.name === this.state.pinTypeSelected
+        ? { ...pin, isSelected: true }
+        : pin;
+    });
+    this.setState({
+      pinType: newItems
+    });
+  };
+
   _handleOnChangeText = (key, value) => {
     this.setState({
       [key]: value
@@ -228,9 +192,20 @@ export default class EditPinScreen extends PureComponent {
       Alert.alert('All * marked inputs are required');
       return;
     }
+
+    let selectedPins = this.state.pinType.map(pin => {
+      if (pin.isSelected === true) {
+        return;
+      } else {
+        this.setSelectedPinType();
+      }
+      return selectedPins;
+    });
+
     this.props.setPinByRegion(this.state.regionId, {
       ...payload
     });
+    this.props.getPinsByRegion(this.state.regionId);
     this.props.navigation.goBack();
   };
 
@@ -274,69 +249,24 @@ export default class EditPinScreen extends PureComponent {
   };
   renderLocationType = () => {
     return (
-      <View style={{ marginBottom: 10 }}>
+      <View style={{ marginBottom: 0 }}>
         {Constants.platform.android && this.renderLocationTypeAndroid()}
         {Constants.platform.ios && (
-          <LabelSelect
-            title="Choose a type"
-            ref={element => (this.select = element)}
-            style={styles.labelSelect}
-            onConfirm={this.selectConfirm}
-            addButtonText={this.state.showToAddLocationQ}
-            customStyle={{
-              addButtonText: {
-                color: '#1D2C3C',
-                padding: 6,
-                fontSize: 14,
-                lineHeight: 20,
-                maxWidth: 300
-              },
-              addButton: {
-                padding: 9
-              }
+          <PickerIOS
+            selectedValue={this.state.pinTypeSelected}
+            onValueChange={itemValue => {
+              this.setState({ pinTypeSelected: itemValue });
             }}
-            enableAddBtn={this.state.enableLocationTypeButton}
+            enabled={true}
           >
-            {this.state.pinType
-              .filter(item => item.isSelected)
-              .map((item, index) => (
-                <LabelSelect.Label
-                  key={'label-' + index}
-                  data={item}
-                  onCancel={() => {
-                    this.deleteItem(item);
-                  }}
-                  customStyle={{
-                    text: {
-                      color: '#1D2C3C',
-                      padding: 6,
-                      fontSize: 14,
-                      lineHeight: 20,
-                      maxWidth: 300
-                    }
-                  }}
-                >
-                  {item.name}
-                </LabelSelect.Label>
-              ))}
-            {this.state.pinType
-              .filter(item => !item.isSelected)
-              .map((item, index) => {
-                return (
-                  <LabelSelect.ModalItem
-                    key={'modal-item-' + index}
-                    data={item}
-                    customStyle={{
-                      innerCircle: {
-                        backgroundColor: Colors.defaultColor.PRIMARY_COLOR
-                      }
-                    }}
-                  >
-                    {item.name}
-                  </LabelSelect.ModalItem>
-                );
-              })}
-          </LabelSelect>
+            {this.state.pinType.map((item, index) => (
+              <PickerIOS.Item
+                key={`${item.name}${index}`}
+                label={item.name}
+                value={item.name}
+              />
+            ))}
+          </PickerIOS>
         )}
       </View>
     );
@@ -410,7 +340,9 @@ export default class EditPinScreen extends PureComponent {
             inputRef={element => (this.coordinatesRef = element)}
             onSubmitEditing={() => this.descriptionRef.focus()}
           />
-          <StyledText style={styles.styledText}>DESCRIPTION *</StyledText>
+          <StyledText style={styles.styledText}>
+            DESCRIPTION * (maximum 200 charaters)
+          </StyledText>
           <StyledInput
             style={styles.inputWide}
             inputRef={element => (this.descriptionRef = element)}
@@ -425,9 +357,7 @@ export default class EditPinScreen extends PureComponent {
               this._handleOnChangeText('description', value)
             }
           />
-
           <StyledText style={styles.styledText}>TYPE *</StyledText>
-
           {this.renderLocationType()}
           <Separator />
         </View>
@@ -621,6 +551,9 @@ const styles = StyleSheet.create({
   },
   addPinButton: {
     height: 42,
+    marginTop: 0,
+    paddingTop: 0,
+    marginBottom: 35,
     backgroundColor: Colors.defaultColor.PRIMARY_COLOR
   },
   addButtonTextStyle: {
