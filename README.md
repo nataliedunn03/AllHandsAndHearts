@@ -10,6 +10,8 @@ All Hands and Hearts efficiently and effectively address the immediate and long-
 
 All Hands and Hearts frequently has to coordinate large groups of Volunteers in disaster zones in order to effectively deploy assistance to their project sites. Managing volunteers and facilitating communication can be very difficult. The FFG 2017 team built a Mobile Disaster Assessment application to engage volunteers, partners, and local communities. Our team is seeking to leverage an app to give All Hands and Hearts more functionality and capabilities to coordinate volunteers on the ground.
 
+[Video Demo](https://drive.google.com/open?id=1nIM4NR-EeB56WkwfNi3frHtNcAX2AAm-)
+
 ### Installation
 
 Pre-Req:
